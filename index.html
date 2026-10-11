@@ -3,61 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultron Voice AI</title>
+<title>Ultron AI</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;color:#ff4400}
-.u{position:fixed;background:rgba(0,0,0,.7);border:1px solid rgba(255,68,0,.4);border-radius:8px;padding:8px 14px;font:12px 'Courier New',monospace;text-shadow:0 0 6px #ff4400}
-#info{top:15px;left:15px;font-size:13px;line-height:1.5;pointer-events:none}
+.u{position:fixed;background:rgba(0,0,0,.75);border:1px solid rgba(255,68,0,.4);border-radius:8px;padding:8px 14px;font:12px 'Courier New',monospace;text-shadow:0 0 6px #ff4400;z-index:10}
+#info{top:15px;left:15px;font-size:12px;line-height:1.6;pointer-events:none;max-width:260px}
 #quality-btn{top:15px;right:15px;cursor:pointer}
 #key-btn{top:15px;right:110px;cursor:pointer}
-#fps{bottom:100px;left:20px;color:#0f0}
-#status{bottom:20px;left:50%;transform:translateX(-50%);text-align:center;min-width:280px;padding:12px 22px;font-size:14px;box-shadow:0 0 25px rgba(255,68,0,.3)}
+#fps{bottom:20px;left:20px;color:#0f0}
+#hud{bottom:60px;left:20px;color:#ffaa55;min-width:200px}
+#status{bottom:20px;left:50%;transform:translateX(-50%);text-align:center;min-width:260px;padding:12px 22px;font-size:14px}
 #status .mode{color:#ffaa55;font-size:11px;letter-spacing:2px;display:block;margin-bottom:4px}
 #start-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;padding:14px 28px;font:17px 'Courier New',monospace;background:transparent;color:#ff4400;border:2px solid #ff4400;border-radius:8px;cursor:pointer;text-shadow:0 0 10px #ff4400;box-shadow:0 0 20px rgba(255,68,0,.3)}
 #start-btn:hover{background:rgba(255,68,0,.15)}
-#input_video{position:fixed;top:-9999px;width:1px;height:1px;opacity:0}
-#response{position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:15;width:min(760px,calc(100% - 40px));max-height:50vh;overflow-y:auto;background:rgba(5,0,0,.75);color:#ffcc88;border:1px solid rgba(255,68,0,.5);border-radius:10px;padding:18px 22px;font:14px/1.6 'Courier New',monospace;text-shadow:0 0 6px rgba(255,68,0,.7);box-shadow:0 0 30px rgba(255,68,0,.25),inset 0 0 40px rgba(255,68,0,.06);opacity:0;pointer-events:none;transition:opacity .35s;white-space:pre-wrap}
+#video-container{position:fixed;bottom:20px;right:20px;width:200px;height:150px;border:1px solid #ff4400;border-radius:8px;overflow:hidden;z-index:10;opacity:.85;box-shadow:0 0 20px rgba(255,68,0,.3);background:#000}
+#input_video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+#response{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:15;width:min(700px,calc(100% - 40px));max-height:40vh;overflow-y:auto;background:rgba(5,0,0,.8);color:#ffcc88;border:1px solid rgba(255,68,0,.5);border-radius:10px;padding:16px 20px;font:14px/1.6 'Courier New',monospace;text-shadow:0 0 6px rgba(255,68,0,.7);box-shadow:0 0 30px rgba(255,68,0,.25);opacity:0;pointer-events:none;transition:opacity .35s;white-space:pre-wrap}
 #response.active{opacity:1}
 #response .label{display:block;color:#ff5500;font-size:11px;letter-spacing:2px;margin-bottom:6px}
 #response .caret{display:inline-block;width:8px;height:14px;background:#ff5500;margin-left:2px;vertical-align:text-bottom;animation:blink .8s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
 .think::after{content:'';animation:dots 1.2s steps(4) infinite}
 @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
-#key-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#key-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center}
 #key-modal.active{display:flex}
-#key-box{width:min(520px,calc(100% - 40px));background:rgba(10,2,0,.95);border:1px solid rgba(255,68,0,.6);border-radius:12px;padding:28px 30px;font-family:'Courier New',monospace;color:#ffcc88;box-shadow:0 0 60px rgba(255,68,0,.4);text-shadow:0 0 6px rgba(255,68,0,.6)}
-#key-box h2{margin:0 0 6px;font-size:18px;color:#ff4400;letter-spacing:3px;text-transform:uppercase}
-#key-box .sub{font-size:12px;color:#ffaa55;margin-bottom:20px;line-height:1.5}
-#key-input{width:100%;padding:14px 16px;font:14px 'Courier New',monospace;background:rgba(0,0,0,.8);color:#ffdd99;border:1px solid #ff4400;border-radius:8px;outline:none;letter-spacing:1px}
-#key-input:focus{border-color:#ff8800;box-shadow:0 0 20px rgba(255,68,0,.5)}
-#key-error{color:#ff2200;font-size:12px;margin-top:10px;min-height:16px}
-#key-actions{display:flex;gap:10px;margin-top:20px}
-#key-actions button{flex:1;padding:12px 16px;font:13px 'Courier New',monospace;font-weight:bold;background:rgba(255,68,0,.15);color:#ff4400;border:1px solid #ff4400;border-radius:8px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
+#key-box{width:min(480px,calc(100% - 40px));background:rgba(10,2,0,.95);border:1px solid rgba(255,68,0,.6);border-radius:12px;padding:24px 28px;font-family:'Courier New',monospace;color:#ffcc88;box-shadow:0 0 60px rgba(255,68,0,.4)}
+#key-box h2{margin:0 0 6px;font-size:16px;color:#ff4400;letter-spacing:3px;text-transform:uppercase}
+#key-box .sub{font-size:12px;color:#ffaa55;margin-bottom:16px;line-height:1.5}
+#key-input{width:100%;padding:12px 14px;font:14px 'Courier New',monospace;background:rgba(0,0,0,.8);color:#ffdd99;border:1px solid #ff4400;border-radius:8px;outline:none}
+#key-error{color:#ff2200;font-size:12px;margin-top:8px;min-height:16px}
+#key-actions{display:flex;gap:8px;margin-top:16px}
+#key-actions button{flex:1;padding:10px 14px;font:12px 'Courier New',monospace;font-weight:bold;background:rgba(255,68,0,.15);color:#ff4400;border:1px solid #ff4400;border-radius:6px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
 #key-actions button:hover{background:rgba(255,68,0,.35)}
-#key-skip{background:transparent!important;color:#aa5522!important;border-color:#663311!important;letter-spacing:1px!important;font-size:11px!important;flex:.7!important}
-#key-hint{font-size:11px;color:#884422;margin-top:14px;line-height:1.5}
 </style>
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
 </head>
 <body>
-<div id="info" class="u"><strong>Ultron Voice AI</strong><br>Say <em>"Hello Ultron"</em> to wake<br>Pinch + drag • Two hands to zoom</div>
+<div id="info" class="u"><strong>ULTRON · GESTURES</strong><br>
+<b>Open palm drag</b> — rotate<br>
+<b>Fist drag</b> — fast spin<br>
+<b>Palm push</b> — zoom<br>
+<b>Fist near task</b> — grab it<br>
+<b>Open palm over bin</b> — toss it<br>
+<b>Say "Hello Ultron"</b> — voice
+</div>
 <button id="quality-btn" class="u">Quality: Performance</button>
 <button id="key-btn" class="u">Key</button>
-<div id="status" class="u"><span class="mode">STATUS</span><span id="status-text">Click Start to activate</span></div>
+<div id="hud" class="u">MODE: IDLE</div>
 <div id="fps" class="u">FPS: --</div>
+<div id="status" class="u"><span class="mode">STATUS</span><span id="status-text">Click Start to activate</span></div>
 <button id="start-btn">ACTIVATE ULTRON</button>
-<video id="input_video" playsinline muted></video>
+<div id="video-container"><video id="input_video" playsinline muted></video></div>
 <div id="response"></div>
 <div id="key-modal"><div id="key-box">
-<h2>◈ Access Key Required</h2>
-<div class="sub">Enter your LLM7 API key. Stored locally in your browser only.</div>
-<input id="key-input" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false">
+<h2>◈ Access Key</h2>
+<div class="sub">Enter your LLM7 API key. Stored locally.</div>
+<input id="key-input" type="password" placeholder="sk-..." autocomplete="off">
 <div id="key-error"></div>
-<div id="key-actions"><button id="key-save">Save</button><button id="key-clear">Clear</button><button id="key-skip">Skip</button></div>
-<div id="key-hint">Get a free key at <b>llm7.io</b>. Without one, the hologram runs but can't answer.</div>
+<div id="key-actions"><button id="key-save">Save</button><button id="key-clear">Clear</button></div>
 </div></div>
 
 <script type="module">
@@ -70,46 +76,44 @@ import {FilesetResolver,HandLandmarker} from 'https://cdn.jsdelivr.net/npm/@medi
 // ---- CONFIG ----
 const ENDPOINT='https://api.llm7.io/v1/chat/completions';
 const MODEL='gpt-4o-mini';
-const SYSTEM='You are ULTRON, a cold, efficient AI hologram. Answer concisely in 1-3 sentences. Slightly menacing, technical tone. No emojis, no markdown.';
-const WAKE=['hello ultron','hey ultron','hi ultron','hello altar','hey altar','hello ultra','hey ultra'];
-const STORAGE_KEY='ultron_llm7_key';
+const SYSTEM='You are ULTRON, a cold, efficient AI hologram. Answer in 1-3 concise sentences. Menacing, technical tone. No emojis, no markdown.';
+const WAKE=['hello ultron','hey ultron','hi ultron','hello ultra','hey ultra'];
+const STORAGE_KEY='ultron_key';
 const WASM='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm';
 const MODEL_URL='https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
 
-// ---- SAFE STORAGE ----
-const safeStorage={
-  get(k){try{return localStorage.getItem(k)}catch{return null}},
-  set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}}
-};
+const SS={get:k=>{try{return localStorage.getItem(k)}catch{return null}},set:(k,v)=>{try{localStorage.setItem(k,v);return true}catch{return false}}};
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 // ---- DOM ----
 const $=id=>document.getElementById(id);
 const statusEl=$('status-text'),statusMode=document.querySelector('#status .mode');
-const responseEl=$('response'),startBtn=$('start-btn'),qualityBtn=$('quality-btn');
+const hudEl=$('hud'),responseEl=$('response'),startBtn=$('start-btn'),qualityBtn=$('quality-btn');
 const keyBtn=$('key-btn'),keyModal=$('key-modal'),keyInput=$('key-input'),keyError=$('key-error');
 const fpsEl=$('fps'),video=$('input_video');
 const setStatus=(m,t)=>{statusMode.textContent=m;statusEl.textContent=t};
 
 // ---- STATE ----
-let API_KEY=safeStorage.get(STORAGE_KEY)||'';
+let API_KEY=SS.get(STORAGE_KEY)||'';
 let thinkingBoost=0,isAwake=false,isProcessing=false,commandBuffer='';
-let wakeTimer=null,typewriterTimer=null,recognitionRestartTimer=null;
-let recognitionRestarts=0,recognitionBlocked=false;
-let handFrameInterval=1000/20;
-let targetRotX=0,targetRotY=0,targetZoom=5.5,handDetected=false,prevHandPos=null,prevPinchDist=null;
+let wakeTimer=null,typewriterTimer=null,srRestartTimer=null,srRestarts=0,srBlocked=false;
+let handFrameInterval=1000/20,targetRotX=0,targetRotY=0,targetZoom=5.5;
+let handDetected=false,rotYVel=0,rotXVel=0;
+let prevPalm=null,prevHandSize=null,prevTwoDist=null;
 let currentQuality='performance';
 let handLandmarker=null,lastVideoTime=-1,lastHandRun=0,recognition=null,cameraReady=false;
+let gestureMode='idle',hoveredTask=null,carriedTask=null;
 
-const Q={performance:{pr:1,bloom:0,br:.5,seg:20,pc:200,dc:120,gc:200,rs:64,sc:18,ac:4,puc:3,hfps:20},balanced:{pr:1.25,bloom:1,br:.5,seg:28,pc:350,dc:220,gc:400,rs:96,sc:30,ac:7,puc:4,hfps:24},ultra:{pr:1.5,bloom:1,br:.75,seg:36,pc:500,dc:350,gc:700,rs:120,sc:45,ac:10,puc:6,hfps:30}};
+const Q={performance:{pr:1,bloom:0,seg:20,pc:200,dc:120,gc:200,hfps:20},balanced:{pr:1.25,bloom:1,seg:26,pc:320,dc:200,gc:350,hfps:24},ultra:{pr:1.5,bloom:1,seg:32,pc:450,dc:300,gc:600,hfps:30}};
 
 // ---- KEY MODAL ----
-function showKey(msg=''){keyInput.value=API_KEY||'';keyError.textContent=msg;keyModal.classList.add('active');setTimeout(()=>{try{keyInput.focus()}catch{}},100)}
-function hideKey(){keyModal.classList.remove('active');keyError.textContent=''}
-$('key-save').onclick=()=>{const v=keyInput.value.trim();if(!v){keyError.textContent='Key cannot be empty.';return}if(v.length<8){keyError.textContent='Key too short.';return}API_KEY=v;if(!safeStorage.set(STORAGE_KEY,v))keyError.textContent='Warning: could not save (private mode?)';hideKey();showResponse('Access key saved. Systems ready.',false)};
-$('key-clear').onclick=()=>{keyInput.value='';keyError.textContent=''};
-$('key-skip').onclick=()=>{hideKey();showResponse('Running without API key. Voice Q&A disabled.',false)};
+function showKey(msg=''){keyInput.value=API_KEY||'';keyError.textContent=msg;keyModal.classList.add('active');setTimeout(()=>keyInput.focus(),100)}
+function hideKey(){keyModal.classList.remove('active')}
+$('key-save').onclick=()=>{const v=keyInput.value.trim();if(v.length<8){keyError.textContent='Key too short.';return}API_KEY=v;SS.set(STORAGE_KEY,v);hideKey();showResponse('Key saved.',false)};
+$('key-clear').onclick=()=>keyInput.value='';
 keyInput.addEventListener('keydown',e=>{if(e.key==='Enter')$('key-save').click()});
-keyBtn.onclick=()=>showKey('Change your key.');
+keyBtn.onclick=()=>showKey();
 if(!API_KEY)setTimeout(()=>showKey(),300);
 
 // ---- SCENE ----
@@ -124,13 +128,12 @@ const composer=new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene,camera));
 const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth*.5,innerHeight*.5),1.6,.4,.25);
 bloom.enabled=false;composer.addPass(bloom);
-
 const uTime={value:0};
 
 // ---- TEXTURES ----
-const glowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const grad=g.createRadialGradient(32,32,0,32,32,32);grad.addColorStop(0,'rgba(255,220,180,1)');grad.addColorStop(.25,'rgba(255,140,40,.9)');grad.addColorStop(.6,'rgba(255,68,0,.35)');grad.addColorStop(1,'rgba(255,68,0,0)');g.fillStyle=grad;g.fillRect(0,0,64,64);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t})();
-const makeTex=text=>{const c=document.createElement('canvas');c.width=512;c.height=64;const g=c.getContext('2d');g.font='bold 26px monospace';g.fillStyle='#ff5500';g.textBaseline='middle';g.shadowColor='#ff5500';g.shadowBlur=10;g.fillText(text,10,32);g.shadowBlur=20;g.fillText(text,10,32);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t};
-const WORDS=['SCANNING...','SEARCHING','ANALYZING','TRACING','TARGET','LOCK','ROUTING','DECRYPT','ACCESS','COMPILE','PROCESS','FRAGMENT','QUERYING','MAPPING','PARSING','DIRECTIVE','PRIORITY','PROTOCOL','0x4F2A','0xBEEF','01001110','SYS://','>>>','NULL','PING','TRACE','DATA','LOG//','NODE_7','SECTOR 4','LISTENING','AWAITING','STANDBY'];
+const glowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'rgba(255,220,180,1)');gr.addColorStop(.25,'rgba(255,140,40,.9)');gr.addColorStop(.6,'rgba(255,68,0,.35)');gr.addColorStop(1,'rgba(255,68,0,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t})();
+const makeTex=txt=>{const c=document.createElement('canvas');c.width=512;c.height=64;const g=c.getContext('2d');g.font='bold 26px monospace';g.fillStyle='#ff5500';g.textBaseline='middle';g.shadowColor='#ff5500';g.shadowBlur=10;g.fillText(txt,10,32);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t};
+const WORDS=['SCANNING...','SEARCHING','ANALYZING','TRACING','TARGET','LOCK','ROUTING','DECRYPT','ACCESS','COMPILE','PROCESS','FRAGMENT','QUERYING','MAPPING','PARSING','DIRECTIVE','PRIORITY','PROTOCOL','0x4F2A','0xBEEF','01001110','SYS://','NULL','PING','TRACE','DATA','LOG//','NODE_7','SECTOR 4','LISTENING','STANDBY'];
 const textTexs=WORDS.map(makeTex);
 
 // ---- ORB ----
@@ -141,12 +144,10 @@ const randPt=r=>{const p=Math.acos(2*Math.random()-1),t=Math.random()*Math.PI*2;
 const setArc=(line,r)=>{const s=randPt(r),e=randPt(r);const m=s.clone().add(e).multiplyScalar(.5).normalize().multiplyScalar(r*1.45);const pts=new THREE.QuadraticBezierCurve3(s,m,e).getPoints(30);const pos=line.geometry.attributes.position;for(let i=0;i<pts.length;i++)pos.setXYZ(i,pts[i].x,pts[i].y,pts[i].z);pos.needsUpdate=true;line.geometry.computeBoundingSphere()};
 
 function applyMotionShader(mat,wobble,swirl){
-  mat.onBeforeCompile=shader=>{
-    shader.uniforms.uTime=uTime;
-    shader.uniforms.uWobble={value:wobble};
-    shader.uniforms.uSwirl={value:swirl};
-    shader.vertexShader=`uniform float uTime;uniform float uWobble;uniform float uSwirl;attribute float aSeed;`+shader.vertexShader;
-    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`
+  mat.onBeforeCompile=s=>{
+    s.uniforms.uTime=uTime;s.uniforms.uWobble={value:wobble};s.uniforms.uSwirl={value:swirl};
+    s.vertexShader=`uniform float uTime;uniform float uWobble;uniform float uSwirl;attribute float aSeed;`+s.vertexShader;
+    s.vertexShader=s.vertexShader.replace('#include <begin_vertex>',`
       vec3 transformed=vec3(position);
       float t=uTime+aSeed;
       float r=length(transformed);
@@ -160,13 +161,11 @@ function applyMotionShader(mat,wobble,swirl){
       transformed.xz=mat2(cs,-sn,sn,cs)*transformed.xz;
     `);
   };
-  mat.customProgramCacheKey=()=>'motion_'+wobble+'_'+swirl;
+  mat.customProgramCacheKey=()=>'m_'+wobble+'_'+swirl;
 }
 
 function makePoints(count,rfn,color,size,opacity,wobble,swirl){
-  const g=new THREE.BufferGeometry();
-  const p=new Float32Array(count*3);
-  const seeds=new Float32Array(count);
+  const g=new THREE.BufferGeometry(),p=new Float32Array(count*3),seeds=new Float32Array(count);
   for(let i=0;i<count;i++){const v=randPt(rfn());p[i*3]=v.x;p[i*3+1]=v.y;p[i*3+2]=v.z;seeds[i]=Math.random()*Math.PI*2}
   g.setAttribute('position',new THREE.BufferAttribute(p,3));
   g.setAttribute('aSeed',new THREE.BufferAttribute(seeds,1));
@@ -179,55 +178,88 @@ function buildOrb(q){
   while(orb.children.length){const c=orb.children.pop();c.geometry?.dispose();if(c.material)(Array.isArray(c.material)?c.material:[c.material]).forEach(m=>m.dispose())}
   rings=[];pulses=[];arcs=[];sprites=[];
   const cfg=Q[q];
-
   shell=new THREE.Mesh(new THREE.SphereGeometry(2,cfg.seg,cfg.seg),new THREE.MeshBasicMaterial({color:0xff4400,wireframe:true,transparent:true,opacity:.13}));orb.add(shell);
   innerShell=new THREE.Mesh(new THREE.SphereGeometry(1.85,cfg.seg,cfg.seg),new THREE.MeshBasicMaterial({color:0xff6600,wireframe:true,transparent:true,opacity:.07}));orb.add(innerShell);
   core=new THREE.Mesh(new THREE.TorusKnotGeometry(.55,.1,40,6,2,3),new THREE.MeshBasicMaterial({color:0xff2200,wireframe:true,transparent:true,opacity:.55}));orb.add(core);
-
-  particles=makePoints(cfg.pc,()=>2.02,0xffaa44,.11,1.0,0.05,0.15);orb.add(particles);
+  particles=makePoints(cfg.pc,()=>2.02,0xffaa44,.11,1,0.05,0.15);orb.add(particles);
   debris=makePoints(cfg.dc,()=>2.15+Math.random()*.9,0xff7700,.07,.85,0.14,0.30);orb.add(debris);
   dust=makePoints(cfg.gc,()=>.4+Math.random()*1.5,0xff3300,.035,.55,0.08,0.22);orb.add(dust);
-
-  for(let i=0;i<3;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(2.3+i*.2,.008,8,cfg.rs),new THREE.MeshBasicMaterial({color:0xff4400,transparent:true,opacity:.4}));r.rotation.x=Math.PI/2;r.rotation.y=i*Math.PI/3;orb.add(r);rings.push(r)}
-
-  for(let i=0;i<cfg.puc;i++){const p=new THREE.Mesh(new THREE.RingGeometry(1.85,2.05,64),new THREE.MeshBasicMaterial({color:0xff7700,transparent:true,opacity:0,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));p.rotation.x=Math.random()*Math.PI;p.rotation.y=Math.random()*Math.PI;p.userData={life:Math.random(),speed:.35+Math.random()*.4};orb.add(p);pulses.push(p)}
-
-  for(let i=0;i<cfg.ac;i++){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(31*3),3));const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xff8800,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));setArc(l,2.02);l.userData={life:Math.random(),speed:.5+Math.random()*.5};orb.add(l);arcs.push(l)}
-
-  for(let i=0;i<cfg.sc;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:textTexs[i%textTexs.length],color:0xffffff,transparent:true,opacity:.85,blending:THREE.AdditiveBlending,depthWrite:false}));const p=randPt(1.9+Math.random()*1.5);s.position.copy(p);const sc=.55+Math.random()*.35;s.scale.set(sc,sc*.13,1);s.userData={baseP:p.clone(),phase:Math.random()*Math.PI*2,speed:.4+Math.random()*.6,orbit:.05+Math.random()*.1};orb.add(s);sprites.push(s)}
+  for(let i=0;i<3;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(2.3+i*.2,.008,8,64),new THREE.MeshBasicMaterial({color:0xff4400,transparent:true,opacity:.4}));r.rotation.x=Math.PI/2;r.rotation.y=i*Math.PI/3;orb.add(r);rings.push(r)}
+  for(let i=0;i<cfg.puc||3;i++){const p=new THREE.Mesh(new THREE.RingGeometry(1.85,2.05,48),new THREE.MeshBasicMaterial({color:0xff7700,transparent:true,opacity:0,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));p.rotation.x=Math.random()*Math.PI;p.rotation.y=Math.random()*Math.PI;p.userData={life:Math.random(),speed:.35+Math.random()*.4};orb.add(p);pulses.push(p)}
+  const arcN=Q[q].ac||4;
+  for(let i=0;i<arcN;i++){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(31*3),3));const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xff8800,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));setArc(l,2.02);l.userData={life:Math.random(),speed:.5+Math.random()*.5};orb.add(l);arcs.push(l)}
+  const spN=Q[q].sc||16;
+  for(let i=0;i<spN;i++){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:textTexs[i%textTexs.length],color:0xffffff,transparent:true,opacity:.85,blending:THREE.AdditiveBlending,depthWrite:false}));const p=randPt(1.9+Math.random()*1.5);s.position.copy(p);const sc=.55+Math.random()*.35;s.scale.set(sc,sc*.13,1);s.userData={baseP:p.clone(),phase:Math.random()*Math.PI*2,speed:.4+Math.random()*.6,orbit:.05+Math.random()*.1};orb.add(s);sprites.push(s)}
 }
 
-function applyQuality(q){
-  currentQuality=q;const cfg=Q[q];
-  renderer.setPixelRatio(Math.min(devicePixelRatio,cfg.pr));
-  renderer.setSize(innerWidth,innerHeight);
-  bloom.enabled=!!cfg.bloom;
-  if(cfg.bloom)bloom.setSize(innerWidth*cfg.br,innerHeight*cfg.br);
-  composer.setSize(innerWidth,innerHeight);
-  handFrameInterval=1000/cfg.hfps;
-  buildOrb(q);
-  qualityBtn.textContent=`Quality: ${q[0].toUpperCase()+q.slice(1)}`;
+// ---- DUSTBIN (3D, follows camera) ----
+const binGroup=new THREE.Group();scene.add(binGroup);
+let binMesh,binRing,binGlow;
+{
+  const binGeo=new THREE.CylinderGeometry(.5,.35,.9,16,1,true);
+  binMesh=new THREE.Mesh(binGeo,new THREE.MeshBasicMaterial({color:0xff4400,wireframe:true,transparent:true,opacity:.5,side:THREE.DoubleSide}));
+  binGroup.add(binMesh);
+  binRing=new THREE.Mesh(new THREE.TorusGeometry(.5,.02,8,32),new THREE.MeshBasicMaterial({color:0xff8800,transparent:true,opacity:.8}));
+  binRing.rotation.x=Math.PI/2;binRing.position.y=.45;binGroup.add(binRing);
+  binGlow=new THREE.Mesh(new THREE.CircleGeometry(.5,24),new THREE.MeshBasicMaterial({color:0xff2200,transparent:true,opacity:.15,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));
+  binGlow.rotation.x=-Math.PI/2;binGlow.position.y=.45;binGroup.add(binGlow);
+  binGroup.userData={active:false,flash:0};
+}
+
+// ---- TASK CHIPS ----
+const tasks=[];
+const MAX_TASKS=6;
+function makeChipTexture(text,state){
+  const c=document.createElement('canvas');c.width=512;c.height=128;
+  const g=c.getContext('2d');
+  const colors={pending:['#ff9900','rgba(255,153,0,.15)'],working:['#ff6600','rgba(255,102,0,.25)'],done:['#88ff88','rgba(136,255,136,.15)'],failed:['#ff2200','rgba(255,34,0,.2)']};
+  const [fg,bg]=colors[state]||colors.pending;
+  g.fillStyle=bg;g.fillRect(0,0,512,128);
+  g.strokeStyle=fg;g.lineWidth=3;g.strokeRect(2,2,508,124);
+  g.font='bold 24px monospace';g.fillStyle=fg;g.textBaseline='middle';
+  // Wrap text
+  const maxW=470;const words=text.split(' ');let line='';const lines=[];
+  for(const w of words){const test=line?line+' '+w:w;if(g.measureText(test).width>maxW){lines.push(line);line=w}else line=test}
+  if(line)lines.push(line);
+  lines.slice(0,3).forEach((l,i)=>g.fillText(l,20,44+i*32));
+  // State indicator
+  g.font='bold 16px monospace';g.fillStyle=fg;g.fillText(state.toUpperCase(),20,110);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;
+}
+function spawnTask(text){
+  if(tasks.length>=MAX_TASKS){const old=tasks.shift();scene.remove(old.sprite);old.sprite.material.map.dispose();old.sprite.material.dispose()}
+  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({transparent:true,opacity:.95,depthWrite:false,depthTest:false}));
+  sprite.scale.set(1.5,.375,1);
+  const angle=Math.random()*Math.PI*2;
+  const radius=2.7+Math.random()*.8;
+  const height=(Math.random()-.5)*1.8;
+  const task={sprite,text,state:'pending',baseAngle:angle,baseRadius:radius,baseHeight:height,phase:Math.random()*Math.PI*2,bornAt:performance.now(),flight:null};
+  sprite.material.map=makeChipTexture(text,'pending');
+  sprite.material.needsUpdate=true;
+  scene.add(sprite);
+  tasks.push(task);
+  return task;
+}
+function setTaskState(task,state){
+  task.state=state;
+  if(task.sprite.material.map)task.sprite.material.map.dispose();
+  task.sprite.material.map=makeChipTexture(task.text,state);
+  task.sprite.material.needsUpdate=true;
 }
 
 // ---- HAND TRACKING ----
 async function startCamera(){
-  if(handLandmarker||cameraReady)return cameraReady;
-  if(!navigator.mediaDevices?.getUserMedia){console.warn('No camera API');return false}
+  if(cameraReady)return true;
+  if(!navigator.mediaDevices?.getUserMedia)return false;
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'},audio:false});
-    video.srcObject=stream;
-    await video.play().catch(()=>{});
+    const stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'},audio:false});
+    video.srcObject=stream;await video.play().catch(()=>{});
     const fs=await FilesetResolver.forVisionTasks(WASM);
-    const opts={baseOptions:{modelAssetPath:MODEL_URL,delegate:'GPU'},runningMode:'VIDEO',numHands:2,minHandDetectionConfidence:.5,minHandPresenceConfidence:.5,minTrackingConfidence:.5};
+    const opts={baseOptions:{modelAssetPath:MODEL_URL,delegate:'GPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:.5,minHandPresenceConfidence:.5,minTrackingConfidence:.5};
     try{handLandmarker=await HandLandmarker.createFromOptions(fs,opts)}
     catch{opts.baseOptions.delegate='CPU';handLandmarker=await HandLandmarker.createFromOptions(fs,opts)}
-    cameraReady=true;
-    detectLoop();
-    return true;
-  }catch(e){
-    console.warn('Camera unavailable — gesture control disabled:',e.message);
-    return false;
-  }
+    cameraReady=true;detectLoop();return true;
+  }catch(e){console.warn('Camera off:',e.message);return false}
 }
 function detectLoop(){
   if(!handLandmarker)return;
@@ -238,62 +270,165 @@ function detectLoop(){
   }
   requestAnimationFrame(detectLoop);
 }
+
+// Single-hand only for reliability. Analyze finger extension.
+function analyze(h){
+  const w=h[0];
+  const ext=[dist(h[4],w)>dist(h[2],w)*1.12];
+  for(const [tip,pip] of [[8,6],[12,10],[16,14],[20,18]])ext.push(dist(h[tip],w)>dist(h[pip],w)*1.15);
+  const open=ext.filter(Boolean).length;
+  const size=dist(h[0],h[9])+dist(h[5],h[17]);
+  const palm={x:(h[0].x+h[5].x+h[9].x+h[13].x+h[17].x)/5,y:(h[0].y+h[5].y+h[9].y+h[13].y+h[17].y)/5};
+  return {open,size,palm};
+}
+
+// Project 3D position to screen (normalized 0-1)
+const projVec=new THREE.Vector3();
+function screenPos(obj3d){
+  projVec.copy(obj3d).project(camera);
+  return {x:(projVec.x+.5),y:(.5-projVec.y)};
+}
+
 function processHands(r){
   const hands=r.landmarks||[];
-  if(!hands.length){handDetected=false;prevHandPos=null;prevPinchDist=null;return}
+  if(!hands.length){
+    handDetected=false;prevPalm=null;prevHandSize=null;prevTwoDist=null;
+    if(gestureMode==='carrying'&&carriedTask){
+      // Auto-drop: release over bin if near, else return to orbit
+      dropTask(carriedTask,false);
+    }
+    gestureMode='idle';carriedTask=null;hoveredTask=null;
+    hudEl.textContent='MODE: IDLE';
+    return;
+  }
   handDetected=true;
-  if(hands.length===1){
-    const h=hands[0],pinch=Math.hypot(h[8].x-h[4].x,h[8].y-h[4].y);
-    if(pinch<.08){const px=1-h[9].x,py=h[9].y;if(prevHandPos){targetRotY+=(px-prevHandPos.x)*3;targetRotX+=(py-prevHandPos.y)*3}prevHandPos={x:px,y:py}}else prevHandPos=null;
-  }else if(hands.length===2){
-    const[h1,h2]=hands;
-    const d1=Math.hypot(h1[8].x-h1[4].x,h1[8].y-h1[4].y),d2=Math.hypot(h2[8].x-h2[4].x,h2[8].y-h2[4].y);
-    if(d1<.08&&d2<.08){const dist=Math.hypot(h1[9].x-h2[9].x,h1[9].y-h2[9].y);if(prevPinchDist){targetZoom-=(dist-prevPinchDist)*15;targetZoom=Math.max(2,Math.min(12,targetZoom))}prevPinchDist=dist}else prevPinchDist=null;
+  const h=hands[0];
+  const info=analyze(h);
+  const gesture=info.open>=4?'open':info.open<=1?'fist':'partial';
+
+  // -------- CARRYING MODE --------
+  if(gestureMode==='carrying'&&carriedTask){
+    // Move chip to follow hand
+    const p={x:1-info.palm.x,y:info.palm.y};
+    if(handLandmarker&&video.videoWidth){
+      // Convert to screen space, keep at fixed depth from camera
+      const depth=3.5;
+      const ndcX=(1-info.palm.x)*2-1;
+      const ndcY=1-info.palm.y*2;
+      const vec=new THREE.Vector3(ndcX,ndcY,.5).unproject(camera);
+      const dir=vec.sub(camera.position).normalize();
+      const pos=camera.position.clone().add(dir.multiplyScalar(depth));
+      carriedTask.sprite.position.copy(pos);
+    }
+    hudEl.textContent='MODE: CARRYING · open palm over bin to toss';
+
+    // Check if hand is over the bin
+    if(info.open>=4){
+      const handScreen={x:1-info.palm.x,y:info.palm.y};
+      const binScreen=screenPos(binGroup.position.clone().add(new THREE.Vector3(0,.45,0)));
+      const d=Math.hypot(handScreen.x-binScreen.x,handScreen.y-binScreen.y);
+      if(d<0.18){dropTask(carriedTask,true);carriedTask=null;gestureMode='idle'}
+    }
+    return;
+  }
+
+  // -------- HOVER: check if fist is near a task --------
+  if(gesture==='fist'&&tasks.length){
+    const handScreen={x:1-info.palm.x,y:info.palm.y};
+    let closest=null,closestD=0.15;
+    for(const t of tasks){
+      if(t===carriedTask)continue;
+      const sp=screenPos(t.sprite.position);
+      const d=Math.hypot(handScreen.x-sp.x,handScreen.y-sp.y);
+      if(d<closestD){closest=t;closestD=d}
+    }
+    hoveredTask=closest;
+    if(closest){
+      hudEl.textContent='MODE: GRAB · open palm to confirm';
+      closest.sprite.scale.set(1.7,.425,1);
+      tasks.forEach(t=>{if(t!==closest)t.sprite.scale.set(1.5,.375,1)});
+      // Grab on sustained fist proximity (auto-grab after a beat)
+      if(prevPalm){
+        // Auto grab — since fist near = intent
+        carriedTask=closest;
+        gestureMode='carrying';
+        hudEl.textContent='MODE: CARRYING';
+      }
+    }else{
+      hudEl.textContent='MODE: FIST · drag to spin';
+      tasks.forEach(t=>t.sprite.scale.set(1.5,.375,1));
+    }
+  }else{
+    tasks.forEach(t=>{if(t!==carriedTask)t.sprite.scale.set(1.5,.375,1)});
+  }
+
+  // -------- NORMAL CONTROL --------
+  if(gesture==='open'){
+    const p={x:1-info.palm.x,y:info.palm.y};
+    if(prevPalm){
+      const dx=p.x-prevPalm.x,dy=p.y-prevPalm.y;
+      targetRotY+=dx*4.5;targetRotX+=dy*3.5;
+      rotYVel=dx*2.5;rotXVel=dy*1.8;
+    }
+    prevPalm=p;
+    if(prevHandSize){
+      const dd=info.size-prevHandSize;
+      if(Math.abs(dd)>0.008){targetZoom=clamp(targetZoom-dd*25,2,12)}
+    }
+    prevHandSize=info.size;
+    if(gestureMode==='idle')hudEl.textContent='MODE: OPEN PALM · rotate · push to zoom';
+  }else if(gesture==='fist'&&!hoveredTask){
+    const p={x:1-info.palm.x,y:info.palm.y};
+    if(prevPalm){
+      const dx=p.x-prevPalm.x,dy=p.y-prevPalm.y;
+      targetRotY+=dx*6.5;targetRotX+=dy*5.0;
+      rotYVel=dx*4.0;rotXVel=dy*3.0;
+    }
+    prevPalm=p;prevHandSize=null;
+    if(gestureMode==='idle')hudEl.textContent='MODE: FIST · fast spin';
+  }else{
+    prevPalm=null;prevHandSize=null;
   }
 }
 
-// ---- SPEECH OUTPUT ----
-if('speechSynthesis' in window){
-  speechSynthesis.getVoices();
-  speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+function dropTask(task,intoBin){
+  if(!task)return;
+  if(intoBin){
+    const bp=binGroup.position.clone().add(new THREE.Vector3(0,.45,0));
+    task.flight={from:task.sprite.position.clone(),to:bp,t:0,dur:.5};
+    setTaskState(task,'done');
+    binGroup.userData.flash=1;
+  }else{
+    // Return to orbit
+    task.flight=null;
+    setTaskState(task,'pending');
+  }
 }
+
+// ---- SPEECH ----
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}
 function speak(text){
   if(!('speechSynthesis' in window))return;
   try{speechSynthesis.cancel()}catch{}
-  const u=new SpeechSynthesisUtterance(text);u.rate=1;u.pitch=.7;u.volume=1;
-  const v=speechSynthesis.getVoices().find(v=>/Google UK English Male|Daniel|Microsoft David|Microsoft Guy/i.test(v.name));
+  const u=new SpeechSynthesisUtterance(text);u.rate=1;u.pitch=.7;
+  const v=speechSynthesis.getVoices().find(v=>/Google UK English Male|Daniel|David|Guy/i.test(v.name));
   if(v)u.voice=v;
   speechSynthesis.speak(u);
 }
-
-// ---- SPEECH INPUT ----
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 function startRecognition(){
-  if(!SR){setStatus('ERROR','Use Chrome or Edge for speech.');return}
-  if(recognitionBlocked)return;
-  try{recognition=new SR()}catch{setStatus('ERROR','Speech init failed');return}
-  recognition.continuous=true;
-  recognition.interimResults=true;
-  recognition.lang='en-US';
-  recognition.maxAlternatives=1;
+  if(!SR||srBlocked)return;
+  try{recognition=new SR()}catch{return}
+  recognition.continuous=true;recognition.interimResults=true;recognition.lang='en-US';
   recognition.onresult=handleSpeech;
-  recognition.onerror=e=>{
-    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
-      recognitionBlocked=true;
-      setStatus('BLOCKED','Microphone access denied. Reload and allow mic.');
-    }else if(e.error==='no-speech'||e.error==='aborted'){/* benign */}
-  };
+  recognition.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){srBlocked=true;setStatus('BLOCKED','Mic denied')}};
   recognition.onend=()=>{
-    if(isProcessing||recognitionBlocked)return;
-    // Progressive backoff for restart attempts
-    recognitionRestarts++;
-    const delay=Math.min(200,50*recognitionRestarts);
-    clearTimeout(recognitionRestartTimer);
-    recognitionRestartTimer=setTimeout(()=>{
-      try{recognition.start();recognitionRestarts=Math.max(0,recognitionRestarts-1)}catch{}
-    },delay);
+    if(isProcessing||srBlocked)return;
+    srRestarts++;
+    clearTimeout(srRestartTimer);
+    srRestartTimer=setTimeout(()=>{try{recognition.start();srRestarts=Math.max(0,srRestarts-1)}catch{}},Math.min(200,50*srRestarts));
   };
-  try{recognition.start();recognitionRestarts=0}catch{}
+  try{recognition.start();srRestarts=0}catch{}
 }
 function handleSpeech(event){
   if(isProcessing)return;
@@ -321,7 +456,7 @@ function handleSpeech(event){
   }
 }
 
-// ---- LLM7 ----
+// ---- LLM ----
 const history=[{role:'system',content:SYSTEM}];
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function showThinking(){responseEl.classList.add('active');responseEl.innerHTML='<span class="label">// ULTRON</span><span class="think">Processing</span>'}
@@ -329,39 +464,40 @@ function showResponse(text,animate=true){
   responseEl.classList.add('active');
   if(!animate){responseEl.innerHTML=`<span class="label">// ULTRON</span>${esc(text)}`;return}
   responseEl.innerHTML='<span class="label">// ULTRON</span><span id="typed"></span><span class="caret"></span>';
-  const el=$('typed');if(!el)return;
-  let i=0;clearInterval(typewriterTimer);
+  const el=$('typed');if(!el)return;let i=0;clearInterval(typewriterTimer);
   typewriterTimer=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(typewriterTimer)},18);
 }
 async function runCommand(q){
   if(isProcessing)return;
-  if(!API_KEY){showResponse('No API key set. Click KEY (top right).',false);speak('No access key configured.');isAwake=false;setStatus('STANDBY','Say "Hello Ultron" to wake');thinkingBoost=0;return}
+  if(!API_KEY){showResponse('No API key.',false);speak('No key.');isAwake=false;setStatus('STANDBY','Say "Hello Ultron" to wake');thinkingBoost=0;return}
   isProcessing=true;thinkingBoost=1;
-  setStatus('PROCESSING','Analyzing: "'+q.slice(0,40)+(q.length>40?'...':'')+'"');
-  showThinking();history.push({role:'user',content:q});
+  setStatus('PROCESSING',q.slice(0,40));
+  showThinking();
+  const task=spawnTask(q);
+  setTaskState(task,'working');
+  history.push({role:'user',content:q});
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),30000);
   try{
-    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},body:JSON.stringify({model:MODEL,messages:history,temperature:.7,max_tokens:250}),signal:controller.signal});
+    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},body:JSON.stringify({model:MODEL,messages:history,temperature:.7,max_tokens:220}),signal:controller.signal});
     clearTimeout(timeout);
     if(res.status===401||res.status===403)throw new Error('AUTH');
-    if(res.status===429)throw new Error('RATE_LIMIT');
-    if(!res.ok)throw new Error('HTTP '+res.status+': '+(await res.text()).slice(0,150));
+    if(!res.ok)throw new Error('HTTP '+res.status);
     const data=await res.json();
     const ans=data.choices?.[0]?.message?.content?.trim()||'(no response)';
     history.push({role:'assistant',content:ans});if(history.length>12)history.splice(1,2);
+    setTaskState(task,'done');
     showResponse(ans,true);speak(ans);
-    setStatus('AWAKE','Listening for your next command...');
+    setStatus('AWAKE','Listening...');
     clearTimeout(wakeTimer);
     wakeTimer=setTimeout(()=>{if(isAwake&&!isProcessing){isAwake=false;setStatus('STANDBY','Say "Hello Ultron" to wake');thinkingBoost=0;responseEl.classList.remove('active')}},12000);
   }catch(err){
     clearTimeout(timeout);
-    console.error(err);
-    if(err.name==='AbortError'){showResponse('Request timed out.',false);speak('Request timed out.')}
-    else if(err.message==='AUTH'){showResponse('API key rejected. Click KEY to update.',false);speak('Access denied.');showKey('Saved key was rejected. Enter a valid one.')}
-    else if(err.message==='RATE_LIMIT'){showResponse('Rate limit. Wait a moment.',false);speak('Rate limit reached.')}
-    else{showResponse('Connection error: '+err.message,false);speak('Connection error.')}
-    setStatus('ERROR','Request failed');
+    setTaskState(task,'failed');
+    if(err.name==='AbortError'){showResponse('Timed out.',false);speak('Timed out.')}
+    else if(err.message==='AUTH'){showResponse('Key rejected.',false);speak('Access denied.');showKey('Key rejected.')}
+    else{showResponse('Error: '+err.message,false);speak('Error.')}
+    setStatus('ERROR','Failed');
     setTimeout(()=>{isAwake=false;setStatus('STANDBY','Say "Hello Ultron" to wake');thinkingBoost=0},3000);
   }finally{isProcessing=false}
 }
@@ -369,35 +505,46 @@ async function runCommand(q){
 // ---- ACTIVATION ----
 startBtn.onclick=async()=>{
   startBtn.style.display='none';
-  setStatus('STARTING','Initializing systems...');
+  setStatus('STARTING','Initializing...');
   const camOK=await startCamera();
   startRecognition();
-  setTimeout(()=>{
-    setStatus('STANDBY','Say "Hello Ultron" to wake'+(camOK?'':' (gestures off)'));
-    speak('Systems online. Say hello Ultron to activate.');
-  },500);
+  setTimeout(()=>{setStatus('STANDBY','Say "Hello Ultron" to wake'+(camOK?'':' (no cam)'));speak('Systems online.')},500);
 };
 const order=['performance','balanced','ultra'];
-qualityBtn.onclick=()=>applyQuality(order[(order.indexOf(currentQuality)+1)%order.length]);
+qualityBtn.onclick=()=>{
+  const next=order[(order.indexOf(currentQuality)+1)%order.length];
+  currentQuality=next;
+  const cfg=Q[next];
+  renderer.setPixelRatio(Math.min(devicePixelRatio,cfg.pr));
+  renderer.setSize(innerWidth,innerHeight);
+  bloom.enabled=!!cfg.bloom;
+  composer.setSize(innerWidth,innerHeight);
+  handFrameInterval=1000/cfg.hfps;
+  buildOrb(next);
+  qualityBtn.textContent=`Quality: ${next[0].toUpperCase()+next.slice(1)}`;
+};
 
 // ---- ANIMATE ----
 const clock=new THREE.Clock();
 let frames=0,fpsTime=0,timeAccum=0;
+const camRight=new THREE.Vector3(),camUp=new THREE.Vector3(),camFwd=new THREE.Vector3();
 function animate(){
   requestAnimationFrame(animate);
   const dt=clock.getDelta(),b=1+thinkingBoost*3;
+  timeAccum+=dt*b;uTime.value=timeAccum;
 
-  timeAccum+=dt*b;
-  uTime.value=timeAccum;
-
-  if(!handDetected){targetRotY+=.003*b;targetRotX+=.0008*b}
-  orb.rotation.x+=(targetRotX-orb.rotation.x)*.08;
-  orb.rotation.y+=(targetRotY-orb.rotation.y)*.08;
-  camera.position.z+=(targetZoom-camera.position.z)*.08;
+  if(!handDetected){
+    if(Math.abs(rotYVel)>.001||Math.abs(rotXVel)>.001){
+      targetRotY+=rotYVel;targetRotX+=rotXVel;
+      rotYVel*=.94;rotXVel*=.94;
+    }else{targetRotY+=.003*b;targetRotX+=.0008*b}
+  }
+  orb.rotation.x+=(targetRotX-orb.rotation.x)*.10;
+  orb.rotation.y+=(targetRotY-orb.rotation.y)*.10;
+  camera.position.z+=(targetZoom-camera.position.z)*.09;
   camera.lookAt(0,0,0);
   if(core){core.rotation.x+=dt*.6*b;core.rotation.y+=dt*.9*b}
   rings.forEach((r,i)=>r.rotation.z+=dt*.15*(i+1)*b);
-
   pulses.forEach(p=>{
     p.userData.life+=dt*p.userData.speed*b;
     if(p.userData.life>1){p.userData.life=0;p.rotation.x=Math.random()*Math.PI;p.rotation.y=Math.random()*Math.PI}
@@ -417,16 +564,61 @@ function animate(){
     s.position.y=u.baseP.y+Math.sin(u.phase)*.12;
     s.material.opacity=.35+.55*(.5+.5*Math.sin(u.phase*1.7));
   });
+
+  // Position bin in front of camera, bottom-right
+  camera.updateMatrixWorld();
+  camRight.setFromMatrixColumn(camera.matrixWorld,0);
+  camUp.setFromMatrixColumn(camera.matrixWorld,1);
+  camFwd.set(-camera.matrixWorld.elements[8],-camera.matrixWorld.elements[9],-camera.matrixWorld.elements[10]).normalize();
+  const binPos=camera.position.clone()
+    .add(camFwd.clone().multiplyScalar(3.5))
+    .add(camRight.clone().multiplyScalar(1.6))
+    .add(camUp.clone().multiplyScalar(-1.0));
+  binGroup.position.copy(binPos);
+  binGroup.lookAt(camera.position);
+  // Bin idle pulse + flash decay
+  const bf=binGroup.userData.flash;
+  binGroup.userData.flash=Math.max(0,bf-dt*2);
+  const pulse=.4+.15*Math.sin(timeAccum*2)+bf*.5;
+  binMesh.material.opacity=pulse;
+  binRing.material.opacity=.5+bf*.5;
+  binGlow.material.opacity=.1+bf*.4;
+
+  // Task chip animation
+  for(const t of tasks){
+    if(t===carriedTask)continue;
+    if(t.flight){
+      t.flight.t+=dt/t.flight.dur;
+      if(t.flight.t>=1){
+        // Landing — remove
+        scene.remove(t.sprite);
+        const i=tasks.indexOf(t);if(i>=0)tasks.splice(i,1);
+        continue;
+      }
+      const e=1-Math.pow(1-t.flight.t,2);
+      t.sprite.position.lerpVectors(t.flight.from,t.flight.to,e);
+      t.sprite.material.opacity=1-t.flight.t*.5;
+      t.sprite.scale.setScalar(1.5*(1-t.flight.t*.5));
+      continue;
+    }
+    // Orbit
+    const a=t.baseAngle+timeAccum*.15;
+    t.sprite.position.set(
+      Math.cos(a)*t.baseRadius,
+      t.baseHeight+Math.sin(timeAccum+t.phase)*.15,
+      Math.sin(a)*t.baseRadius
+    );
+    t.sprite.scale.set(1.5,.375,1);
+  }
+
   composer.render();
   frames++;fpsTime+=dt;
   if(fpsTime>=1){fpsEl.textContent='FPS: '+frames;frames=0;fpsTime=0}
 }
-applyQuality('performance');
-animate();
+buildOrb('performance');animate();
 addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
   renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
-  const cfg=Q[currentQuality];if(cfg.bloom)bloom.setSize(innerWidth*cfg.br,innerHeight*cfg.br);
 });
 addEventListener('beforeunload',()=>{try{speechSynthesis.cancel()}catch{}try{recognition?.stop()}catch{}});
 </script>

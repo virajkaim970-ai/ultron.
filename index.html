@@ -76,6 +76,12 @@ const STORAGE_KEY='ultron_llm7_key';
 const WASM='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm';
 const MODEL_URL='https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
 
+// ---- SAFE STORAGE ----
+const safeStorage={
+  get(k){try{return localStorage.getItem(k)}catch{return null}},
+  set(k,v){try{localStorage.setItem(k,v);return true}catch{return false}}
+};
+
 // ---- DOM ----
 const $=id=>document.getElementById(id);
 const statusEl=$('status-text'),statusMode=document.querySelector('#status .mode');
@@ -85,20 +91,21 @@ const fpsEl=$('fps'),video=$('input_video');
 const setStatus=(m,t)=>{statusMode.textContent=m;statusEl.textContent=t};
 
 // ---- STATE ----
-let API_KEY=localStorage.getItem(STORAGE_KEY)||'';
+let API_KEY=safeStorage.get(STORAGE_KEY)||'';
 let thinkingBoost=0,isAwake=false,isProcessing=false,commandBuffer='';
-let wakeTimer=null,typewriterTimer=null;
+let wakeTimer=null,typewriterTimer=null,recognitionRestartTimer=null;
+let recognitionRestarts=0,recognitionBlocked=false;
 let handFrameInterval=1000/20;
 let targetRotX=0,targetRotY=0,targetZoom=5.5,handDetected=false,prevHandPos=null,prevPinchDist=null;
 let currentQuality='performance';
-let handLandmarker=null,lastVideoTime=-1,lastHandRun=0,recognition=null;
+let handLandmarker=null,lastVideoTime=-1,lastHandRun=0,recognition=null,cameraReady=false;
 
 const Q={performance:{pr:1,bloom:0,br:.5,seg:20,pc:200,dc:120,gc:200,rs:64,sc:18,ac:4,puc:3,hfps:20},balanced:{pr:1.25,bloom:1,br:.5,seg:28,pc:350,dc:220,gc:400,rs:96,sc:30,ac:7,puc:4,hfps:24},ultra:{pr:1.5,bloom:1,br:.75,seg:36,pc:500,dc:350,gc:700,rs:120,sc:45,ac:10,puc:6,hfps:30}};
 
 // ---- KEY MODAL ----
-function showKey(msg=''){keyInput.value=API_KEY||'';keyError.textContent=msg;keyModal.classList.add('active');setTimeout(()=>keyInput.focus(),100)}
+function showKey(msg=''){keyInput.value=API_KEY||'';keyError.textContent=msg;keyModal.classList.add('active');setTimeout(()=>{try{keyInput.focus()}catch{}},100)}
 function hideKey(){keyModal.classList.remove('active');keyError.textContent=''}
-$('key-save').onclick=()=>{const v=keyInput.value.trim();if(!v){keyError.textContent='Key cannot be empty.';return}if(v.length<8){keyError.textContent='Key too short.';return}API_KEY=v;localStorage.setItem(STORAGE_KEY,v);hideKey();showResponse('Access key saved. Systems ready.',false)};
+$('key-save').onclick=()=>{const v=keyInput.value.trim();if(!v){keyError.textContent='Key cannot be empty.';return}if(v.length<8){keyError.textContent='Key too short.';return}API_KEY=v;if(!safeStorage.set(STORAGE_KEY,v))keyError.textContent='Warning: could not save (private mode?)';hideKey();showResponse('Access key saved. Systems ready.',false)};
 $('key-clear').onclick=()=>{keyInput.value='';keyError.textContent=''};
 $('key-skip').onclick=()=>{hideKey();showResponse('Running without API key. Voice Q&A disabled.',false)};
 keyInput.addEventListener('keydown',e=>{if(e.key==='Enter')$('key-save').click()});
@@ -118,7 +125,6 @@ composer.addPass(new RenderPass(scene,camera));
 const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth*.5,innerHeight*.5),1.6,.4,.25);
 bloom.enabled=false;composer.addPass(bloom);
 
-// ---- SHARED TIME UNIFORM (for per-particle motion shader) ----
 const uTime={value:0};
 
 // ---- TEXTURES ----
@@ -134,37 +140,25 @@ let shell,innerShell,core,particles,debris,dust,rings=[],pulses=[],arcs=[],sprit
 const randPt=r=>{const p=Math.acos(2*Math.random()-1),t=Math.random()*Math.PI*2;return new THREE.Vector3(r*Math.sin(p)*Math.cos(t),r*Math.cos(p),r*Math.sin(p)*Math.sin(t))};
 const setArc=(line,r)=>{const s=randPt(r),e=randPt(r);const m=s.clone().add(e).multiplyScalar(.5).normalize().multiplyScalar(r*1.45);const pts=new THREE.QuadraticBezierCurve3(s,m,e).getPoints(30);const pos=line.geometry.attributes.position;for(let i=0;i<pts.length;i++)pos.setXYZ(i,pts[i].x,pts[i].y,pts[i].z);pos.needsUpdate=true;line.geometry.computeBoundingSphere()};
 
-// --- INDIVIDUAL PARTICLE MOTION via GPU ---
-function applyMotionShader(mat, wobble, swirl){
+function applyMotionShader(mat,wobble,swirl){
   mat.onBeforeCompile=shader=>{
     shader.uniforms.uTime=uTime;
     shader.uniforms.uWobble={value:wobble};
     shader.uniforms.uSwirl={value:swirl};
-    shader.vertexShader=`
-      uniform float uTime;
-      uniform float uWobble;
-      uniform float uSwirl;
-      attribute float aSeed;
-    `+shader.vertexShader;
-    shader.vertexShader=shader.vertexShader.replace(
-      '#include <begin_vertex>',
-      `
-      vec3 transformed = vec3(position);
-      float t = uTime + aSeed;
-      // Per-particle radial breathing
-      float r = length(transformed);
-      vec3 dir = transformed / max(r, 0.0001);
-      transformed += dir * sin(t * 1.2) * uWobble;
-      // Per-particle 3D drift (each axis at different freq + phase)
-      transformed.x += sin(t * 0.6 + aSeed * 1.7) * uWobble * 0.8;
-      transformed.y += cos(t * 0.8 + aSeed * 2.3) * uWobble * 0.8;
-      transformed.z += sin(t * 1.0 + aSeed * 3.1) * uWobble * 0.8;
-      // Slow orbital swirl around Y axis (individual speed per particle)
-      float ang = t * uSwirl * (0.4 + fract(aSeed * 0.159) * 0.6);
-      float cs = cos(ang), sn = sin(ang);
-      transformed.xz = mat2(cs, -sn, sn, cs) * transformed.xz;
-      `
-    );
+    shader.vertexShader=`uniform float uTime;uniform float uWobble;uniform float uSwirl;attribute float aSeed;`+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`
+      vec3 transformed=vec3(position);
+      float t=uTime+aSeed;
+      float r=length(transformed);
+      vec3 dir=transformed/max(r,0.0001);
+      transformed+=dir*sin(t*1.2)*uWobble;
+      transformed.x+=sin(t*0.6+aSeed*1.7)*uWobble*0.8;
+      transformed.y+=cos(t*0.8+aSeed*2.3)*uWobble*0.8;
+      transformed.z+=sin(t*1.0+aSeed*3.1)*uWobble*0.8;
+      float ang=t*uSwirl*(0.4+fract(aSeed*0.159)*0.6);
+      float cs=cos(ang),sn=sin(ang);
+      transformed.xz=mat2(cs,-sn,sn,cs)*transformed.xz;
+    `);
   };
   mat.customProgramCacheKey=()=>'motion_'+wobble+'_'+swirl;
 }
@@ -173,11 +167,7 @@ function makePoints(count,rfn,color,size,opacity,wobble,swirl){
   const g=new THREE.BufferGeometry();
   const p=new Float32Array(count*3);
   const seeds=new Float32Array(count);
-  for(let i=0;i<count;i++){
-    const v=randPt(rfn());
-    p[i*3]=v.x;p[i*3+1]=v.y;p[i*3+2]=v.z;
-    seeds[i]=Math.random()*Math.PI*2;
-  }
+  for(let i=0;i<count;i++){const v=randPt(rfn());p[i*3]=v.x;p[i*3+1]=v.y;p[i*3+2]=v.z;seeds[i]=Math.random()*Math.PI*2}
   g.setAttribute('position',new THREE.BufferAttribute(p,3));
   g.setAttribute('aSeed',new THREE.BufferAttribute(seeds,1));
   const m=new THREE.PointsMaterial({map:glowTex,color,size,transparent:true,opacity,blending:THREE.AdditiveBlending,depthWrite:false,sizeAttenuation:true});
@@ -194,11 +184,8 @@ function buildOrb(q){
   innerShell=new THREE.Mesh(new THREE.SphereGeometry(1.85,cfg.seg,cfg.seg),new THREE.MeshBasicMaterial({color:0xff6600,wireframe:true,transparent:true,opacity:.07}));orb.add(innerShell);
   core=new THREE.Mesh(new THREE.TorusKnotGeometry(.55,.1,40,6,2,3),new THREE.MeshBasicMaterial({color:0xff2200,wireframe:true,transparent:true,opacity:.55}));orb.add(core);
 
-  // Main particles: tiny wobble, slow swirl
   particles=makePoints(cfg.pc,()=>2.02,0xffaa44,.11,1.0,0.05,0.15);orb.add(particles);
-  // Debris: more wobble, faster swirl
   debris=makePoints(cfg.dc,()=>2.15+Math.random()*.9,0xff7700,.07,.85,0.14,0.30);orb.add(debris);
-  // Dust: gentle wobble, medium swirl
   dust=makePoints(cfg.gc,()=>.4+Math.random()*1.5,0xff3300,.035,.55,0.08,0.22);orb.add(dust);
 
   for(let i=0;i<3;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(2.3+i*.2,.008,8,cfg.rs),new THREE.MeshBasicMaterial({color:0xff4400,transparent:true,opacity:.4}));r.rotation.x=Math.PI/2;r.rotation.y=i*Math.PI/3;orb.add(r);rings.push(r)}
@@ -224,15 +211,23 @@ function applyQuality(q){
 
 // ---- HAND TRACKING ----
 async function startCamera(){
-  if(handLandmarker)return;
+  if(handLandmarker||cameraReady)return cameraReady;
+  if(!navigator.mediaDevices?.getUserMedia){console.warn('No camera API');return false}
   try{
     const stream=await navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'},audio:false});
-    video.srcObject=stream;await video.play();
+    video.srcObject=stream;
+    await video.play().catch(()=>{});
     const fs=await FilesetResolver.forVisionTasks(WASM);
     const opts={baseOptions:{modelAssetPath:MODEL_URL,delegate:'GPU'},runningMode:'VIDEO',numHands:2,minHandDetectionConfidence:.5,minHandPresenceConfidence:.5,minTrackingConfidence:.5};
-    try{handLandmarker=await HandLandmarker.createFromOptions(fs,opts)}catch{opts.baseOptions.delegate='CPU';handLandmarker=await HandLandmarker.createFromOptions(fs,opts)}
+    try{handLandmarker=await HandLandmarker.createFromOptions(fs,opts)}
+    catch{opts.baseOptions.delegate='CPU';handLandmarker=await HandLandmarker.createFromOptions(fs,opts)}
+    cameraReady=true;
     detectLoop();
-  }catch(e){console.warn('Camera unavailable:',e.message)}
+    return true;
+  }catch(e){
+    console.warn('Camera unavailable — gesture control disabled:',e.message);
+    return false;
+  }
 }
 function detectLoop(){
   if(!handLandmarker)return;
@@ -258,10 +253,13 @@ function processHands(r){
 }
 
 // ---- SPEECH OUTPUT ----
-if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+if('speechSynthesis' in window){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+}
 function speak(text){
   if(!('speechSynthesis' in window))return;
-  speechSynthesis.cancel();
+  try{speechSynthesis.cancel()}catch{}
   const u=new SpeechSynthesisUtterance(text);u.rate=1;u.pitch=.7;u.volume=1;
   const v=speechSynthesis.getVoices().find(v=>/Google UK English Male|Daniel|Microsoft David|Microsoft Guy/i.test(v.name));
   if(v)u.voice=v;
@@ -272,11 +270,30 @@ function speak(text){
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 function startRecognition(){
   if(!SR){setStatus('ERROR','Use Chrome or Edge for speech.');return}
-  recognition=new SR();recognition.continuous=true;recognition.interimResults=true;recognition.lang='en-US';
+  if(recognitionBlocked)return;
+  try{recognition=new SR()}catch{setStatus('ERROR','Speech init failed');return}
+  recognition.continuous=true;
+  recognition.interimResults=true;
+  recognition.lang='en-US';
+  recognition.maxAlternatives=1;
   recognition.onresult=handleSpeech;
-  recognition.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed')setStatus('BLOCKED','Microphone access denied')};
-  recognition.onend=()=>{if(!isProcessing)try{recognition.start()}catch{}};
-  try{recognition.start()}catch{}
+  recognition.onerror=e=>{
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){
+      recognitionBlocked=true;
+      setStatus('BLOCKED','Microphone access denied. Reload and allow mic.');
+    }else if(e.error==='no-speech'||e.error==='aborted'){/* benign */}
+  };
+  recognition.onend=()=>{
+    if(isProcessing||recognitionBlocked)return;
+    // Progressive backoff for restart attempts
+    recognitionRestarts++;
+    const delay=Math.min(200,50*recognitionRestarts);
+    clearTimeout(recognitionRestartTimer);
+    recognitionRestartTimer=setTimeout(()=>{
+      try{recognition.start();recognitionRestarts=Math.max(0,recognitionRestarts-1)}catch{}
+    },delay);
+  };
+  try{recognition.start();recognitionRestarts=0}catch{}
 }
 function handleSpeech(event){
   if(isProcessing)return;
@@ -312,7 +329,8 @@ function showResponse(text,animate=true){
   responseEl.classList.add('active');
   if(!animate){responseEl.innerHTML=`<span class="label">// ULTRON</span>${esc(text)}`;return}
   responseEl.innerHTML='<span class="label">// ULTRON</span><span id="typed"></span><span class="caret"></span>';
-  const el=$('typed');let i=0;clearInterval(typewriterTimer);
+  const el=$('typed');if(!el)return;
+  let i=0;clearInterval(typewriterTimer);
   typewriterTimer=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length)clearInterval(typewriterTimer)},18);
 }
 async function runCommand(q){
@@ -321,9 +339,13 @@ async function runCommand(q){
   isProcessing=true;thinkingBoost=1;
   setStatus('PROCESSING','Analyzing: "'+q.slice(0,40)+(q.length>40?'...':'')+'"');
   showThinking();history.push({role:'user',content:q});
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),30000);
   try{
-    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},body:JSON.stringify({model:MODEL,messages:history,temperature:.7,max_tokens:250})});
+    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+API_KEY},body:JSON.stringify({model:MODEL,messages:history,temperature:.7,max_tokens:250}),signal:controller.signal});
+    clearTimeout(timeout);
     if(res.status===401||res.status===403)throw new Error('AUTH');
+    if(res.status===429)throw new Error('RATE_LIMIT');
     if(!res.ok)throw new Error('HTTP '+res.status+': '+(await res.text()).slice(0,150));
     const data=await res.json();
     const ans=data.choices?.[0]?.message?.content?.trim()||'(no response)';
@@ -333,8 +355,11 @@ async function runCommand(q){
     clearTimeout(wakeTimer);
     wakeTimer=setTimeout(()=>{if(isAwake&&!isProcessing){isAwake=false;setStatus('STANDBY','Say "Hello Ultron" to wake');thinkingBoost=0;responseEl.classList.remove('active')}},12000);
   }catch(err){
+    clearTimeout(timeout);
     console.error(err);
-    if(err.message==='AUTH'){showResponse('API key rejected. Click KEY to update.',false);speak('Access denied.');showKey('Saved key was rejected. Enter a valid one.')}
+    if(err.name==='AbortError'){showResponse('Request timed out.',false);speak('Request timed out.')}
+    else if(err.message==='AUTH'){showResponse('API key rejected. Click KEY to update.',false);speak('Access denied.');showKey('Saved key was rejected. Enter a valid one.')}
+    else if(err.message==='RATE_LIMIT'){showResponse('Rate limit. Wait a moment.',false);speak('Rate limit reached.')}
     else{showResponse('Connection error: '+err.message,false);speak('Connection error.')}
     setStatus('ERROR','Request failed');
     setTimeout(()=>{isAwake=false;setStatus('STANDBY','Say "Hello Ultron" to wake');thinkingBoost=0},3000);
@@ -345,21 +370,25 @@ async function runCommand(q){
 startBtn.onclick=async()=>{
   startBtn.style.display='none';
   setStatus('STARTING','Initializing systems...');
-  await startCamera();
+  const camOK=await startCamera();
   startRecognition();
-  setTimeout(()=>{setStatus('STANDBY','Say "Hello Ultron" to wake');speak('Systems online. Say hello Ultron to activate.')},500);
+  setTimeout(()=>{
+    setStatus('STANDBY','Say "Hello Ultron" to wake'+(camOK?'':' (gestures off)'));
+    speak('Systems online. Say hello Ultron to activate.');
+  },500);
 };
 const order=['performance','balanced','ultra'];
 qualityBtn.onclick=()=>applyQuality(order[(order.indexOf(currentQuality)+1)%order.length]);
 
 // ---- ANIMATE ----
 const clock=new THREE.Clock();
-let frames=0,fpsTime=0;
+let frames=0,fpsTime=0,timeAccum=0;
 function animate(){
   requestAnimationFrame(animate);
-  const dt=clock.getDelta(),t=clock.getElapsedTime(),b=1+thinkingBoost*3;
+  const dt=clock.getDelta(),b=1+thinkingBoost*3;
 
-  uTime.value=t;
+  timeAccum+=dt*b;
+  uTime.value=timeAccum;
 
   if(!handDetected){targetRotY+=.003*b;targetRotX+=.0008*b}
   orb.rotation.x+=(targetRotX-orb.rotation.x)*.08;
@@ -382,7 +411,7 @@ function animate(){
   });
   sprites.forEach(s=>{
     const u=s.userData;u.phase+=dt*u.speed*b;
-    const a=t*u.orbit*b,c=Math.cos(a),si=Math.sin(a);
+    const a=timeAccum*u.orbit,c=Math.cos(a),si=Math.sin(a);
     s.position.x=u.baseP.x*c-u.baseP.z*si;
     s.position.z=u.baseP.x*si+u.baseP.z*c;
     s.position.y=u.baseP.y+Math.sin(u.phase)*.12;
@@ -399,6 +428,7 @@ addEventListener('resize',()=>{
   renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);
   const cfg=Q[currentQuality];if(cfg.bloom)bloom.setSize(innerWidth*cfg.br,innerHeight*cfg.br);
 });
+addEventListener('beforeunload',()=>{try{speechSynthesis.cancel()}catch{}try{recognition?.stop()}catch{}});
 </script>
 </body>
 </html>

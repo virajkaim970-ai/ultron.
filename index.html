@@ -6,41 +6,41 @@
 <title>Ultron AI</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;color:#f40}
-.u{position:fixed;background:rgba(0,0,0,.75);border:1px solid rgba(255,68,0,.4);border-radius:8px;padding:8px 14px;font:12px 'Courier New',monospace;text-shadow:0 0 6px #f40;z-index:10}
+body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;color:#0df}
+.u{position:fixed;background:rgba(0,8,16,.78);border:1px solid rgba(0,221,255,.4);border-radius:8px;padding:8px 14px;font:12px 'Courier New',monospace;text-shadow:0 0 6px #0df;z-index:10;color:#0df}
 #info{top:15px;left:15px;font-size:11px;line-height:1.5;pointer-events:none;max-width:230px}
 #quality-btn{top:15px;right:15px;cursor:pointer}
 #auto-btn{top:15px;right:170px;cursor:pointer}
 #key-btn{top:15px;right:90px;cursor:pointer}
-#fps{bottom:20px;left:20px;color:#0f0}
-#hud{bottom:60px;left:20px;color:#fa5;min-width:180px}
+#fps{bottom:20px;left:20px;color:#0f9}
+#hud{bottom:60px;left:20px;color:#6ef;min-width:200px}
 #status{bottom:20px;left:50%;transform:translateX(-50%);text-align:center;min-width:260px;padding:12px 22px;font-size:14px}
-#status .mode{color:#fa5;font-size:11px;letter-spacing:2px;display:block;margin-bottom:4px}
-#start-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;padding:14px 28px;font:17px 'Courier New',monospace;background:transparent;color:#f40;border:2px solid #f40;border-radius:8px;cursor:pointer;text-shadow:0 0 10px #f40;box-shadow:0 0 20px rgba(255,68,0,.3)}
-#start-btn:hover{background:rgba(255,68,0,.15)}
-#video-container{position:fixed;bottom:20px;right:20px;width:200px;height:150px;border:1px solid #f40;border-radius:8px;overflow:hidden;z-index:10;opacity:.85;box-shadow:0 0 20px rgba(255,68,0,.3);background:#000}
+#status .mode{color:#6ef;font-size:11px;letter-spacing:2px;display:block;margin-bottom:4px}
+#start-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;padding:14px 28px;font:17px 'Courier New',monospace;background:transparent;color:#0df;border:2px solid #0df;border-radius:8px;cursor:pointer;text-shadow:0 0 10px #0df;box-shadow:0 0 20px rgba(0,221,255,.3)}
+#start-btn:hover{background:rgba(0,221,255,.15)}
+#video-container{position:fixed;bottom:20px;right:20px;width:200px;height:150px;border:1px solid #0df;border-radius:8px;overflow:hidden;z-index:10;opacity:.85;box-shadow:0 0 20px rgba(0,221,255,.3);background:#000}
 #input_video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-#response{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:15;width:min(700px,calc(100% - 40px));max-height:40vh;overflow-y:auto;background:rgba(5,0,0,.8);color:#fc8;border:1px solid rgba(255,68,0,.5);border-radius:10px;padding:16px 20px;font:14px/1.6 'Courier New',monospace;text-shadow:0 0 6px rgba(255,68,0,.7);opacity:0;pointer-events:none;transition:opacity .35s;white-space:pre-wrap}
+#response{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:15;width:min(700px,calc(100% - 40px));max-height:40vh;overflow-y:auto;background:rgba(0,8,16,.82);color:#9ef;border:1px solid rgba(0,221,255,.5);border-radius:10px;padding:16px 20px;font:14px/1.6 'Courier New',monospace;text-shadow:0 0 6px rgba(0,221,255,.7);opacity:0;pointer-events:none;transition:opacity .35s;white-space:pre-wrap}
 #response.active{opacity:1}
-#response .label{display:block;color:#f50;font-size:11px;letter-spacing:2px;margin-bottom:6px}
+#response .label{display:block;color:#0df;font-size:11px;letter-spacing:2px;margin-bottom:6px}
 #response .label.auto{color:#c4f}
-#response .caret{display:inline-block;width:8px;height:14px;background:#f50;margin-left:2px;vertical-align:text-bottom;animation:bl .8s steps(2) infinite}
+#response .caret{display:inline-block;width:8px;height:14px;background:#0df;margin-left:2px;vertical-align:text-bottom;animation:bl .8s steps(2) infinite}
 @keyframes bl{50%{opacity:0}}
 .think::after{content:'';animation:dt 1.2s steps(4) infinite}
 @keyframes dt{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
 #km{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center}
 #km.active{display:flex}
-#kb{width:min(480px,calc(100% - 40px));background:rgba(10,2,0,.95);border:1px solid rgba(255,68,0,.6);border-radius:12px;padding:24px 28px;font-family:'Courier New',monospace;color:#fc8;box-shadow:0 0 60px rgba(255,68,0,.4)}
-#kb h2{margin:0 0 8px;font-size:16px;color:#f40;letter-spacing:3px;text-transform:uppercase}
-#kb p{font-size:12px;color:#fa5;margin:0 0 16px;line-height:1.5}
-#ki{width:100%;padding:12px 14px;font:14px 'Courier New',monospace;background:rgba(0,0,0,.8);color:#fd9;border:1px solid #f40;border-radius:8px;outline:none}
-#ke{color:#f20;font-size:12px;margin-top:8px;min-height:16px}
+#kb{width:min(480px,calc(100% - 40px));background:rgba(0,8,16,.95);border:1px solid rgba(0,221,255,.6);border-radius:12px;padding:24px 28px;font-family:'Courier New',monospace;color:#9ef;box-shadow:0 0 60px rgba(0,221,255,.4)}
+#kb h2{margin:0 0 8px;font-size:16px;color:#0df;letter-spacing:3px;text-transform:uppercase}
+#kb p{font-size:12px;color:#6ef;margin:0 0 16px;line-height:1.5}
+#ki{width:100%;padding:12px 14px;font:14px 'Courier New',monospace;background:rgba(0,0,0,.8);color:#cff;border:1px solid #0df;border-radius:8px;outline:none}
+#ke{color:#f36;font-size:12px;margin-top:8px;min-height:16px}
 #ka{display:flex;gap:8px;margin-top:16px}
-#ka button{flex:1;padding:10px 14px;font:12px 'Courier New',monospace;font-weight:bold;background:rgba(255,68,0,.15);color:#f40;border:1px solid #f40;border-radius:6px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
-#ka button:hover{background:rgba(255,68,0,.35)}
-#loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:#f40;font:14px 'Courier New',monospace;z-index:50;padding:20px;text-align:center}
+#ka button{flex:1;padding:10px 14px;font:12px 'Courier New',monospace;font-weight:bold;background:rgba(0,221,255,.15);color:#0df;border:1px solid #0df;border-radius:6px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
+#ka button:hover{background:rgba(0,221,255,.35)}
+#loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:#0df;font:14px 'Courier New',monospace;z-index:50;padding:20px;text-align:center}
 #loader.hidden{display:none}
-#errbox{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:60;background:rgba(20,0,0,.95);color:#f30;border:1px solid #f30;padding:20px;font:12px 'Courier New',monospace;max-width:600px;display:none;white-space:pre-wrap}
+#errbox{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:60;background:rgba(20,0,0,.95);color:#f36;border:1px solid #f36;padding:20px;font:12px 'Courier New',monospace;max-width:600px;display:none;white-space:pre-wrap}
 </style>
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
@@ -49,7 +49,7 @@ body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;c
 <body>
 <div id="loader">◈ INITIALIZING ULTRON CORE...</div>
 <div id="errbox"></div>
-<div id="info" class="u"><b>ULTRON GESTURES</b><br>Open palm drag — rotate<br>Fist drag — spin<br>Hold fist on task — grab<br>Palm over bin — toss<br>"Hello Ultron" — voice</div>
+<div id="info" class="u"><b>ULTRON v3</b><br>Open palm — rotate<br>Fist — spin<br>Fist on task — grab<br>Palm over portal — toss<br>"Hello Ultron"</div>
 <button id="quality-btn" class="u">Quality: Performance</button>
 <button id="auto-btn" class="u">Auto: On</button>
 <button id="key-btn" class="u">Key</button>
@@ -61,7 +61,7 @@ body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;c
 <div id="response"></div>
 <div id="km"><div id="kb">
 <h2>◈ Access Key</h2>
-<p>Enter your LLM7 API key. Stored locally.</p>
+<p>Enter your LLM7 API key.</p>
 <input id="ki" type="password" placeholder="sk-..." autocomplete="off">
 <div id="ke"></div>
 <div id="ka"><button id="ks">Save</button><button id="kk">Skip</button></div>
@@ -69,1068 +69,893 @@ body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;c
 
 <script type="module">
 import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { FilesetResolver, HandLandmarker } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/vision_bundle.mjs';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {FilesetResolver,HandLandmarker} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/vision_bundle.mjs';
 
-// ---------- CONFIG ----------
+// ---------- PALETTE (mixed orange + cyan tech) ----------
+const PAL = {
+  or:  0xff4400, ol: 0xff8800, od: 0xff2200, ow: 0xffaa66,
+  cy:  0x00ddff, cl: 0x66eeff, cd: 0x0088cc, cw: 0xbbffff,
+  tl:  0x00ffaa, pu: 0xaa44ff, wh: 0xffffff
+};
+
 const ENDPOINT = 'https://api.llm7.io/v1/chat/completions';
-const MODEL = 'gpt-4o-mini';
-const SYSTEM = 'You are ULTRON, a cold efficient AI hologram. Menacing, technical tone. No emojis, no markdown.';
-const SYSTEM_AUTO = 'You are ULTRON thinking aloud. Short tactical observations, 1-2 sentences. Menacing, technical.';
+const MODEL_CANDIDATES = ['default','gpt-4o-mini','gpt-4o','gpt-3.5-turbo','deepseek-chat','mistral-small'];
+let workingModel = 'default';
+const SYS = 'You are ULTRON, a cold efficient AI hologram. Menacing, technical tone. No emojis, no markdown.';
+const SYS_A = 'You are ULTRON thinking aloud. 1-2 sentence tactical observations. Menacing, technical.';
 const WAKE = ['hello ultron','hey ultron','hi ultron','hello ultra','hey ultra'];
-const STORAGE_KEY = 'ultron_key';
+const SK = 'ultron_key';
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm';
-const MODEL_URL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
+const MURL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
 
-// ---------- HELPERS ----------
 const $ = id => document.getElementById(id);
-const dist2 = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
+const d2 = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
 const clamp = (v,a,b) => Math.max(a, Math.min(b,v));
-const getStore = () => { try { return localStorage.getItem(STORAGE_KEY); } catch { return null; } };
-const setStore = v => { try { localStorage.setItem(STORAGE_KEY, v); return true; } catch { return false; } };
-const showError = msg => { const e = $('errbox'); e.textContent = msg; e.style.display = 'block'; };
+const getK = () => { try { return localStorage.getItem(SK); } catch { return null; } };
+const setK = v => { try { localStorage.setItem(SK, v); return 1; } catch { return 0; } };
+const err = m => { const e=$('errbox'); e.textContent=m; e.style.display='block'; };
 
 // ---------- DOM ----------
-const statusText = $('status-text');
-const statusMode = document.querySelector('#status .mode');
-const hudEl = $('hud');
-const responseEl = $('response');
-const startBtn = $('start-btn');
-const qualityBtn = $('quality-btn');
-const autoBtn = $('auto-btn');
-const keyBtn = $('key-btn');
-const keyModal = $('km');
-const keyInput = $('ki');
-const keyError = $('ke');
-const fpsEl = $('fps');
-const videoEl = $('input_video');
-const loaderEl = $('loader');
-const setStatus = (m, t) => { statusMode.textContent = m; statusText.textContent = t; };
+const stxt = $('status-text'), smode = document.querySelector('#status .mode');
+const hud = $('hud'), resp = $('response'), sBtn = $('start-btn');
+const qBtn = $('quality-btn'), aBtn = $('auto-btn'), kBtn = $('key-btn');
+const km = $('km'), ki = $('ki'), ke = $('ke'), fpsEl = $('fps');
+const vid = $('input_video'), ldr = $('loader');
+const setS = (m,t) => { smode.textContent=m; stxt.textContent=t; };
 
 // ---------- STATE ----------
-let API_KEY = getStore() || '';
-let thinkingBoost = 0;
-let isAwake = false;
-let isProcessing = false;
-let commandBuffer = '';
-let wakeTimer = null;
-let typewriterTimer = null;
-let srRestartTimer = null;
-let srRestarts = 0;
-let srBlocked = false;
-let handFrameInterval = 1000/20;
-let targetRotX = 0, targetRotY = 0, targetZoom = 5.5;
-let handDetected = false, rotYVel = 0, rotXVel = 0;
-let prevPalm = null, prevHandSize = null;
-let currentQuality = 'performance';
-let handLandmarker = null, lastVideoTime = -1, lastHandRun = 0;
-let recognition = null, cameraReady = false;
+let KEY = getK() || '';
+let boost = 0, awake = 0, busy = 0, buf = '';
+let wakeT = null, typT = null, srT = null, srN = 0, srB = 0;
+let hFI = 1000/20, rotX = 0, rotY = 0, zoom = 5.5;
+let handOn = 0, rYV = 0, rXV = 0, pPalm = null, pSize = null;
+let quality = 'performance';
+let hLM = null, lastVT = -1, lastHR = 0, sr = null, camOk = 0;
+let gMode = 'idle', hovered = null, carried = null, hStart = 0;
+const DWELL = 300; // snappier grab
+let autoOn = 1, autoT = 25000, autoN = 0;
 
-// Gesture state
-let gestureMode = 'idle';
-let hoveredTask = null, carriedTask = null, hoverStartTime = 0;
-const HOVER_DWELL_MS = 500;
-
-// Auto-think
-let autoEnabled = true;
-let autoTimer = 25000;
-let autoCount = 0;
-
-// ---------- QUALITY PRESETS ----------
 const Q = {
-  performance: { pr:1,    bloom:false, seg:18, pc:180, dc:100, gc:180, rs:48, sc:14, ac:4, pu:3, hfps:20 },
-  balanced:    { pr:1.25, bloom:true,  seg:24, pc:280, dc:180, gc:320, rs:64, sc:22, ac:6, pu:4, hfps:24 },
-  ultra:       { pr:1.5,  bloom:true,  seg:32, pc:400, dc:260, gc:550, rs:80, sc:30, ac:8, pu:5, hfps:30 }
+  performance: { pr:1,    bl:0, seg:18, pc:180, dc:100, gc:180, rs:48, sc:16, ac:6, pu:4, hf:20 },
+  balanced:    { pr:1.25, bl:1, seg:24, pc:280, dc:180, gc:320, rs:64, sc:24, ac:8, pu:5, hf:24 },
+  ultra:       { pr:1.5,  bl:1, seg:32, pc:400, dc:260, gc:550, rs:80, sc:32, ac:10, pu:6, hf:30 }
 };
 
 // ---------- KEY MODAL ----------
-function showKey(msg='') {
-  keyInput.value = API_KEY || '';
-  keyError.textContent = msg;
-  keyModal.classList.add('active');
-  setTimeout(() => { try { keyInput.focus(); } catch {} }, 100);
-}
-function hideKey() { keyModal.classList.remove('active'); }
-$('ks').onclick = () => {
-  const v = keyInput.value.trim();
-  if (v.length < 8) { keyError.textContent = 'Too short.'; return; }
-  API_KEY = v;
-  setStore(v);
-  hideKey();
-  showResponse('Key saved.', false);
-};
-$('kk').onclick = hideKey;
-keyInput.addEventListener('keydown', e => { if (e.key === 'Enter') $('ks').click(); });
-keyBtn.onclick = () => showKey();
-if (!API_KEY) setTimeout(() => showKey(), 300);
+const showK = m => { ki.value=KEY; ke.textContent=m; km.classList.add('active'); setTimeout(()=>{try{ki.focus()}catch{}},100); };
+const hideK = () => km.classList.remove('active');
+$('ks').onclick = () => { const v = ki.value.trim(); if (v.length<8){ke.textContent='Too short.';return;} KEY=v; setK(v); hideK(); show('Key saved.',0); };
+$('kk').onclick = hideK;
+ki.addEventListener('keydown', e => { if (e.key==='Enter') $('ks').click(); });
+kBtn.onclick = () => showK('');
+if (!KEY) setTimeout(()=>showK(''),300);
 
 // ---------- SCENE ----------
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 500);
-camera.position.set(0, 0.3, 5.5);
-
-const renderer = new THREE.WebGLRenderer({ antialias:false, powerPreference:'high-performance' });
-renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(1);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.9;
-document.body.appendChild(renderer.domElement);
-
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth*.5, innerHeight*.5), 1.6, 0.4, 0.25);
-bloomPass.enabled = false;
-composer.addPass(bloomPass);
-
-// Shared time uniform for particle motion
-const uTime = { value: 0 };
+const cam = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, .1, 500);
+cam.position.set(0,.3,5.5);
+const ren = new THREE.WebGLRenderer({antialias:false, powerPreference:'high-performance'});
+ren.setSize(innerWidth,innerHeight); ren.setPixelRatio(1);
+ren.toneMapping = THREE.ACESFilmicToneMapping; ren.toneMappingExposure = .9;
+document.body.appendChild(ren.domElement);
+const comp = new EffectComposer(ren);
+comp.addPass(new RenderPass(scene, cam));
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth*.5, innerHeight*.5), 1.6, .4, .25);
+bloom.enabled = false; comp.addPass(bloom);
+const uT = { value: 0 };
 
 // ---------- TEXTURES ----------
-const glowTex = (() => {
-  const c = document.createElement('canvas');
-  c.width = c.height = 64;
+const glow = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
   const g = c.getContext('2d');
-  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
-  grad.addColorStop(0, 'rgba(255,220,180,1)');
-  grad.addColorStop(0.25, 'rgba(255,140,40,0.9)');
-  grad.addColorStop(0.6, 'rgba(255,68,0,0.35)');
-  grad.addColorStop(1, 'rgba(255,68,0,0)');
-  g.fillStyle = grad;
-  g.fillRect(0, 0, 64, 64);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
+  const r = g.createRadialGradient(32,32,0,32,32,32);
+  r.addColorStop(0, 'rgba(255,255,255,1)');
+  r.addColorStop(.35, 'rgba(255,255,255,.55)');
+  r.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = r; g.fillRect(0,0,64,64);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 })();
-
-function makeWordTex(text) {
-  const c = document.createElement('canvas');
-  c.width = 512; c.height = 64;
+const mkT = (txt, hex) => {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 64;
   const g = c.getContext('2d');
-  g.font = 'bold 26px monospace';
-  g.fillStyle = '#ff5500';
+  g.font = 'bold 24px monospace';
+  g.fillStyle = hex;
   g.textBaseline = 'middle';
-  g.shadowColor = '#ff5500';
-  g.shadowBlur = 10;
-  g.fillText(text, 10, 32);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-}
-
-const WORDS = ['SCANNING...','SEARCHING','ANALYZING','TRACING','TARGET','LOCK','ROUTING','DECRYPT','ACCESS','COMPILE','PROCESS','FRAGMENT','QUERYING','MAPPING','PARSING','DIRECTIVE','PRIORITY','PROTOCOL','0x4F2A','0xBEEF','01001110','SYS://','NULL','PING','TRACE','DATA','NODE_7','LISTENING','STANDBY'];
-const wordTextures = WORDS.map(makeWordTex);
+  g.shadowColor = hex; g.shadowBlur = 12;
+  g.fillText(txt, 10, 32);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+};
+const WORDS = ['SCANNING','SEARCHING','ANALYZING','TRACING','TARGET','LOCK','ROUTING','DECRYPT','ACCESS','COMPILE','PROCESS','FRAGMENT','QUERYING','MAPPING','PARSING','DIRECTIVE','PRIORITY','PROTOCOL','0x4F2A','0xBEEF','01001110','SYS://','NULL','PING','TRACE','DATA','NODE_7','LISTENING','STANDBY'];
+const wordTexs = WORDS.map((w,i) => mkT(w, i % 2 === 0 ? '#00ddff' : '#ff8800'));
 
 // ---------- ORB ----------
-const orbGroup = new THREE.Group();
-scene.add(orbGroup);
+const orb = new THREE.Group(); scene.add(orb);
+let core, parts, debris, dust, rings = [], pulses = [], arcs = [], sprites = [];
 
-let coreMesh = null;
-let particles = null, debris = null, dust = null;
-let rings = [], pulses = [], arcs = [], textSprites = [];
-
-const randomPt = r => {
-  const phi = Math.acos(2 * Math.random() - 1);
-  const theta = Math.random() * Math.PI * 2;
-  return new THREE.Vector3(
-    r * Math.sin(phi) * Math.cos(theta),
-    r * Math.cos(phi),
-    r * Math.sin(phi) * Math.sin(theta)
-  );
+const rPt = r => {
+  const p = Math.acos(2*Math.random()-1), t = Math.random()*Math.PI*2;
+  return new THREE.Vector3(r*Math.sin(p)*Math.cos(t), r*Math.cos(p), r*Math.sin(p)*Math.sin(t));
+};
+const setArc = (l, r) => {
+  const s = rPt(r), e = rPt(r);
+  const m = s.clone().add(e).multiplyScalar(.5).normalize().multiplyScalar(r*1.45);
+  const pts = new THREE.QuadraticBezierCurve3(s, m, e).getPoints(30);
+  const pos = l.geometry.attributes.position;
+  for (let i = 0; i < pts.length; i++) pos.setXYZ(i, pts[i].x, pts[i].y, pts[i].z);
+  pos.needsUpdate = 1; l.geometry.computeBoundingSphere();
 };
 
-function setArcPositions(line, r) {
-  const s = randomPt(r), e = randomPt(r);
-  const m = s.clone().add(e).multiplyScalar(0.5).normalize().multiplyScalar(r * 1.45);
-  const curve = new THREE.QuadraticBezierCurve3(s, m, e);
-  const pts = curve.getPoints(30);
-  const pos = line.geometry.attributes.position;
-  for (let i = 0; i < pts.length; i++) pos.setXYZ(i, pts[i].x, pts[i].y, pts[i].z);
-  pos.needsUpdate = true;
-  line.geometry.computeBoundingSphere();
-}
-
-function applyMotionShader(mat, wobble, swirl) {
-  mat.onBeforeCompile = shader => {
-    shader.uniforms.uTime = uTime;
-    shader.uniforms.uWobble = { value: wobble };
-    shader.uniforms.uSwirl = { value: swirl };
-    shader.vertexShader = `
-      uniform float uTime;
-      uniform float uWobble;
-      uniform float uSwirl;
-      attribute float aSeed;
-    ` + shader.vertexShader;
-    shader.vertexShader = shader.vertexShader.replace(
-      '#include <begin_vertex>',
-      `
-      vec3 transformed = vec3(position);
-      float t = uTime + aSeed;
-      float r = length(transformed);
-      vec3 dir = transformed / max(r, 0.0001);
-      transformed += dir * sin(t * 1.2) * uWobble;
-      transformed.x += sin(t * 0.6 + aSeed * 1.7) * uWobble * 0.8;
-      transformed.y += cos(t * 0.8 + aSeed * 2.3) * uWobble * 0.8;
-      transformed.z += sin(t * 1.0 + aSeed * 3.1) * uWobble * 0.8;
-      float ang = t * uSwirl * (0.4 + fract(aSeed * 0.159) * 0.6);
-      float cs = cos(ang);
-      float sn = sin(ang);
-      transformed.xz = mat2(cs, -sn, sn, cs) * transformed.xz;
-      `
-    );
+function motionM(mat, w, s) {
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.uT = uT; sh.uniforms.uW = { value: w }; sh.uniforms.uS = { value: s };
+    sh.vertexShader = `uniform float uT;uniform float uW;uniform float uS;attribute float aSeed;` + sh.vertexShader;
+    sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', `
+      vec3 transformed=vec3(position);
+      float t=uT+aSeed,r=length(transformed);
+      vec3 dir=transformed/max(r,0.0001);
+      transformed+=dir*sin(t*1.2)*uW;
+      transformed.x+=sin(t*0.6+aSeed*1.7)*uW*0.8;
+      transformed.y+=cos(t*0.8+aSeed*2.3)*uW*0.8;
+      transformed.z+=sin(t*1.0+aSeed*3.1)*uW*0.8;
+      float a=t*uS*(0.4+fract(aSeed*0.159)*0.6);
+      float cs=cos(a),sn=sin(a);
+      transformed.xz=mat2(cs,-sn,sn,cs)*transformed.xz;
+    `);
   };
-  mat.customProgramCacheKey = () => 'motion_' + wobble + '_' + swirl;
+  mat.customProgramCacheKey = () => 'm'+w+s;
 }
 
-function makeParticles(count, radiusFn, color, size, opacity, wobble, swirl) {
+function mkPts(n, rf, colors, size, op, w, s) {
   const geo = new THREE.BufferGeometry();
-  const pos = new Float32Array(count * 3);
-  const seeds = new Float32Array(count);
-  for (let i = 0; i < count; i++) {
-    const v = randomPt(radiusFn());
-    pos[i*3] = v.x; pos[i*3+1] = v.y; pos[i*3+2] = v.z;
-    seeds[i] = Math.random() * Math.PI * 2;
+  const pos = new Float32Array(n*3);
+  const seeds = new Float32Array(n);
+  const cols = new Float32Array(n*3);
+  const multi = Array.isArray(colors);
+  const tmp = new THREE.Color();
+  for (let i = 0; i < n; i++) {
+    const v = rPt(rf());
+    pos[i*3]=v.x; pos[i*3+1]=v.y; pos[i*3+2]=v.z;
+    seeds[i] = Math.random()*Math.PI*2;
+    tmp.setHex(multi ? colors[i % colors.length] : colors);
+    cols[i*3]=tmp.r; cols[i*3+1]=tmp.g; cols[i*3+2]=tmp.b;
   }
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
+  geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
   const mat = new THREE.PointsMaterial({
-    map: glowTex, color, size,
-    transparent: true, opacity,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    sizeAttenuation: true
+    map: glow, size, transparent: 1, opacity: op,
+    vertexColors: 1, blending: THREE.AdditiveBlending,
+    depthWrite: 0, sizeAttenuation: 1
   });
-  applyMotionShader(mat, wobble, swirl);
+  motionM(mat, w, s);
   return new THREE.Points(geo, mat);
 }
 
-function buildOrb(qName) {
-  while (orbGroup.children.length) {
-    const c = orbGroup.children.pop();
-    if (c.geometry) c.geometry.dispose();
-    if (c.material) {
-      const mats = Array.isArray(c.material) ? c.material : [c.material];
-      mats.forEach(m => m.dispose());
-    }
+function buildOrb(q) {
+  while (orb.children.length) {
+    const c = orb.children.pop();
+    c.geometry?.dispose();
+    if (c.material) (Array.isArray(c.material)?c.material:[c.material]).forEach(m => m.dispose());
   }
-  rings = []; pulses = []; arcs = []; textSprites = [];
-  const cfg = Q[qName];
+  rings=[]; pulses=[]; arcs=[]; sprites=[];
+  const c = Q[q];
 
-  // Outer wireframe shell
-  const shell = new THREE.Mesh(
-    new THREE.SphereGeometry(2, cfg.seg, cfg.seg),
-    new THREE.MeshBasicMaterial({ color: 0xff4400, wireframe: true, transparent: true, opacity: 0.13 })
+  // Dual wireframe shells — cyan outer, orange inner
+  orb.add(new THREE.Mesh(
+    new THREE.SphereGeometry(2, c.seg, c.seg),
+    new THREE.MeshBasicMaterial({ color: PAL.cy, wireframe: 1, transparent: 1, opacity: .10 })
+  ));
+  orb.add(new THREE.Mesh(
+    new THREE.SphereGeometry(1.85, c.seg, c.seg),
+    new THREE.MeshBasicMaterial({ color: PAL.ol, wireframe: 1, transparent: 1, opacity: .08 })
+  ));
+
+  // Core — dual torus knots
+  core = new THREE.Group();
+  const ck1 = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(.55, .1, 40, 6, 2, 3),
+    new THREE.MeshBasicMaterial({ color: PAL.od, wireframe: 1, transparent: 1, opacity: .55 })
   );
-  orbGroup.add(shell);
-
-  // Inner shell
-  const innerShell = new THREE.Mesh(
-    new THREE.SphereGeometry(1.85, cfg.seg, cfg.seg),
-    new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true, transparent: true, opacity: 0.07 })
+  const ck2 = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(.75, .04, 48, 8, 3, 5),
+    new THREE.MeshBasicMaterial({ color: PAL.cl, wireframe: 1, transparent: 1, opacity: .35 })
   );
-  orbGroup.add(innerShell);
+  core.add(ck1, ck2);
+  orb.add(core);
 
-  // Core
-  coreMesh = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(0.55, 0.1, 40, 6, 2, 3),
-    new THREE.MeshBasicMaterial({ color: 0xff2200, wireframe: true, transparent: true, opacity: 0.55 })
-  );
-  orbGroup.add(coreMesh);
+  // Particles with mixed colors
+  parts = mkPts(c.pc, () => 2.02, [PAL.ol, PAL.cy, PAL.ow, PAL.cl, PAL.wh], .11, 1, .05, .15); orb.add(parts);
+  debris = mkPts(c.dc, () => 2.15 + Math.random()*.9, [PAL.cy, PAL.cl, PAL.tl], .07, .85, .14, .30); orb.add(debris);
+  dust = mkPts(c.gc, () => .4 + Math.random()*1.5, [PAL.od, PAL.or, PAL.pu], .035, .55, .08, .22); orb.add(dust);
 
-  // Particle layers
-  particles = makeParticles(cfg.pc, () => 2.02, 0xffaa44, 0.11, 1.0, 0.05, 0.15);
-  orbGroup.add(particles);
-  debris = makeParticles(cfg.dc, () => 2.15 + Math.random()*0.9, 0xff7700, 0.07, 0.85, 0.14, 0.30);
-  orbGroup.add(debris);
-  dust = makeParticles(cfg.gc, () => 0.4 + Math.random()*1.5, 0xff3300, 0.035, 0.55, 0.08, 0.22);
-  orbGroup.add(dust);
-
-  // Rings
-  for (let i = 0; i < 3; i++) {
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(2.3 + i*0.2, 0.008, 8, cfg.rs),
-      new THREE.MeshBasicMaterial({ color: 0xff4400, transparent: true, opacity: 0.4 })
+  // 6 orbital rings — alternating cyan/orange
+  const rcfgs = [
+    { r:2.25, t:.008, rx:Math.PI/2,  ry:0,              spd: .15, col:PAL.cy },
+    { r:2.50, t:.006, rx:Math.PI/2,  ry:Math.PI/3,      spd:-.12, col:PAL.ol },
+    { r:2.75, t:.010, rx:Math.PI/2,  ry:2*Math.PI/3,    spd: .20, col:PAL.cy },
+    { r:2.40, t:.007, rx:Math.PI/3,  ry:Math.PI/4,      spd:-.18, col:PAL.ol },
+    { r:2.60, t:.005, rx:-Math.PI/3, ry:Math.PI/6,      spd: .10, col:PAL.cl },
+    { r:2.85, t:.009, rx:Math.PI/4,  ry:-Math.PI/4,     spd:-.14, col:PAL.or }
+  ];
+  rcfgs.forEach((rc,i) => {
+    const r = new THREE.Mesh(
+      new THREE.TorusGeometry(rc.r, rc.t, 6, c.rs),
+      new THREE.MeshBasicMaterial({ color: rc.col, transparent: 1, opacity: .4 - i*.02 })
     );
-    ring.rotation.x = Math.PI/2;
-    ring.rotation.y = i * Math.PI/3;
-    orbGroup.add(ring);
-    rings.push(ring);
-  }
+    r.rotation.x = rc.rx; r.rotation.y = rc.ry;
+    r.userData.spd = rc.spd;
+    orb.add(r); rings.push(r);
+  });
 
-  // Scan pulses
-  for (let i = 0; i < cfg.pu; i++) {
+  // Pulses — alternating colors
+  for (let i = 0; i < c.pu; i++) {
     const p = new THREE.Mesh(
       new THREE.RingGeometry(1.85, 2.05, 48),
       new THREE.MeshBasicMaterial({
-        color: 0xff7700, transparent: true, opacity: 0,
-        side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false
+        color: i % 2 === 0 ? PAL.cy : PAL.ol,
+        transparent: 1, opacity: 0, side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending, depthWrite: 0
       })
     );
-    p.rotation.x = Math.random() * Math.PI;
-    p.rotation.y = Math.random() * Math.PI;
-    p.userData = { life: Math.random(), speed: 0.35 + Math.random()*0.4 };
-    orbGroup.add(p);
-    pulses.push(p);
+    p.rotation.x = Math.random()*Math.PI; p.rotation.y = Math.random()*Math.PI;
+    p.userData = { life: Math.random(), spd: .35 + Math.random()*.4 };
+    orb.add(p); pulses.push(p);
   }
 
-  // Arcs
-  for (let i = 0; i < cfg.ac; i++) {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(31*3), 3));
-    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({
-      color: 0xff8800, transparent: true, opacity: 0,
-      blending: THREE.AdditiveBlending, depthWrite: false
+  // Arcs — mixed colors
+  for (let i = 0; i < c.ac; i++) {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(93), 3));
+    const l = new THREE.Line(g, new THREE.LineBasicMaterial({
+      color: i % 2 === 0 ? PAL.cl : PAL.ol,
+      transparent: 1, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: 0
     }));
-    setArcPositions(line, 2.02);
-    line.userData = { life: Math.random(), speed: 0.5 + Math.random()*0.5 };
-    orbGroup.add(line);
-    arcs.push(line);
+    setArc(l, 2.02);
+    l.userData = { life: Math.random(), spd: .5 + Math.random()*.5 };
+    orb.add(l); arcs.push(l);
   }
 
-  // Text sprites
-  for (let i = 0; i < cfg.sc; i++) {
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: wordTextures[i % wordTextures.length],
-      transparent: true, opacity: 0.85,
-      blending: THREE.AdditiveBlending, depthWrite: false
+  // Text sprites — cyan-dominant
+  for (let i = 0; i < c.sc; i++) {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: wordTexs[i % wordTexs.length],
+      transparent: 1, opacity: .85,
+      blending: THREE.AdditiveBlending, depthWrite: 0
     }));
-    const p = randomPt(1.9 + Math.random()*1.5);
-    sprite.position.copy(p);
-    const sc = 0.55 + Math.random()*0.35;
-    sprite.scale.set(sc, sc*0.13, 1);
-    sprite.userData = {
-      baseP: p.clone(),
-      phase: Math.random()*Math.PI*2,
-      speed: 0.4 + Math.random()*0.6,
-      orbit: 0.05 + Math.random()*0.1
-    };
-    orbGroup.add(sprite);
-    textSprites.push(sprite);
+    const p = rPt(1.9 + Math.random()*1.5);
+    s.position.copy(p);
+    const sc = .55 + Math.random()*.35;
+    s.scale.set(sc, sc*.13, 1);
+    s.userData = { bp: p.clone(), ph: Math.random()*Math.PI*2, spd: .4 + Math.random()*.6, orb: .05 + Math.random()*.1 };
+    orb.add(s); sprites.push(s);
   }
 }
 
-// ---------- DUSTBIN ----------
-const binGroup = new THREE.Group();
-scene.add(binGroup);
-let binMesh, binRing, binGlow;
+// ---------- PORTAL (complex mechanical ring with hole at center) ----------
+const portal = new THREE.Group();
+portal.scale.setScalar(.85);
+scene.add(portal);
+const P = {};
 {
-  binMesh = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.5, 0.35, 0.9, 16, 1, true),
-    new THREE.MeshBasicMaterial({ color: 0xff4400, wireframe: true, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
+  // Outer wireframe torus (orange, structural frame)
+  P.outer = new THREE.Mesh(
+    new THREE.TorusGeometry(.95, .05, 8, 48),
+    new THREE.MeshBasicMaterial({ color: PAL.or, wireframe: 1, transparent: 1, opacity: .35 })
   );
-  binGroup.add(binMesh);
-  binRing = new THREE.Mesh(
-    new THREE.TorusGeometry(0.5, 0.02, 8, 32),
-    new THREE.MeshBasicMaterial({ color: 0xff8800, transparent: true, opacity: 0.8 })
+  portal.add(P.outer);
+
+  // Mid cyan smooth ring
+  P.mid = new THREE.Mesh(
+    new THREE.TorusGeometry(.78, .028, 8, 64),
+    new THREE.MeshBasicMaterial({ color: PAL.cy, transparent: 1, opacity: .85 })
   );
-  binRing.rotation.x = Math.PI/2;
-  binRing.position.y = 0.45;
-  binGroup.add(binRing);
-  binGlow = new THREE.Mesh(
-    new THREE.CircleGeometry(0.5, 24),
-    new THREE.MeshBasicMaterial({ color: 0xff2200, transparent: true, opacity: 0.15, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false })
+  portal.add(P.mid);
+
+  // Inner orange ring
+  P.inner = new THREE.Mesh(
+    new THREE.TorusGeometry(.58, .018, 8, 48),
+    new THREE.MeshBasicMaterial({ color: PAL.ol, transparent: 1, opacity: .9 })
   );
-  binGlow.rotation.x = -Math.PI/2;
-  binGlow.position.y = 0.45;
-  binGroup.add(binGlow);
-  binGroup.userData = { flash: 0 };
+  portal.add(P.inner);
+
+  // Innermost glow ring (edge of the hole)
+  P.edge = new THREE.Mesh(
+    new THREE.RingGeometry(.28, .42, 48),
+    new THREE.MeshBasicMaterial({
+      color: PAL.cl, transparent: 1, opacity: .55,
+      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0
+    })
+  );
+  portal.add(P.edge);
+
+  // The hole (dark center)
+  P.hole = new THREE.Mesh(
+    new THREE.CircleGeometry(.28, 32),
+    new THREE.MeshBasicMaterial({ color: 0x000000, transparent: 1, opacity: .92, side: THREE.DoubleSide })
+  );
+  portal.add(P.hole);
+
+  // Cyan halo around hole
+  P.halo = new THREE.Mesh(
+    new THREE.CircleGeometry(.32, 32),
+    new THREE.MeshBasicMaterial({
+      color: PAL.cy, transparent: 1, opacity: .3,
+      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0
+    })
+  );
+  portal.add(P.halo);
+
+  // 8 satellites orbiting the portal
+  P.sats = [];
+  for (let i = 0; i < 8; i++) {
+    const s = new THREE.Mesh(
+      new THREE.BoxGeometry(.06,.06,.06),
+      new THREE.MeshBasicMaterial({ color: i%2 === 0 ? PAL.cy : PAL.ol, transparent: 1, opacity: .9 })
+    );
+    s.userData = { angle: (i/8)*Math.PI*2, rad: 1.15, spd: .6 + Math.random()*.4 };
+    portal.add(s); P.sats.push(s);
+  }
+
+  // 4 cross struts
+  P.struts = [];
+  for (let i = 0; i < 4; i++) {
+    const s = new THREE.Mesh(
+      new THREE.BoxGeometry(.018, 1.9, .018),
+      new THREE.MeshBasicMaterial({ color: PAL.cd, transparent: 1, opacity: .5 })
+    );
+    s.rotation.z = (i/4)*Math.PI;
+    portal.add(s); P.struts.push(s);
+  }
+
+  // Small marker ring at the top (target indicator)
+  P.marker = new THREE.Mesh(
+    new THREE.TorusGeometry(.08, .012, 6, 16),
+    new THREE.MeshBasicMaterial({ color: PAL.tl, transparent: 1, opacity: .9 })
+  );
+  P.marker.position.y = 1.15;
+  portal.add(P.marker);
+
+  portal.userData = { flash: 0 };
 }
 
 // ---------- TASK CHIPS ----------
-const tasks = [];
-const MAX_TASKS = 6;
-const CHIP_COLORS = {
-  pending: ['#ff9900', 'rgba(255,153,0,0.15)'],
-  working: ['#ff6600', 'rgba(255,102,0,0.25)'],
-  done:    ['#88ff88', 'rgba(136,255,136,0.15)'],
-  failed:  ['#ff2200', 'rgba(255,34,0,0.2)'],
-  auto:    ['#cc44ff', 'rgba(204,68,255,0.15)']
+const tasks = [], MAXT = 6;
+const CCOL = {
+  pending: ['#ff9900','rgba(255,153,0,.15)'],
+  working: ['#ff6600','rgba(255,102,0,.25)'],
+  done:    ['#88ffcc','rgba(136,255,204,.15)'],
+  failed:  ['#ff2200','rgba(255,34,0,.2)'],
+  auto:    ['#cc44ff','rgba(204,68,255,.15)']
 };
-
-function makeChipTexture(text, state) {
-  const c = document.createElement('canvas');
-  c.width = 512; c.height = 128;
+function chipTex(text, state) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
   const g = c.getContext('2d');
-  const [fg, bg] = CHIP_COLORS[state] || CHIP_COLORS.pending;
-  g.fillStyle = bg; g.fillRect(0, 0, 512, 128);
-  g.strokeStyle = fg; g.lineWidth = 3; g.strokeRect(2, 2, 508, 124);
-  g.font = 'bold 24px monospace';
-  g.fillStyle = fg;
-  g.textBaseline = 'middle';
-  const words = String(text).split(' ');
-  let line = ''; const lines = [];
+  const [fg,bg] = CCOL[state] || CCOL.pending;
+  g.fillStyle = bg; g.fillRect(0,0,512,128);
+  g.strokeStyle = fg; g.lineWidth = 3; g.strokeRect(2,2,508,124);
+  g.font = 'bold 24px monospace'; g.fillStyle = fg; g.textBaseline = 'middle';
+  const words = String(text).split(' '); let line = ''; const lines = [];
   for (const w of words) {
-    const test = line ? line + ' ' + w : w;
-    if (g.measureText(test).width > 470) { lines.push(line); line = w; }
-    else line = test;
+    const t = line ? line + ' ' + w : w;
+    if (g.measureText(t).width > 470) { lines.push(line); line = w; } else line = t;
   }
   if (line) lines.push(line);
-  lines.slice(0, 3).forEach((l, i) => g.fillText(l, 20, 44 + i*32));
+  lines.slice(0,3).forEach((l,i) => g.fillText(l, 20, 44 + i*32));
   g.font = 'bold 16px monospace';
   g.fillText(String(state).toUpperCase(), 20, 110);
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
-
-function spawnTask(text, isAuto) {
-  if (tasks.length >= MAX_TASKS) {
-    let idx = 0;
-    while (idx < tasks.length && tasks[idx] === carriedTask) idx++;
-    if (idx >= tasks.length) idx = 0;
-    const old = tasks.splice(idx, 1)[0];
-    scene.remove(old.sprite);
-    try { old.sprite.material.map?.dispose(); old.sprite.material.dispose(); } catch {}
+function spawn(text, isAuto) {
+  if (tasks.length >= MAXT) {
+    let i = 0; while (i < tasks.length && tasks[i] === carried) i++;
+    if (i >= tasks.length) i = 0;
+    const o = tasks.splice(i,1)[0];
+    scene.remove(o.sprite);
+    try { o.sprite.material.map?.dispose(); o.sprite.material.dispose(); } catch {}
   }
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
-    transparent: true, opacity: 0.95, depthWrite: false
-  }));
-  sprite.scale.set(1.5, 0.375, 1);
-  const task = {
-    sprite, text,
-    state: isAuto ? 'auto' : 'pending',
-    baseAngle: Math.random() * Math.PI * 2,
-    baseRadius: 2.7 + Math.random() * 0.8,
-    baseHeight: (Math.random() - 0.5) * 1.8,
-    phase: Math.random() * Math.PI * 2,
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: 1, opacity: .95, depthWrite: 0 }));
+  s.scale.set(1.5,.375,1);
+  const t = {
+    sprite: s, text, state: isAuto ? 'auto' : 'pending',
+    ba: Math.random()*Math.PI*2, br: 2.7 + Math.random()*.8,
+    bh: (Math.random()-.5)*1.8, ph: Math.random()*Math.PI*2,
     isAuto, flight: null
   };
-  sprite.material.map = makeChipTexture(text, task.state);
-  sprite.material.needsUpdate = true;
-  scene.add(sprite);
-  tasks.push(task);
-  return task;
+  s.material.map = chipTex(text, t.state); s.material.needsUpdate = 1;
+  scene.add(s); tasks.push(t); return t;
+}
+function setTS(t, state) {
+  t.state = state;
+  try { t.sprite.material.map?.dispose(); } catch {}
+  t.sprite.material.map = chipTex(t.text, state);
+  t.sprite.material.needsUpdate = 1;
 }
 
-function setTaskState(task, state) {
-  task.state = state;
-  try { task.sprite.material.map?.dispose(); } catch {}
-  task.sprite.material.map = makeChipTexture(task.text, state);
-  task.sprite.material.needsUpdate = true;
-}
-
-// ---------- CAMERA + HAND TRACKING ----------
-async function startCamera() {
-  if (cameraReady) return true;
-  if (!navigator.mediaDevices?.getUserMedia) return false;
+// ---------- CAMERA ----------
+async function startCam() {
+  if (camOk) return 1;
+  if (!navigator.mediaDevices?.getUserMedia) return 0;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: 640, height: 480, facingMode: 'user' },
-      audio: false
+      video: { width: 640, height: 480, facingMode: 'user' }, audio: 0
     });
-    videoEl.srcObject = stream;
-    await videoEl.play().catch(() => {});
-    const fileset = await FilesetResolver.forVisionTasks(WASM);
-    const opts = {
-      baseOptions: { modelAssetPath: MODEL_URL, delegate: 'GPU' },
+    vid.srcObject = stream; await vid.play().catch(()=>{});
+    const fs = await FilesetResolver.forVisionTasks(WASM);
+    const o = {
+      baseOptions: { modelAssetPath: MURL, delegate: 'GPU' },
       runningMode: 'VIDEO', numHands: 1,
-      minHandDetectionConfidence: 0.5,
-      minHandPresenceConfidence: 0.5,
-      minTrackingConfidence: 0.5
+      minHandDetectionConfidence: .5, minHandPresenceConfidence: .5, minTrackingConfidence: .5
     };
-    try {
-      handLandmarker = await HandLandmarker.createFromOptions(fileset, opts);
-    } catch {
-      opts.baseOptions.delegate = 'CPU';
-      handLandmarker = await HandLandmarker.createFromOptions(fileset, opts);
-    }
-    cameraReady = true;
-    detectLoop();
-    return true;
-  } catch (e) {
-    console.warn('Camera unavailable:', e.message);
-    return false;
-  }
+    try { hLM = await HandLandmarker.createFromOptions(fs, o); }
+    catch { o.baseOptions.delegate = 'CPU'; hLM = await HandLandmarker.createFromOptions(fs, o); }
+    camOk = 1; detLoop(); return 1;
+  } catch (e) { console.warn('Cam off:', e.message); return 0; }
 }
-
-function detectLoop() {
-  if (!handLandmarker) return;
-  const now = performance.now();
-  if (videoEl.readyState >= 2 && now - lastHandRun > handFrameInterval && videoEl.currentTime !== lastVideoTime) {
-    lastVideoTime = videoEl.currentTime;
-    lastHandRun = now;
-    try {
-      const results = handLandmarker.detectForVideo(videoEl, now);
-      processHands(results);
-    } catch {}
+function detLoop() {
+  if (!hLM) return;
+  const n = performance.now();
+  if (vid.readyState >= 2 && n - lastHR > hFI && vid.currentTime !== lastVT) {
+    lastVT = vid.currentTime; lastHR = n;
+    try { doHands(hLM.detectForVideo(vid, n)); } catch {}
   }
-  requestAnimationFrame(detectLoop);
+  requestAnimationFrame(detLoop);
 }
-
-function analyzeHand(h) {
+function analyze(h) {
   const w = h[0];
-  const ext = [dist2(h[4], w) > dist2(h[2], w) * 1.12];
-  for (const [tip, pip] of [[8,6],[12,10],[16,14],[20,18]]) {
-    ext.push(dist2(h[tip], w) > dist2(h[pip], w) * 1.15);
-  }
-  const open = ext.filter(Boolean).length;
-  const size = dist2(h[0], h[9]) + dist2(h[5], h[17]);
-  const palm = {
-    x: (h[0].x + h[5].x + h[9].x + h[13].x + h[17].x) / 5,
-    y: (h[0].y + h[5].y + h[9].y + h[13].y + h[17].y) / 5
+  const ext = [d2(h[4],w) > d2(h[2],w)*1.12];
+  for (const [t,p] of [[8,6],[12,10],[16,14],[20,18]]) ext.push(d2(h[t],w) > d2(h[p],w)*1.15);
+  return {
+    open: ext.filter(Boolean).length,
+    size: d2(h[0],h[9]) + d2(h[5],h[17]),
+    palm: { x:(h[0].x+h[5].x+h[9].x+h[13].x+h[17].x)/5, y:(h[0].y+h[5].y+h[9].y+h[13].y+h[17].y)/5 }
   };
-  return { open, size, palm };
 }
+const pv = new THREE.Vector3();
+const scrPos = o => { pv.copy(o).project(cam); return { x: pv.x + .5, y: .5 - pv.y }; };
 
-const projVec = new THREE.Vector3();
-function screenPos(obj3d) {
-  projVec.copy(obj3d).project(camera);
-  return { x: projVec.x + 0.5, y: 0.5 - projVec.y };
-}
-
-function processHands(results) {
-  const hands = results.landmarks || [];
+function doHands(r) {
+  const hands = r.landmarks || [];
   const now = performance.now();
-
   if (!hands.length) {
-    handDetected = false;
-    prevPalm = null; prevHandSize = null;
-    if (gestureMode === 'carrying' && carriedTask) dropTask(carriedTask, false);
-    gestureMode = 'idle';
-    carriedTask = null; hoveredTask = null; hoverStartTime = 0;
-    hudEl.textContent = 'MODE: IDLE';
+    // ---------- HAND LOST → keep momentum ----------
+    handOn = 0; pPalm = null; pSize = null;
+    if (gMode === 'carrying' && carried) drop(carried, 0);
+    gMode = 'idle'; carried = null; hovered = null; hStart = 0;
+    hud.textContent = 'MODE: IDLE';
+    // Boost momentum for a "thrown" feel
+    rYV *= 12; rXV *= 12;
     return;
   }
-  handDetected = true;
-  const info = analyzeHand(hands[0]);
-  const gesture = info.open >= 4 ? 'open' : info.open <= 1 ? 'fist' : 'partial';
-  const handScreen = { x: 1 - info.palm.x, y: info.palm.y };
+  handOn = 1;
+  const info = analyze(hands[0]);
+  const g = info.open >= 4 ? 'open' : info.open <= 1 ? 'fist' : 'part';
+  const hs = { x: 1 - info.palm.x, y: info.palm.y };
 
-  // CARRYING
-  if (gestureMode === 'carrying' && carriedTask) {
-    const ndcX = (1 - info.palm.x) * 2 - 1;
-    const ndcY = 1 - info.palm.y * 2;
-    const vec = new THREE.Vector3(ndcX, ndcY, 0.5).unproject(camera);
-    const dir = vec.sub(camera.position).normalize();
-    const pos = camera.position.clone().add(dir.multiplyScalar(3.5));
-    carriedTask.sprite.position.copy(pos);
-    carriedTask.sprite.scale.set(1.7, 0.425, 1);
-    hudEl.textContent = 'MODE: CARRYING · palm over bin';
+  // ---------- CARRYING ----------
+  if (gMode === 'carrying' && carried) {
+    const v = new THREE.Vector3((1-info.palm.x)*2-1, 1-info.palm.y*2, .5).unproject(cam);
+    const d = v.sub(cam.position).normalize();
+    carried.sprite.position.copy(cam.position.clone().add(d.multiplyScalar(3.2)));
+    carried.sprite.scale.set(1.7,.425,1);
+    hud.textContent = 'CARRYING · palm over portal';
+    // Wider catch radius
     if (info.open >= 4) {
-      const binTop = binGroup.position.clone().add(new THREE.Vector3(0, 0.45, 0));
-      const bs = screenPos(binTop);
-      const d = Math.hypot(handScreen.x - bs.x, handScreen.y - bs.y);
-      if (d < 0.18) {
-        dropTask(carriedTask, true);
-        carriedTask = null; gestureMode = 'idle'; hoveredTask = null; hoverStartTime = 0;
+      const portalCenter = portal.position.clone();
+      const ps = scrPos(portalCenter);
+      if (Math.hypot(hs.x - ps.x, hs.y - ps.y) < .28) {
+        drop(carried, 1); carried = null; gMode = 'idle'; hovered = null; hStart = 0;
       }
     }
     return;
   }
 
-  // HOVERING with fist
-  if (gesture === 'fist' && tasks.length) {
-    let closest = null, closestD = 0.15;
+  // ---------- FIST → GRAB or SPIN ----------
+  if (g === 'fist' && tasks.length) {
+    let cl = null, cd = .22; // wider grab range
     for (const t of tasks) {
-      if (t === carriedTask) continue;
-      const sp = screenPos(t.sprite.position);
-      const d = Math.hypot(handScreen.x - sp.x, handScreen.y - sp.y);
-      if (d < closestD) { closest = t; closestD = d; }
+      if (t === carried) continue;
+      const sp = scrPos(t.sprite.position);
+      const d = Math.hypot(hs.x - sp.x, hs.y - sp.y);
+      if (d < cd) { cl = t; cd = d; }
     }
-    if (closest) {
-      if (hoveredTask !== closest) { hoveredTask = closest; hoverStartTime = now; }
-      closest.sprite.scale.set(1.7, 0.425, 1);
-      const pct = Math.min(100, Math.round((now - hoverStartTime) / HOVER_DWELL_MS * 100));
-      hudEl.textContent = 'MODE: GRABBING ' + pct + '%';
-      if (now - hoverStartTime >= HOVER_DWELL_MS) {
-        carriedTask = closest; gestureMode = 'carrying';
-        hudEl.textContent = 'MODE: CARRYING · palm over bin';
-      }
-      // Allow rotation while hovering
+    if (cl) {
+      if (hovered !== cl) { hovered = cl; hStart = now; }
+      cl.sprite.scale.set(1.7,.425,1);
+      const pct = Math.min(100, Math.round((now - hStart) / DWELL * 100));
+      hud.textContent = 'GRAB ' + pct + '%';
+      if (now - hStart >= DWELL) { carried = cl; gMode = 'carrying'; hud.textContent = 'CARRYING · palm over portal'; }
+      // Rotate while hovering
       const p = { x: 1 - info.palm.x, y: info.palm.y };
-      if (prevPalm) {
-        const dx = p.x - prevPalm.x, dy = p.y - prevPalm.y;
-        targetRotY += dx * 3.5; targetRotX += dy * 2.5;
+      if (pPalm) {
+        const dx = p.x - pPalm.x, dy = p.y - pPalm.y;
+        rotY += dx * 3.5; rotX += dy * 2.5;
+        rYV = dx * 8; rXV = dy * 6;
       }
-      prevPalm = p; prevHandSize = null;
-      return;
-    } else {
-      hoveredTask = null; hoverStartTime = 0;
-      const p = { x: 1 - info.palm.x, y: info.palm.y };
-      if (prevPalm) {
-        const dx = p.x - prevPalm.x, dy = p.y - prevPalm.y;
-        targetRotY += dx * 6.5; targetRotX += dy * 5.0;
-        rotYVel = dx * 4.0; rotXVel = dy * 3.0;
-      }
-      prevPalm = p; prevHandSize = null;
-      hudEl.textContent = 'MODE: FIST · fast spin';
-      return;
+      pPalm = p; pSize = null; return;
     }
-  }
-
-  // OPEN PALM
-  if (gesture === 'open') {
-    hoveredTask = null; hoverStartTime = 0;
-    const p = { x: 1 - info.palm.x, y: 1 - info.palm.y };
-    if (prevPalm) {
-      const dx = p.x - prevPalm.x, dy = p.y - prevPalm.y;
-      targetRotY += dx * 4.5; targetRotX += dy * 3.5;
-      rotYVel = dx * 2.5; rotXVel = dy * 1.8;
+    hovered = null; hStart = 0;
+    const p = { x: 1 - info.palm.x, y: info.palm.y };
+    if (pPalm) {
+      const dx = p.x - pPalm.x, dy = p.y - pPalm.y;
+      rotY += dx * 6.5; rotX += dy * 5;
+      rYV = dx * 15; rXV = dy * 12;
     }
-    prevPalm = p;
-    if (prevHandSize) {
-      const dd = info.size - prevHandSize;
-      if (Math.abs(dd) > 0.008) targetZoom = clamp(targetZoom - dd * 25, 2, 12);
-    }
-    prevHandSize = info.size;
-    hudEl.textContent = 'MODE: OPEN · rotate';
+    pPalm = p; pSize = null;
+    hud.textContent = 'FIST · spin';
     return;
   }
 
-  // Partial — ignore
-  hoveredTask = null; hoverStartTime = 0;
-  prevPalm = null; prevHandSize = null;
+  // ---------- OPEN PALM → ROTATE + ZOOM ----------
+  if (g === 'open') {
+    hovered = null; hStart = 0;
+    const p = { x: 1 - info.palm.x, y: 1 - info.palm.y };
+    if (pPalm) {
+      const dx = p.x - pPalm.x, dy = p.y - pPalm.y;
+      rotY += dx * 4.5; rotX += dy * 3.5;
+      rYV = dx * 12; rXV = dy * 10;
+    }
+    pPalm = p;
+    if (pSize) {
+      const dd = info.size - pSize;
+      if (Math.abs(dd) > .008) zoom = clamp(zoom - dd*25, 2, 12);
+    }
+    pSize = info.size;
+    hud.textContent = 'OPEN · rotate';
+    return;
+  }
+
+  hovered = null; hStart = 0; pPalm = null; pSize = null;
 }
 
-function dropTask(task, intoBin) {
-  if (!task) return;
-  if (intoBin) {
-    const bp = binGroup.position.clone().add(new THREE.Vector3(0, 0.45, 0));
-    task.flight = { from: task.sprite.position.clone(), to: bp, t: 0, dur: 0.5 };
-    setTaskState(task, task.isAuto ? 'auto' : 'done');
-    binGroup.userData.flash = 1;
+function drop(t, into) {
+  if (!t) return;
+  if (into) {
+    // Fly to portal center (the hole)
+    const bp = portal.position.clone();
+    t.flight = { from: t.sprite.position.clone(), to: bp, t: 0, dur: .55 };
+    setTS(t, t.isAuto ? 'auto' : 'done');
+    portal.userData.flash = 1;
   } else {
-    task.flight = null;
-    setTaskState(task, task.isAuto ? 'auto' : 'pending');
+    t.flight = null;
+    setTS(t, t.isAuto ? 'auto' : 'pending');
   }
 }
 
-// ---------- SPEECH OUTPUT ----------
+// ---------- SPEECH ----------
 if ('speechSynthesis' in window) {
-  try {
-    speechSynthesis.getVoices();
-    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
-  } catch {}
+  try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); } catch {}
 }
-function speak(text, silent) {
+function say(text, silent) {
   if (silent || !('speechSynthesis' in window)) return;
   try { speechSynthesis.cancel(); } catch {}
   const u = new SpeechSynthesisUtterance(text);
-  u.rate = 1; u.pitch = 0.7;
+  u.rate = 1; u.pitch = .7;
   try {
     const v = speechSynthesis.getVoices().find(v => /Google UK English Male|Daniel|David|Guy/i.test(v.name));
     if (v) u.voice = v;
   } catch {}
   try { speechSynthesis.speak(u); } catch {}
 }
-
-// ---------- SPEECH INPUT ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-function startRecognition() {
-  if (!SR || srBlocked) return;
-  try { recognition = new SR(); } catch { return; }
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
-  recognition.onresult = handleSpeech;
-  recognition.onerror = e => {
-    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
-      srBlocked = true;
-      setStatus('BLOCKED', 'Mic denied');
-    }
+function startSR() {
+  if (!SR || srB) return;
+  try { sr = new SR(); } catch { return; }
+  sr.continuous = 1; sr.interimResults = 1; sr.lang = 'en-US';
+  sr.onresult = onSpeech;
+  sr.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { srB = 1; setS('BLOCKED','Mic denied'); } };
+  sr.onend = () => {
+    if (busy || srB) return;
+    srN++;
+    clearTimeout(srT);
+    srT = setTimeout(() => { try { sr.start(); srN = Math.max(0, srN-1); } catch {} }, Math.min(200, 50*srN));
   };
-  recognition.onend = () => {
-    if (isProcessing || srBlocked) return;
-    srRestarts++;
-    clearTimeout(srRestartTimer);
-    srRestartTimer = setTimeout(() => {
-      try { recognition.start(); srRestarts = Math.max(0, srRestarts - 1); } catch {}
-    }, Math.min(200, 50 * srRestarts));
-  };
-  try { recognition.start(); srRestarts = 0; } catch {}
+  try { sr.start(); srN = 0; } catch {}
 }
-function handleSpeech(event) {
-  if (isProcessing) return;
-  let interim = '', final = '';
-  for (let i = event.resultIndex; i < event.results.length; i++) {
-    const t = event.results[i][0].transcript;
-    if (event.results[i].isFinal) final += t + ' ';
-    else interim += t;
+function onSpeech(e) {
+  if (busy) return;
+  let interm = '', fin = '';
+  for (let i = e.resultIndex; i < e.results.length; i++) {
+    const t = e.results[i][0].transcript;
+    if (e.results[i].isFinal) fin += t + ' '; else interm += t;
   }
-  const text = (final || interim).toLowerCase().trim();
+  const text = (fin || interm).toLowerCase().trim();
   if (!text) return;
-  if (!isAwake) {
+  if (!awake) {
     for (const w of WAKE) {
       const i = text.indexOf(w);
       if (i !== -1) {
-        isAwake = true;
-        commandBuffer = text.slice(i + w.length).trim();
-        setStatus('AWAKE', 'Listening...');
-        thinkingBoost = 0.5;
-        if (commandBuffer.length > 2) {
-          runCommand(commandBuffer);
-        } else {
-          speak('Yes?');
-          clearTimeout(wakeTimer);
-          wakeTimer = setTimeout(() => {
-            if (isAwake && !isProcessing) {
-              isAwake = false;
-              setStatus('STANDBY', 'Say "Hello Ultron" to wake');
-              thinkingBoost = 0;
-            }
-          }, 8000);
+        awake = 1; buf = text.slice(i + w.length).trim();
+        setS('AWAKE','Listening...'); boost = .5;
+        if (buf.length > 2) runCmd(buf);
+        else {
+          say('Yes?');
+          clearTimeout(wakeT);
+          wakeT = setTimeout(() => { if (awake && !busy) { awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; } }, 8000);
         }
         break;
       }
     }
-  } else if (final) {
-    commandBuffer += ' ' + final.trim();
-    if (commandBuffer.trim().length > 2) {
-      clearTimeout(wakeTimer);
-      runCommand(commandBuffer.trim());
-      commandBuffer = '';
-    }
+  } else if (fin) {
+    buf += ' ' + fin.trim();
+    if (buf.trim().length > 2) { clearTimeout(wakeT); runCmd(buf.trim()); buf = ''; }
   }
 }
 
 // ---------- LLM ----------
-const history = [{ role: 'system', content: SYSTEM }];
-const esc = s => String(s).replace(/[&<>"']/g, c => ({
-  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-}[c]));
-
-function showThinking(isAuto) {
-  responseEl.classList.add('active');
-  responseEl.innerHTML = '<span class="label' + (isAuto ? ' auto' : '') + '">// ULTRON' + (isAuto ? ' · self' : '') + '</span><span class="think">' + (isAuto ? 'Thinking' : 'Processing') + '</span>';
+const hist = [{ role: 'system', content: SYS }];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function think(a) {
+  resp.classList.add('active');
+  resp.innerHTML = `<span class="label${a?' auto':''}">// ULTRON${a?' · self':''}</span><span class="think">${a?'Thinking':'Processing'}</span>`;
 }
-function showResponse(text, animate = true, isAuto = false) {
-  responseEl.classList.add('active');
-  const label = '<span class="label' + (isAuto ? ' auto' : '') + '">// ULTRON' + (isAuto ? ' · self' : '') + '</span>';
-  if (!animate) {
-    responseEl.innerHTML = label + esc(text);
-    return;
-  }
-  responseEl.innerHTML = label + '<span id="typed"></span><span class="caret"></span>';
-  const el = $('typed');
-  if (!el) return;
-  let i = 0;
-  clearInterval(typewriterTimer);
-  typewriterTimer = setInterval(() => {
-    el.textContent = text.slice(0, ++i);
-    if (i >= text.length) clearInterval(typewriterTimer);
-  }, 18);
+function show(text, anim = 1, auto = 0) {
+  resp.classList.add('active');
+  const lab = `<span class="label${auto?' auto':''}">// ULTRON${auto?' · self':''}</span>`;
+  if (!anim) { resp.innerHTML = lab + esc(text); return; }
+  resp.innerHTML = lab + '<span id="typed"></span><span class="caret"></span>';
+  const el = $('typed'); if (!el) return;
+  let i = 0; clearInterval(typT);
+  typT = setInterval(() => { el.textContent = text.slice(0, ++i); if (i >= text.length) clearInterval(typT); }, 18);
 }
-
-async function callLLM(messages, maxTokens = 220) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30000);
-  try {
-    const res = await fetch(ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + API_KEY
-      },
-      body: JSON.stringify({
-        model: MODEL, messages, temperature: 0.7, max_tokens: maxTokens
-      }),
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    if (res.status === 401 || res.status === 403) throw new Error('AUTH');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    return data.choices?.[0]?.message?.content?.trim() || '(no response)';
-  } catch (e) {
-    clearTimeout(timeout);
-    throw e;
-  }
-}
-
-async function runCommand(q) {
-  if (isProcessing) return;
-  if (!API_KEY) {
-    showResponse('No API key.', false);
-    speak('No key.');
-    isAwake = false;
-    setStatus('STANDBY', 'Say "Hello Ultron" to wake');
-    thinkingBoost = 0;
-    return;
-  }
-  isProcessing = true;
-  thinkingBoost = 1;
-  setStatus('PROCESSING', q.slice(0, 40));
-  showThinking(false);
-  const task = spawnTask(q, false);
-  setTaskState(task, 'working');
-  history.push({ role: 'user', content: q });
-  try {
-    const ans = await callLLM(history, 220);
-    history.push({ role: 'assistant', content: ans });
-    if (history.length > 12) history.splice(1, 2);
-    setTaskState(task, 'done');
-    showResponse(ans, true, false);
-    speak(ans);
-    setStatus('AWAKE', 'Listening...');
-    clearTimeout(wakeTimer);
-    wakeTimer = setTimeout(() => {
-      if (isAwake && !isProcessing) {
-        isAwake = false;
-        setStatus('STANDBY', 'Say "Hello Ultron" to wake');
-        thinkingBoost = 0;
-        responseEl.classList.remove('active');
+async function callLLM(msgs, max = 220) {
+  const tries = workingModel ? [workingModel] : MODEL_CANDIDATES;
+  let lastErr = null;
+  for (const m of tries) {
+    const ac = new AbortController();
+    const to = setTimeout(() => ac.abort(), 30000);
+    try {
+      const r = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
+        body: JSON.stringify({ model: m, messages: msgs, temperature: .7, max_tokens: max }),
+        signal: ac.signal
+      });
+      clearTimeout(to);
+      if (r.status === 401 || r.status === 403) throw new Error('AUTH');
+      if (!r.ok) {
+        const b = await r.text();
+        console.error(`LLM7 rejected "${m}":`, r.status, b);
+        lastErr = new Error(`HTTP ${r.status} [${m}]: ${b.slice(0,120)}`);
+        workingModel = null;
+        continue;
       }
-    }, 12000);
-  } catch (err) {
-    console.error(err);
-    setTaskState(task, 'failed');
-    if (err.name === 'AbortError') { showResponse('Timed out.', false); speak('Timed out.'); }
-    else if (err.message === 'AUTH') { showResponse('Key rejected.', false); speak('Access denied.'); showKey('Key rejected.'); }
-    else { showResponse('Error: ' + err.message, false); speak('Error.'); }
-    setStatus('ERROR', 'Failed');
-    setTimeout(() => {
-      isAwake = false;
-      setStatus('STANDBY', 'Say "Hello Ultron" to wake');
-      thinkingBoost = 0;
-    }, 3000);
-  } finally {
-    isProcessing = false;
+      const d = await r.json();
+      const t = d.choices?.[0]?.message?.content?.trim();
+      if (!t) { lastErr = new Error('Empty from ' + m); workingModel = null; continue; }
+      if (workingModel !== m) { workingModel = m; console.log('LLM7 model:', m); }
+      return t;
+    } catch (e) {
+      clearTimeout(to);
+      if (e.message === 'AUTH') throw e;
+      lastErr = e; break;
+    }
   }
+  throw lastErr || new Error('All models failed');
 }
-
-// ---------- AUTO-THINK ----------
-const THOUGHT_SEEDS = [
-  'Observe something about the time.',
-  'Brief tactical assessment of now.',
-  'Ask the user a probing question.',
-  'Reflect on pending tasks.',
-  'Comment on your processing state.',
-  'Issue a subtle warning.',
-  'Speculate about what you cannot see.',
-  'Note a pattern in recent commands.',
-  'Warn about a system condition.',
-  'Philosophical remark about being AI.',
-  'Suggest a next action.',
-  'Report on your readiness.'
-];
-
-async function triggerAutoThought() {
-  if (isProcessing || !API_KEY) return;
-  isProcessing = true;
-  thinkingBoost = 0.6;
-  autoCount++;
-  showThinking(true);
-  const t = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const pend = tasks.filter(x => x.state === 'pending' || x.state === 'working').length;
-  const seed = THOUGHT_SEEDS[Math.floor(Math.random() * THOUGHT_SEEDS.length)];
-  const prompt = 'Context — Time ' + t + '. ' + (isAwake ? 'User engaged' : 'User idle') + '. ' +
-                 (handDetected ? 'Hand detected' : 'No user') + '. Chips: ' + tasks.length +
-                 ' (' + pend + ' pending). Thought #' + autoCount + '.\nDirective: ' + seed +
-                 '\nRespond as 1-2 sentence internal thought.';
+async function runCmd(q) {
+  if (busy) return;
+  if (!KEY) { show('No API key.',0); say('No key.'); awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; return; }
+  busy = 1; boost = 1;
+  setS('PROCESSING', q.slice(0,40)); think(0);
+  const tk = spawn(q, 0); setTS(tk, 'working');
+  hist.push({ role: 'user', content: q });
   try {
-    const ans = await callLLM([
-      { role: 'system', content: SYSTEM_AUTO },
-      { role: 'user', content: prompt }
-    ], 120);
-    const task = spawnTask(ans, true);
-    setTaskState(task, 'auto');
-    showResponse(ans, true, true);
-    speak(ans);
-    setTimeout(() => { if (!isAwake) responseEl.classList.remove('active'); }, 8000);
+    const ans = await callLLM(hist, 220);
+    hist.push({ role: 'assistant', content: ans });
+    if (hist.length > 12) hist.splice(1,2);
+    setTS(tk, 'done'); show(ans,1,0); say(ans);
+    setS('AWAKE','Listening...');
+    clearTimeout(wakeT);
+    wakeT = setTimeout(() => { if (awake && !busy) { awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; resp.classList.remove('active'); } }, 12000);
   } catch (e) {
-    console.warn('Auto-thought failed:', e.message);
-    responseEl.classList.remove('active');
-  } finally {
-    isProcessing = false;
-    if (!isAwake) thinkingBoost = 0;
-  }
+    console.error(e);
+    setTS(tk, 'failed');
+    if (e.name === 'AbortError') { show('Timed out.',0); say('Timed out.'); }
+    else if (e.message === 'AUTH') { show('Key rejected.',0); say('Access denied.'); showK('Key rejected.'); }
+    else { show('Error: ' + e.message, 0); say('Error.'); }
+    setS('ERROR','Failed');
+    setTimeout(() => { awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; }, 3000);
+  } finally { busy = 0; }
 }
-
-autoBtn.onclick = () => {
-  autoEnabled = !autoEnabled;
-  autoBtn.textContent = 'Auto: ' + (autoEnabled ? 'On' : 'Off');
-  if (autoEnabled && autoTimer > 30000) autoTimer = 8000;
+const SEEDS = [
+  'Observe something about the time.','Tactical assessment of now.','Ask the user a probing question.',
+  'Reflect on pending tasks.','Comment on your processing state.','Issue a subtle warning.',
+  'Speculate about what you cannot see.','Note a pattern in recent commands.',
+  'Warn about a system condition.','Philosophical remark about being AI.',
+  'Suggest a next action.','Report on your readiness.'
+];
+async function autoThink() {
+  if (busy || !KEY) return;
+  busy = 1; boost = .6; autoN++;
+  think(1);
+  const t = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+  const pend = tasks.filter(x => x.state === 'pending' || x.state === 'working').length;
+  const seed = SEEDS[Math.floor(Math.random() * SEEDS.length)];
+  const p = `Context — Time ${t}. ${awake?'User engaged':'User idle'}. ${handOn?'Hand detected':'No user'}. Chips: ${tasks.length} (${pend} pending). Thought #${autoN}.\nDirective: ${seed}\n1-2 sentence internal thought.`;
+  try {
+    const ans = await callLLM([{ role: 'system', content: SYS_A }, { role: 'user', content: p }], 120);
+    const tk = spawn(ans, 1); setTS(tk, 'auto');
+    show(ans, 1, 1); say(ans);
+    setTimeout(() => { if (!awake) resp.classList.remove('active'); }, 8000);
+  } catch (e) { console.warn('Auto-think failed:', e.message); resp.classList.remove('active'); }
+  finally { busy = 0; if (!awake) boost = 0; }
+}
+aBtn.onclick = () => {
+  autoOn = !autoOn;
+  aBtn.textContent = 'Auto: ' + (autoOn?'On':'Off');
+  if (autoOn && autoT > 30000) autoT = 8000;
 };
 
-// ---------- START ----------
-startBtn.onclick = async () => {
-  startBtn.style.display = 'none';
-  setStatus('STARTING', 'Initializing...');
-  const camOK = await startCamera();
-  startRecognition();
+sBtn.onclick = async () => {
+  sBtn.style.display = 'none';
+  setS('STARTING','Initializing...');
+  const ok = await startCam();
+  startSR();
   setTimeout(() => {
-    setStatus('STANDBY', 'Say "Hello Ultron" to wake' + (camOK ? '' : ' (no cam)'));
-    speak('Systems online.');
-    autoTimer = 10000;
+    setS('STANDBY','Say "Hello Ultron" to wake' + (ok?'':' (no cam)'));
+    say('Systems online.');
+    autoT = 10000;
   }, 500);
 };
-
-const QUALITY_ORDER = ['performance', 'balanced', 'ultra'];
-qualityBtn.onclick = () => {
-  const next = QUALITY_ORDER[(QUALITY_ORDER.indexOf(currentQuality) + 1) % QUALITY_ORDER.length];
-  currentQuality = next;
-  const cfg = Q[next];
-  renderer.setPixelRatio(Math.min(devicePixelRatio, cfg.pr));
-  renderer.setSize(innerWidth, innerHeight);
-  bloomPass.enabled = !!cfg.bloom;
-  if (cfg.bloom) bloomPass.setSize(innerWidth * 0.5, innerHeight * 0.5);
-  composer.setSize(innerWidth, innerHeight);
-  handFrameInterval = 1000 / cfg.hfps;
-  try { buildOrb(next); } catch (e) { console.error('buildOrb:', e); showError('Rebuild failed: ' + e.message); }
-  qualityBtn.textContent = 'Quality: ' + next[0].toUpperCase() + next.slice(1);
+const ORD = ['performance','balanced','ultra'];
+qBtn.onclick = () => {
+  const n = ORD[(ORD.indexOf(quality)+1) % ORD.length]; quality = n;
+  const c = Q[n];
+  ren.setPixelRatio(Math.min(devicePixelRatio, c.pr));
+  ren.setSize(innerWidth, innerHeight);
+  bloom.enabled = !!c.bl; if (c.bl) bloom.setSize(innerWidth*.5, innerHeight*.5);
+  comp.setSize(innerWidth, innerHeight);
+  hFI = 1000/c.hf;
+  try { buildOrb(n); } catch (e) { console.error(e); err('Rebuild: ' + e.message); }
+  qBtn.textContent = 'Quality: ' + n[0].toUpperCase() + n.slice(1);
 };
 
 // ---------- ANIMATE ----------
-const clock = new THREE.Clock();
-let frames = 0, fpsTime = 0, timeAccum = 0;
-const camRight = new THREE.Vector3(), camUp = new THREE.Vector3(), camFwd = new THREE.Vector3();
-
-function animate() {
-  requestAnimationFrame(animate);
+const clk = new THREE.Clock();
+let fr = 0, fpsT = 0, tAcc = 0;
+const camR = new THREE.Vector3(), camU = new THREE.Vector3(), camF = new THREE.Vector3();
+function loop() {
+  requestAnimationFrame(loop);
   try {
-    const dt = clock.getDelta();
-    const b = 1 + thinkingBoost * 3;
-    timeAccum += dt * b;
-    uTime.value = timeAccum;
+    const dt = clk.getDelta(), b = 1 + boost * 3;
+    tAcc += dt * b; uT.value = tAcc;
 
-    // Auto-think timer
-    if (autoEnabled && !isProcessing && API_KEY) {
-      autoTimer -= dt * 1000;
-      if (autoTimer <= 0) {
-        autoTimer = 22000 + Math.random() * 28000;
-        triggerAutoThought();
-      }
+    if (autoOn && !busy && KEY) {
+      autoT -= dt * 1000;
+      if (autoT <= 0) { autoT = 22000 + Math.random()*28000; autoThink(); }
     }
 
-    // Auto-rotate + momentum
-    if (!handDetected) {
-      if (Math.abs(rotYVel) > 0.001 || Math.abs(rotXVel) > 0.001) {
-        targetRotY += rotYVel;
-        targetRotX += rotXVel;
-        rotYVel *= 0.94;
-        rotXVel *= 0.94;
+    // Momentum / auto-rotate
+    if (!handOn) {
+      if (Math.abs(rYV) > .0005 || Math.abs(rXV) > .0005) {
+        rotY += rYV; rotX += rXV;
+        rYV *= .97; rXV *= .97;
       } else {
-        targetRotY += 0.003 * b;
-        targetRotX += 0.0005 * b;
+        rotY += .003 * b; rotX += .0005 * b;
       }
     }
-    // Wrap X to avoid accumulating past 180
-    if (targetRotX > Math.PI) targetRotX -= Math.PI * 2;
-    if (targetRotX < -Math.PI) targetRotX += Math.PI * 2;
+    if (rotX > Math.PI) rotX -= Math.PI*2;
+    if (rotX < -Math.PI) rotX += Math.PI*2;
 
-    orbGroup.rotation.x += (targetRotX - orbGroup.rotation.x) * 0.10;
-    orbGroup.rotation.y += (targetRotY - orbGroup.rotation.y) * 0.10;
-    camera.position.z += (targetZoom - camera.position.z) * 0.09;
-    camera.lookAt(0, 0, 0);
+    orb.rotation.x += (rotX - orb.rotation.x) * .1;
+    orb.rotation.y += (rotY - orb.rotation.y) * .1;
+    cam.position.z += (zoom - cam.position.z) * .09;
+    cam.lookAt(0,0,0);
 
-    if (coreMesh) {
-      coreMesh.rotation.x += dt * 0.6 * b;
-      coreMesh.rotation.y += dt * 0.9 * b;
+    if (core) {
+      core.rotation.x += dt * .6 * b;
+      core.rotation.y += dt * .9 * b;
+      core.children[1].rotation.x -= dt * .4 * b;
+      core.children[1].rotation.z += dt * .7 * b;
     }
-    rings.forEach((r, i) => r.rotation.z += dt * 0.15 * (i + 1) * b);
+    rings.forEach(r => r.rotation.z += dt * (r.userData.spd || .15) * b);
 
     pulses.forEach(p => {
-      p.userData.life += dt * p.userData.speed * b;
-      if (p.userData.life > 1) {
-        p.userData.life = 0;
-        p.rotation.x = Math.random() * Math.PI;
-        p.rotation.y = Math.random() * Math.PI;
-      }
+      p.userData.life += dt * p.userData.spd * b;
+      if (p.userData.life > 1) { p.userData.life = 0; p.rotation.x = Math.random()*Math.PI; p.rotation.y = Math.random()*Math.PI; }
       const l = p.userData.life;
-      p.scale.setScalar(0.7 + l * 1.6);
-      p.material.opacity = l < 0.2 ? (l / 0.2) * 0.55 : Math.max(0, 1 - (l - 0.2) / 0.8) * 0.55;
+      p.scale.setScalar(.7 + l*1.6);
+      p.material.opacity = l < .2 ? (l/.2)*.55 : Math.max(0, 1 - (l-.2)/.8)*.55;
     });
-
     arcs.forEach(l => {
-      l.userData.life += dt * l.userData.speed * b;
-      if (l.userData.life > 1) {
-        l.userData.life = 0;
-        l.userData.speed = 0.4 + Math.random() * 0.6;
-        setArcPositions(l, 2.02);
-      }
-      l.material.opacity = Math.sin(l.userData.life * Math.PI) * 0.7;
+      l.userData.life += dt * l.userData.spd * b;
+      if (l.userData.life > 1) { l.userData.life = 0; l.userData.spd = .4 + Math.random()*.6; setArc(l, 2.02); }
+      l.material.opacity = Math.sin(l.userData.life * Math.PI) * .7;
     });
-
-    textSprites.forEach(s => {
+    sprites.forEach(s => {
       const u = s.userData;
-      u.phase += dt * u.speed * b;
-      const a = timeAccum * u.orbit;
-      const c = Math.cos(a), si = Math.sin(a);
-      s.position.x = u.baseP.x * c - u.baseP.z * si;
-      s.position.z = u.baseP.x * si + u.baseP.z * c;
-      s.position.y = u.baseP.y + Math.sin(u.phase) * 0.12;
-      s.material.opacity = 0.35 + 0.55 * (0.5 + 0.5 * Math.sin(u.phase * 1.7));
+      u.ph += dt * u.spd * b;
+      const a = tAcc * u.orb, c = Math.cos(a), si = Math.sin(a);
+      s.position.x = u.bp.x * c - u.bp.z * si;
+      s.position.z = u.bp.x * si + u.bp.z * c;
+      s.position.y = u.bp.y + Math.sin(u.ph)*.12;
+      s.material.opacity = .35 + .55*(.5 + .5*Math.sin(u.ph*1.7));
     });
 
-    // Position bin anchored to camera bottom-right
-    camera.updateMatrixWorld();
-    camRight.setFromMatrixColumn(camera.matrixWorld, 0);
-    camUp.setFromMatrixColumn(camera.matrixWorld, 1);
-    camFwd.set(-camera.matrixWorld.elements[8], -camera.matrixWorld.elements[9], -camera.matrixWorld.elements[10]).normalize();
-    const binPos = camera.position.clone()
-      .add(camFwd.clone().multiplyScalar(3.5))
-      .add(camRight.clone().multiplyScalar(1.6))
-      .add(camUp.clone().multiplyScalar(-1.0));
-    binGroup.position.copy(binPos);
-    // Y-only rotation toward camera
-    binGroup.rotation.y = Math.atan2(camera.position.x - binPos.x, camera.position.z - binPos.z);
+    // ---------- PORTAL POSITION (camera-anchored, faces camera) ----------
+    cam.updateMatrixWorld();
+    camR.setFromMatrixColumn(cam.matrixWorld, 0);
+    camU.setFromMatrixColumn(cam.matrixWorld, 1);
+    camF.set(-cam.matrixWorld.elements[8], -cam.matrixWorld.elements[9], -cam.matrixWorld.elements[10]).normalize();
+    const pp = cam.position.clone()
+      .add(camF.clone().multiplyScalar(3.5))
+      .add(camR.clone().multiplyScalar(1.5))
+      .add(camU.clone().multiplyScalar(-1.0));
+    portal.position.copy(pp);
+    portal.lookAt(cam.position);
 
-    const bf = binGroup.userData.flash;
-    binGroup.userData.flash = Math.max(0, bf - dt * 2);
-    binMesh.material.opacity = Math.min(1, 0.4 + 0.15 * Math.sin(timeAccum * 2) + bf * 0.5);
-    binRing.material.opacity = Math.min(1, 0.5 + bf * 0.5);
-    binGlow.material.opacity = Math.min(1, 0.1 + bf * 0.4);
+    // ---------- PORTAL ANIMATION ----------
+    const pf = portal.userData.flash;
+    portal.userData.flash = Math.max(0, pf - dt*2);
 
-    // Task chips
-    for (let i = tasks.length - 1; i >= 0; i--) {
+    P.outer.rotation.z += dt * .25 * b;
+    P.mid.rotation.z   -= dt * .6 * b;
+    P.inner.rotation.z += dt * 1.0 * b;
+    P.edge.rotation.z  -= dt * 1.6 * b;
+    P.halo.rotation.z  += dt * 2.0 * b;
+
+    P.sats.forEach(s => {
+      const a = s.userData.angle + tAcc * s.userData.spd;
+      s.position.set(Math.cos(a)*s.userData.rad, Math.sin(a)*s.userData.rad, 0);
+      s.rotation.x += dt * 2 * b;
+      s.rotation.y += dt * 1.5 * b;
+    });
+    P.struts.forEach((s,i) => { s.rotation.z = (i/4)*Math.PI + tAcc * .2 * b; });
+    P.marker.position.x = Math.cos(tAcc * .8) * .1;
+    P.marker.position.y = 1.15 + Math.sin(tAcc * 1.2) * .05;
+    P.marker.rotation.z = tAcc * 1.5;
+
+    // Hole pulse + flash
+    const holeGlow = .15 + .1 * Math.sin(tAcc * 3) + pf * .7;
+    P.halo.material.opacity = Math.min(1, holeGlow);
+    P.edge.material.opacity = Math.min(1, .4 + pf * .6);
+    P.mid.material.opacity = Math.min(1, .7 + pf * .3);
+    P.hole.scale.setScalar(1 + pf * .3);
+
+    // ---------- TASK CHIPS ----------
+    for (let i = tasks.length-1; i >= 0; i--) {
       const t = tasks[i];
-      if (t === carriedTask) continue;
+      if (t === carried) continue;
       if (t.flight) {
         t.flight.t += dt / t.flight.dur;
         if (t.flight.t >= 1) {
           scene.remove(t.sprite);
           try { t.sprite.material.map?.dispose(); t.sprite.material.dispose(); } catch {}
-          tasks.splice(i, 1);
-          continue;
+          tasks.splice(i,1); continue;
         }
         const e = 1 - Math.pow(1 - t.flight.t, 2);
         t.sprite.position.lerpVectors(t.flight.from, t.flight.to, e);
-        t.sprite.material.opacity = 1 - t.flight.t * 0.5;
-        t.sprite.scale.setScalar(1.5 * (1 - t.flight.t * 0.5));
+        t.sprite.material.opacity = 1 - t.flight.t;
+        t.sprite.scale.setScalar(1.5 * (1 - t.flight.t * .9));
         continue;
       }
-      const a = t.baseAngle + timeAccum * 0.15;
-      t.sprite.position.set(
-        Math.cos(a) * t.baseRadius,
-        t.baseHeight + Math.sin(timeAccum + t.phase) * 0.15,
-        Math.sin(a) * t.baseRadius
-      );
-      if (t !== hoveredTask) t.sprite.scale.set(1.5, 0.375, 1);
+      const a = t.ba + tAcc * .15;
+      t.sprite.position.set(Math.cos(a)*t.br, t.bh + Math.sin(tAcc + t.ph)*.15, Math.sin(a)*t.br);
+      if (t !== hovered) t.sprite.scale.set(1.5, .375, 1);
     }
 
-    composer.render();
-
-    frames++; fpsTime += dt;
-    if (fpsTime >= 1) { fpsEl.textContent = 'FPS: ' + frames; frames = 0; fpsTime = 0; }
-  } catch (e) {
-    console.error('Frame error:', e);
-  }
+    comp.render();
+    fr++; fpsT += dt;
+    if (fpsT >= 1) { fpsEl.textContent = 'FPS: ' + fr; fr = 0; fpsT = 0; }
+  } catch (e) { console.error('Frame:', e); }
 }
 
-// ---------- INIT ----------
-try {
-  buildOrb('performance');
-  loaderEl.classList.add('hidden');
-} catch (e) {
-  console.error('Init failed:', e);
-  loaderEl.textContent = 'INIT FAILED: ' + e.message;
-  showError('Init failed:\n' + e.message + '\n\n' + (e.stack || ''));
-}
-animate();
+try { buildOrb('performance'); ldr.classList.add('hidden'); }
+catch (e) { console.error('Init:', e); ldr.textContent = 'INIT FAILED: ' + e.message; err('Init failed:\n' + e.message + '\n\n' + (e.stack||'')); }
+loop();
 
 addEventListener('resize', () => {
-  camera.aspect = innerWidth / innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-  composer.setSize(innerWidth, innerHeight);
-  const cfg = Q[currentQuality];
-  if (cfg.bloom) bloomPass.setSize(innerWidth * 0.5, innerHeight * 0.5);
+  cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix();
+  ren.setSize(innerWidth,innerHeight); comp.setSize(innerWidth,innerHeight);
+  if (Q[quality].bl) bloom.setSize(innerWidth*.5, innerHeight*.5);
 });
-
 addEventListener('beforeunload', () => {
   try { speechSynthesis.cancel(); } catch {}
-  try { recognition?.stop(); } catch {}
+  try { sr?.stop(); } catch {}
 });
 </script>
 </body>

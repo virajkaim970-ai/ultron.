@@ -110,6 +110,8 @@ let hLM=null, lastVT=-1, lastHR=0, sr=null, camOk=0;
 let gMode='idle', hovered=null, carried=null, hStart=0;
 const DWELL=300;
 let autoOn=1, autoT=25000, autoN=0;
+// FIX: tracks whether Ultron is currently speaking out loud
+let speechActive = false;
 
 const Q = {
   performance: { pr:1,    bl:0, seg:2, pc:200, dc:120, gc:180, rs:48, sc:14, ac:5, hf:20, sats:20, pan:30 },
@@ -127,7 +129,6 @@ if (!KEY) setTimeout(() => showK(''), 300);
 
 // ---------- SCENE ----------
 const scene = new THREE.Scene();
-// FIX: fog matches background
 scene.fog = new THREE.FogExp2(0x000000, 0.05);
 const cam = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, .1, 500);
 cam.position.set(0,.3,5.5);
@@ -170,7 +171,7 @@ function mkCodeTex(kind){
 const codeTexs = [];
 for (let i=0;i<16;i++) codeTexs.push(mkCodeTex(i%3));
 
-// ---------- LIQUID METAL SHADER (created once, never disposed) ----------
+// ---------- LIQUID METAL SHADER ----------
 const liquidMat = new THREE.ShaderMaterial({
   uniforms: {
     uT: uT, uVel: uVel, uBoost: uB,
@@ -218,7 +219,6 @@ const orb = new THREE.Group(); scene.add(orb);
 const swarm = new THREE.Group(); scene.add(swarm);
 const codeGroup = new THREE.Group(); scene.add(codeGroup);
 
-// ---------- STATE ARRAYS ----------
 let liquidMesh, coreGlow, particles, swarmPts, dust;
 let mechanical=[], gimbals=[], sats=[], codeSprites=[], arcBeams=[];
 
@@ -263,23 +263,18 @@ function mkPts(n, rf, colors, size, op, w, s) {
       transformed.xz=mat2(cs,-sn,sn,cs)*transformed.xz;
     `);
   };
-  // FIX: cache key uses real varying params only
   mat.customProgramCacheKey = () => 'p' + w + s;
   return new THREE.Points(geo, mat);
 }
 
-// ---------- BUILD ORB ----------
 function buildOrb(q) {
   const c = Q[q];
-
-  // FIX: Clear all dynamic children INCLUDING dust, EXCLUDING liquidMat
   const dynamic = [...mechanical, ...gimbals, ...sats, ...codeSprites,
                    liquidMesh, coreGlow, particles, swarmPts, dust, ...arcBeams];
   dynamic.forEach(o => {
     if (!o) return;
     if (o.parent) o.parent.remove(o);
     if (o.geometry) o.geometry.dispose();
-    // FIX: never dispose the shared liquidMat
     if (o.material && o.material !== liquidMat) {
       const ms = Array.isArray(o.material) ? o.material : [o.material];
       ms.forEach(m => m.dispose());
@@ -287,7 +282,6 @@ function buildOrb(q) {
   });
   mechanical=[]; gimbals=[]; sats=[]; codeSprites=[]; arcBeams=[];
 
-  // Liquid metal core
   liquidMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, c.seg), liquidMat);
   orb.add(liquidMesh);
 
@@ -297,7 +291,6 @@ function buildOrb(q) {
   );
   orb.add(coreGlow);
 
-  // Latitude rings
   [-1.2,-0.7,-0.2,0.3,0.9,1.3].forEach((y,i) => {
     const rad = Math.sqrt(Math.max(0, 2.05*2.05 - y*y)) * 0.96;
     const ring = new THREE.Mesh(
@@ -308,7 +301,6 @@ function buildOrb(q) {
     orb.add(ring); mechanical.push(ring);
   });
 
-  // Meridian arcs
   for (let i=0;i<4;i++){
     const arc = new THREE.Mesh(
       new THREE.TorusGeometry(2.0, 0.01, 4, 32, Math.PI),
@@ -318,7 +310,6 @@ function buildOrb(q) {
     orb.add(arc); mechanical.push(arc);
   }
 
-  // Panel plates — FIX: removed unused bp field
   for (let i=0;i<c.pan;i++){
     const phi = Math.acos(2*Math.random()-1), th = Math.random()*Math.PI*2, r = 2.08;
     const box = new THREE.Mesh(
@@ -331,7 +322,6 @@ function buildOrb(q) {
     orb.add(box); mechanical.push(box);
   }
 
-  // Gimbals
   const gcfgs = [
     { r:2.3, tube:.022, col:C.cl, rx:0,         ry:0,         rz:0 },
     { r:2.45,tube:.018, col:C.am, rx:Math.PI/2, ry:Math.PI/3, rz:0 },
@@ -358,7 +348,6 @@ function buildOrb(q) {
     orb.add(g); gimbals.push(g);
   });
 
-  // Satellites
   for (let i=0;i<c.sats;i++){
     const s = new THREE.Mesh(
       new THREE.OctahedronGeometry(0.05, 0),
@@ -368,13 +357,12 @@ function buildOrb(q) {
     orb.add(s); sats.push(s);
   }
 
-  // Energy arcs
   const ac = [
     { r:2.75, tube:.014, col:C.cl, axis:'x', speed:.5 },
     { r:2.85, tube:.012, col:C.am, axis:'y', speed:-.6 },
     { r:2.65, tube:.010, col:C.te, axis:'z', speed:.7 },
     { r:3.0,  tube:.008, col:C.cy, axis:'x', speed:-.4 },
-    { r:2.9,  tube:.010, col:C.ow || C.am, axis:'y', speed:.45 }
+    { r:2.9,  tube:.010, col:C.am, axis:'y', speed:.45 }
   ].slice(0, c.ac);
   ac.forEach(cfg => {
     const arc = new THREE.Mesh(
@@ -408,7 +396,6 @@ function buildOrb(q) {
     codeGroup.add(s); codeSprites.push(s);
   }
 
-  // FIX: dust is now in the clear list, will dispose properly
   dust = mkPts(c.gc, () => 0.5 + Math.random()*2.5, [C.od, C.am, C.pu, C.cy], .025, .45, .1, .28);
   swarm.add(dust);
 }
@@ -502,7 +489,7 @@ function spawn(text, isAuto){
   scene.add(s); tasks.push(t); return t;
 }
 function setTS(t, state){
-  if (t.state === state) return; // FIX: skip redundant texture rebuild
+  if (t.state === state) return;
   t.state = state;
   try { t.sprite.material.map?.dispose(); } catch {}
   t.sprite.material.map = chipTex(t.text, state);
@@ -549,7 +536,7 @@ function doHands(r){
 
   if (!hands.length){
     if (wasHand){
-      rYV *= 2.2; rXV *= 2.2; // single momentum boost
+      rYV *= 2.2; rXV *= 2.2;
       wasHand = 0;
     }
     handOn = 0; pPalm = null; pSize = null;
@@ -642,18 +629,27 @@ function drop(t, into){
   } else { t.flight = null; setTS(t, t.isAuto ? 'auto' : 'pending'); }
 }
 
-// ---------- SPEECH ----------
+// ---------- SPEECH OUTPUT ----------
 if ('speechSynthesis' in window){
   try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); } catch {}
 }
+// FIX: say() now tracks whether Ultron is actively speaking
 function say(text, silent){
   if (silent || !('speechSynthesis' in window)) return;
   try { speechSynthesis.cancel(); } catch {}
   const u = new SpeechSynthesisUtterance(text);
   u.rate = 1; u.pitch = .75;
   try { const v = speechSynthesis.getVoices().find(v => /Google UK English Male|Daniel|David|Guy/i.test(v.name)); if (v) u.voice = v; } catch {}
-  try { speechSynthesis.speak(u); } catch {}
+  speechActive = true;
+  u.onend = () => {
+    // 400ms tail so the mic doesn't catch trailing echo
+    setTimeout(() => { speechActive = false; }, 400);
+  };
+  u.onerror = () => { speechActive = false; };
+  try { speechSynthesis.speak(u); } catch { speechActive = false; }
 }
+
+// ---------- SPEECH INPUT ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 function startSR(){
   if (!SR || srB) return;
@@ -670,6 +666,8 @@ function startSR(){
 }
 function onSpeech(e){
   if (busy) return;
+  // FIX: ignore mic entirely while Ultron is speaking
+  if (speechActive) return;
   let interm = '', fin = '';
   for (let i = e.resultIndex; i < e.results.length; i++){
     const t = e.results[i][0].transcript;
@@ -763,7 +761,6 @@ async function autoThink(){
   const p = `Context — ${t}. ${awake?'User engaged':'User idle'}. ${handOn?'Hand detected':'No user'}. Chips: ${tasks.length} (${pend} pending). Thought #${autoN}.\nDirective: ${SEEDS[Math.floor(Math.random()*SEEDS.length)]}\n1-2 sentence internal thought.`;
   try {
     const ans = await callLLM([{ role:'system', content: SYS_A }, { role:'user', content: p }], 120);
-    // FIX: spawn already sets 'auto' state, no setTS needed
     spawn(ans, 1);
     show(ans, 1, 1); say(ans);
     setTimeout(() => { if (!awake) resp.classList.remove('active'); }, 8000);
@@ -777,7 +774,12 @@ sBtn.onclick = async () => {
   setS('STARTING','Initializing...');
   const ok = await startCam();
   startSR();
-  setTimeout(() => { setS('STANDBY','Say "Hello Ultron" to wake' + (ok?'':' (no cam)')); say('Systems online.'); autoT = 10000; }, 500);
+  setTimeout(() => {
+    setS('STANDBY','Say "Hello Ultron" to wake' + (ok?'':' (no cam)'));
+    // FIX: greeting no longer contains wake word
+    say('Systems online. Voice interface standing by.');
+    autoT = 10000;
+  }, 500);
 };
 const ORD = ['performance','balanced','ultra'];
 qBtn.onclick = () => {
@@ -802,12 +804,10 @@ function loop(){
     const dt = clk.getDelta(), b = 1 + boost * 3;
     tAcc += dt * b; uT.value = tAcc; uB.value = boost;
 
-    // FIX: correct velocity tracking with both axes
     const dRot = Math.abs(rotY - lastRotY) + Math.abs(rotX - lastRotX);
     rotVel = rotVel * 0.88 + dRot * 0.12;
     uVel.value = Math.min(rotVel * 20, 1.2);
-    lastRotY = rotY;
-    lastRotX = rotX;
+    lastRotY = rotY; lastRotX = rotX;
 
     if (autoOn && !busy && KEY){
       autoT -= dt * 1000;
@@ -830,7 +830,6 @@ function loop(){
     cam.position.z += (zoom - cam.position.z) * .09;
     cam.lookAt(0,0,0);
 
-    // Swarm + code lag for liquid trailing
     swarm.rotation.x += (orb.rotation.x - swarm.rotation.x) * .04;
     swarm.rotation.y += (orb.rotation.y - swarm.rotation.y) * .04;
     codeGroup.rotation.x += (orb.rotation.x - codeGroup.rotation.x) * .07;
@@ -868,7 +867,6 @@ function loop(){
       s.material.opacity = .5 + .45 * Math.sin(u.ph * 1.6);
     });
 
-    // ---------- PORTAL ----------
     cam.updateMatrixWorld();
     camR.setFromMatrixColumn(cam.matrixWorld, 0);
     camU.setFromMatrixColumn(cam.matrixWorld, 1);
@@ -906,7 +904,6 @@ function loop(){
     P.hole.scale.setScalar(1 + pf * .35);
     P.corona.material.opacity = .08 + pf * .25;
 
-    // ---------- TASK CHIPS ----------
     for (let i = tasks.length-1; i >= 0; i--){
       const t = tasks[i];
       if (t === carried) continue;
@@ -917,7 +914,6 @@ function loop(){
           try { t.sprite.material.map?.dispose(); t.sprite.material.dispose(); } catch {}
           tasks.splice(i,1); continue;
         }
-        // FIX: read live portal position each frame
         const e = 1 - Math.pow(1 - t.flight.t, 2);
         t.sprite.position.lerpVectors(t.flight.from, portal.position, e);
         t.sprite.material.opacity = 1 - t.flight.t;

@@ -7,23 +7,23 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;color:#0df}
-.u{position:fixed;background:rgba(0,8,16,.78);border:1px solid rgba(0,221,255,.4);border-radius:8px;padding:8px 14px;font:12px 'Courier New',monospace;text-shadow:0 0 6px #0df;z-index:10;color:#0df}
+.u{position:fixed;background:rgba(0,8,16,.78);border:1px solid rgba(0,221,255,.35);border-radius:8px;padding:8px 14px;font:12px 'Courier New',monospace;text-shadow:0 0 6px #0df;z-index:10;color:#0df}
 #info{top:15px;left:15px;font-size:11px;line-height:1.5;pointer-events:none;max-width:230px}
 #quality-btn{top:15px;right:15px;cursor:pointer}
 #auto-btn{top:15px;right:170px;cursor:pointer}
 #key-btn{top:15px;right:90px;cursor:pointer}
 #fps{bottom:20px;left:20px;color:#0f9}
-#hud{bottom:60px;left:20px;color:#6ef;min-width:200px}
+#hud{bottom:60px;left:20px;color:#8df;min-width:200px}
 #status{bottom:20px;left:50%;transform:translateX(-50%);text-align:center;min-width:260px;padding:12px 22px;font-size:14px}
-#status .mode{color:#6ef;font-size:11px;letter-spacing:2px;display:block;margin-bottom:4px}
+#status .mode{color:#8df;font-size:11px;letter-spacing:2px;display:block;margin-bottom:4px}
 #start-btn{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;padding:14px 28px;font:17px 'Courier New',monospace;background:transparent;color:#0df;border:2px solid #0df;border-radius:8px;cursor:pointer;text-shadow:0 0 10px #0df;box-shadow:0 0 20px rgba(0,221,255,.3)}
 #start-btn:hover{background:rgba(0,221,255,.15)}
 #video-container{position:fixed;bottom:20px;right:20px;width:200px;height:150px;border:1px solid #0df;border-radius:8px;overflow:hidden;z-index:10;opacity:.85;box-shadow:0 0 20px rgba(0,221,255,.3);background:#000}
 #input_video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-#response{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:15;width:min(700px,calc(100% - 40px));max-height:40vh;overflow-y:auto;background:rgba(0,8,16,.82);color:#9ef;border:1px solid rgba(0,221,255,.5);border-radius:10px;padding:16px 20px;font:14px/1.6 'Courier New',monospace;text-shadow:0 0 6px rgba(0,221,255,.7);opacity:0;pointer-events:none;transition:opacity .35s;white-space:pre-wrap}
+#response{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:15;width:min(700px,calc(100% - 40px));max-height:40vh;overflow-y:auto;background:rgba(0,8,16,.85);color:#9ef;border:1px solid rgba(0,221,255,.5);border-radius:10px;padding:16px 20px;font:14px/1.6 'Courier New',monospace;text-shadow:0 0 6px rgba(0,221,255,.7);opacity:0;pointer-events:none;transition:opacity .35s;white-space:pre-wrap}
 #response.active{opacity:1}
 #response .label{display:block;color:#0df;font-size:11px;letter-spacing:2px;margin-bottom:6px}
-#response .label.auto{color:#c4f}
+#response .label.auto{color:#b6f}
 #response .caret{display:inline-block;width:8px;height:14px;background:#0df;margin-left:2px;vertical-align:text-bottom;animation:bl .8s steps(2) infinite}
 @keyframes bl{50%{opacity:0}}
 .think::after{content:'';animation:dt 1.2s steps(4) infinite}
@@ -32,13 +32,13 @@ body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;c
 #km.active{display:flex}
 #kb{width:min(480px,calc(100% - 40px));background:rgba(0,8,16,.95);border:1px solid rgba(0,221,255,.6);border-radius:12px;padding:24px 28px;font-family:'Courier New',monospace;color:#9ef;box-shadow:0 0 60px rgba(0,221,255,.4)}
 #kb h2{margin:0 0 8px;font-size:16px;color:#0df;letter-spacing:3px;text-transform:uppercase}
-#kb p{font-size:12px;color:#6ef;margin:0 0 16px;line-height:1.5}
+#kb p{font-size:12px;color:#8df;margin:0 0 16px;line-height:1.5}
 #ki{width:100%;padding:12px 14px;font:14px 'Courier New',monospace;background:rgba(0,0,0,.8);color:#cff;border:1px solid #0df;border-radius:8px;outline:none}
 #ke{color:#f36;font-size:12px;margin-top:8px;min-height:16px}
 #ka{display:flex;gap:8px;margin-top:16px}
 #ka button{flex:1;padding:10px 14px;font:12px 'Courier New',monospace;font-weight:bold;background:rgba(0,221,255,.15);color:#0df;border:1px solid #0df;border-radius:6px;cursor:pointer;letter-spacing:2px;text-transform:uppercase}
 #ka button:hover{background:rgba(0,221,255,.35)}
-#loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:#0df;font:14px 'Courier New',monospace;z-index:50;padding:20px;text-align:center}
+#loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:#0df;font:14px 'Courier New',monospace;z-index:50}
 #loader.hidden{display:none}
 #errbox{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:60;background:rgba(20,0,0,.95);color:#f36;border:1px solid #f36;padding:20px;font:12px 'Courier New',monospace;max-width:600px;display:none;white-space:pre-wrap}
 </style>
@@ -47,9 +47,9 @@ body{margin:0;overflow:hidden;background:#000;font-family:system-ui,sans-serif;c
 </script>
 </head>
 <body>
-<div id="loader">◈ INITIALIZING ULTRON CORE...</div>
+<div id="loader">◈ INITIALIZING ULTRON...</div>
 <div id="errbox"></div>
-<div id="info" class="u"><b>ULTRON v3</b><br>Open palm — rotate<br>Fist — spin<br>Fist on task — grab<br>Palm over portal — toss<br>"Hello Ultron"</div>
+<div id="info" class="u"><b>ULTRON</b><br>Palm — rotate<br>Fist — spin<br>Fist on task — grab<br>Palm over portal — send<br>"Hello Ultron"</div>
 <button id="quality-btn" class="u">Quality: Performance</button>
 <button id="auto-btn" class="u">Auto: On</button>
 <button id="key-btn" class="u">Key</button>
@@ -74,16 +74,11 @@ import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {FilesetResolver,HandLandmarker} from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/vision_bundle.mjs';
 
-// ---------- PALETTE (mixed orange + cyan tech) ----------
-const PAL = {
-  or:  0xff4400, ol: 0xff8800, od: 0xff2200, ow: 0xffaa66,
-  cy:  0x00ddff, cl: 0x66eeff, cd: 0x0088cc, cw: 0xbbffff,
-  tl:  0x00ffaa, pu: 0xaa44ff, wh: 0xffffff
-};
+const C = { cy:0x00aaff, cl:0x66ddff, cw:0xddffff, am:0xff9900, od:0xff4400, te:0x00ffaa, pu:0xaa55ff, wh:0xffffff, gb:0x334455 };
 
-const ENDPOINT = 'https://api.llm7.io/v1/chat/completions';
-const MODEL_CANDIDATES = ['default','gpt-4o-mini','gpt-4o','gpt-3.5-turbo','deepseek-chat','mistral-small'];
-let workingModel = 'default';
+const EP = 'https://api.llm7.io/v1/chat/completions';
+const MODS = ['default','gpt-4o-mini','gpt-4o','gpt-3.5-turbo','deepseek-chat'];
+let wMod = 'default';
 const SYS = 'You are ULTRON, a cold efficient AI hologram. Menacing, technical tone. No emojis, no markdown.';
 const SYS_A = 'You are ULTRON thinking aloud. 1-2 sentence tactical observations. Menacing, technical.';
 const WAKE = ['hello ultron','hey ultron','hi ultron','hello ultra','hey ultra'];
@@ -93,382 +88,421 @@ const MURL = 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/ha
 
 const $ = id => document.getElementById(id);
 const d2 = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
-const clamp = (v,a,b) => Math.max(a, Math.min(b,v));
+const cl = (v,a,b) => Math.max(a, Math.min(b,v));
 const getK = () => { try { return localStorage.getItem(SK); } catch { return null; } };
-const setK = v => { try { localStorage.setItem(SK, v); return 1; } catch { return 0; } };
-const err = m => { const e=$('errbox'); e.textContent=m; e.style.display='block'; };
+const setK = v => { try { localStorage.setItem(SK,v); return 1; } catch { return 0; } };
+const errBox = m => { const e=$('errbox'); e.textContent=m; e.style.display='block'; };
 
-// ---------- DOM ----------
-const stxt = $('status-text'), smode = document.querySelector('#status .mode');
-const hud = $('hud'), resp = $('response'), sBtn = $('start-btn');
-const qBtn = $('quality-btn'), aBtn = $('auto-btn'), kBtn = $('key-btn');
-const km = $('km'), ki = $('ki'), ke = $('ke'), fpsEl = $('fps');
-const vid = $('input_video'), ldr = $('loader');
+const stxt=$('status-text'), smode=document.querySelector('#status .mode');
+const hud=$('hud'), resp=$('response'), sBtn=$('start-btn'), qBtn=$('quality-btn');
+const aBtn=$('auto-btn'), kBtn=$('key-btn'), km=$('km'), ki=$('ki'), ke=$('ke');
+const fpsEl=$('fps'), vid=$('input_video'), ldr=$('loader');
 const setS = (m,t) => { smode.textContent=m; stxt.textContent=t; };
 
-// ---------- STATE ----------
 let KEY = getK() || '';
-let boost = 0, awake = 0, busy = 0, buf = '';
-let wakeT = null, typT = null, srT = null, srN = 0, srB = 0;
-let hFI = 1000/20, rotX = 0, rotY = 0, zoom = 5.5;
-let handOn = 0, rYV = 0, rXV = 0, pPalm = null, pSize = null;
-let quality = 'performance';
-let hLM = null, lastVT = -1, lastHR = 0, sr = null, camOk = 0;
-let gMode = 'idle', hovered = null, carried = null, hStart = 0;
-const DWELL = 300; // snappier grab
-let autoOn = 1, autoT = 25000, autoN = 0;
+let boost=0, awake=0, busy=0, buf='';
+let wakeT=null, typT=null, srT=null, srN=0, srB=0;
+let hFI=1000/20, rotX=0, rotY=0, zoom=5.5;
+let handOn=0, wasHand=0, rYV=0, rXV=0, pPalm=null, pSize=null;
+let rotVel=0, lastRotX=0, lastRotY=0;
+let quality='performance';
+let hLM=null, lastVT=-1, lastHR=0, sr=null, camOk=0;
+let gMode='idle', hovered=null, carried=null, hStart=0;
+const DWELL=300;
+let autoOn=1, autoT=25000, autoN=0;
 
 const Q = {
-  performance: { pr:1,    bl:0, seg:18, pc:180, dc:100, gc:180, rs:48, sc:16, ac:6, pu:4, hf:20 },
-  balanced:    { pr:1.25, bl:1, seg:24, pc:280, dc:180, gc:320, rs:64, sc:24, ac:8, pu:5, hf:24 },
-  ultra:       { pr:1.5,  bl:1, seg:32, pc:400, dc:260, gc:550, rs:80, sc:32, ac:10, pu:6, hf:30 }
+  performance: { pr:1,    bl:0, seg:2, pc:200, dc:120, gc:180, rs:48, sc:14, ac:5, hf:20, sats:20, pan:30 },
+  balanced:    { pr:1.25, bl:1, seg:3, pc:320, dc:200, gc:280, rs:64, sc:22, ac:7, hf:24, sats:28, pan:40 },
+  ultra:       { pr:1.5,  bl:1, seg:4, pc:450, dc:300, gc:400, rs:80, sc:30, ac:9, hf:30, sats:36, pan:50 }
 };
 
-// ---------- KEY MODAL ----------
 const showK = m => { ki.value=KEY; ke.textContent=m; km.classList.add('active'); setTimeout(()=>{try{ki.focus()}catch{}},100); };
 const hideK = () => km.classList.remove('active');
-$('ks').onclick = () => { const v = ki.value.trim(); if (v.length<8){ke.textContent='Too short.';return;} KEY=v; setK(v); hideK(); show('Key saved.',0); };
+$('ks').onclick = () => { const v=ki.value.trim(); if(v.length<8){ke.textContent='Too short.';return;} KEY=v; setK(v); hideK(); show('Key saved.',0); };
 $('kk').onclick = hideK;
-ki.addEventListener('keydown', e => { if (e.key==='Enter') $('ks').click(); });
+ki.addEventListener('keydown', e => { if(e.key==='Enter') $('ks').click(); });
 kBtn.onclick = () => showK('');
-if (!KEY) setTimeout(()=>showK(''),300);
+if (!KEY) setTimeout(() => showK(''), 300);
 
 // ---------- SCENE ----------
 const scene = new THREE.Scene();
+// FIX: fog matches background
+scene.fog = new THREE.FogExp2(0x000000, 0.05);
 const cam = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, .1, 500);
 cam.position.set(0,.3,5.5);
 const ren = new THREE.WebGLRenderer({antialias:false, powerPreference:'high-performance'});
 ren.setSize(innerWidth,innerHeight); ren.setPixelRatio(1);
-ren.toneMapping = THREE.ACESFilmicToneMapping; ren.toneMappingExposure = .9;
+ren.toneMapping = THREE.ACESFilmicToneMapping; ren.toneMappingExposure = 1.0;
 document.body.appendChild(ren.domElement);
 const comp = new EffectComposer(ren);
 comp.addPass(new RenderPass(scene, cam));
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth*.5, innerHeight*.5), 1.6, .4, .25);
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth*.5, innerHeight*.5), 1.6, .5, .2);
 bloom.enabled = false; comp.addPass(bloom);
 const uT = { value: 0 };
+const uB = { value: 0 };
+const uVel = { value: 0 };
 
 // ---------- TEXTURES ----------
-const glow = (() => {
-  const c = document.createElement('canvas'); c.width = c.height = 64;
-  const g = c.getContext('2d');
-  const r = g.createRadialGradient(32,32,0,32,32,32);
-  r.addColorStop(0, 'rgba(255,255,255,1)');
-  r.addColorStop(.35, 'rgba(255,255,255,.55)');
-  r.addColorStop(1, 'rgba(255,255,255,0)');
-  g.fillStyle = r; g.fillRect(0,0,64,64);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+const glowTex = (() => {
+  const c=document.createElement('canvas'); c.width=c.height=64;
+  const g=c.getContext('2d');
+  const r=g.createRadialGradient(32,32,0,32,32,32);
+  r.addColorStop(0,'rgba(255,255,255,1)');
+  r.addColorStop(.4,'rgba(255,255,255,.4)');
+  r.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=r; g.fillRect(0,0,64,64);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
 })();
-const mkT = (txt, hex) => {
-  const c = document.createElement('canvas'); c.width = 512; c.height = 64;
-  const g = c.getContext('2d');
-  g.font = 'bold 24px monospace';
-  g.fillStyle = hex;
-  g.textBaseline = 'middle';
-  g.shadowColor = hex; g.shadowBlur = 12;
-  g.fillText(txt, 10, 32);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
-};
-const WORDS = ['SCANNING','SEARCHING','ANALYZING','TRACING','TARGET','LOCK','ROUTING','DECRYPT','ACCESS','COMPILE','PROCESS','FRAGMENT','QUERYING','MAPPING','PARSING','DIRECTIVE','PRIORITY','PROTOCOL','0x4F2A','0xBEEF','01001110','SYS://','NULL','PING','TRACE','DATA','NODE_7','LISTENING','STANDBY'];
-const wordTexs = WORDS.map((w,i) => mkT(w, i % 2 === 0 ? '#00ddff' : '#ff8800'));
+function mkCodeTex(kind){
+  const c=document.createElement('canvas'); c.width=512; c.height=64;
+  const g=c.getContext('2d');
+  g.font='bold 22px monospace';
+  const col = kind===0?'#00ddff':kind===1?'#ff9900':'#88ddff';
+  g.fillStyle=col; g.shadowColor=col; g.shadowBlur=8; g.textBaseline='middle';
+  let txt='';
+  if (kind===0){ for(let i=0;i<48;i++) txt += Math.random()<.5?'0':'1'; }
+  else if (kind===1){ const h='0123456789ABCDEF'; for(let i=0;i<24;i++) txt += h[Math.floor(Math.random()*16)]; }
+  else { const w=['SEARCH','DECRYPT','ROUTE','TRACE','PING','LOCK','SCAN','PARSE','QUERY','TRANS']; txt = w[Math.floor(Math.random()*w.length)] + ' // ' + Math.floor(Math.random()*9999); }
+  g.fillText(txt, 8, 32);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
+}
+const codeTexs = [];
+for (let i=0;i<16;i++) codeTexs.push(mkCodeTex(i%3));
 
-// ---------- ORB ----------
+// ---------- LIQUID METAL SHADER (created once, never disposed) ----------
+const liquidMat = new THREE.ShaderMaterial({
+  uniforms: {
+    uT: uT, uVel: uVel, uBoost: uB,
+    uA: { value: new THREE.Color(C.od) },
+    uB: { value: new THREE.Color(C.am) },
+    uC: { value: new THREE.Color(C.cl) },
+    uD: { value: new THREE.Color(C.wh) }
+  },
+  wireframe: true,
+  transparent: true,
+  vertexShader: `
+    uniform float uT; uniform float uVel; uniform float uBoost;
+    varying float vN; varying vec3 vP;
+    void main(){
+      vec3 p = position;
+      float t = uT * (1.0 + uBoost * 1.2);
+      float turb = 1.0 + uVel * 5.0;
+      float n1 = sin(p.x*1.9 + t*1.1) * cos(p.y*2.3 + t*1.3) * sin(p.z*2.0 + t*1.0);
+      float n2 = sin(p.x*3.5 - t*1.5) * cos(p.z*3.3 + t*0.9);
+      float n3 = sin(p.y*5.5 + t*2.1);
+      float n4 = cos(p.x*8.0 + p.y*6.0 + p.z*7.0 + t*2.0);
+      float d = (n1 + n2*0.6 + n3*0.35 + n4*0.2) * 0.42 * turb;
+      p += normalize(p) * d * (0.32 + uBoost * 0.25);
+      vN = d; vP = p;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+    }`,
+  fragmentShader: `
+    uniform vec3 uA; uniform vec3 uB; uniform vec3 uC; uniform vec3 uD;
+    uniform float uBoost; uniform float uVel;
+    varying float vN; varying vec3 vP;
+    void main(){
+      float m = clamp(vN + 0.5, 0.0, 1.0);
+      vec3 col = mix(uA, uB, m);
+      col = mix(col, uC, pow(max(0.0, vN), 2.0));
+      col = mix(col, uD, pow(max(0.0, vN), 5.0));
+      float r = length(vP);
+      col += vec3(0.2, 0.6, 1.0) * smoothstep(0.5, 2.2, r) * 0.2;
+      col *= (1.0 + uVel * 0.6);
+      gl_FragColor = vec4(col, 0.42 + uBoost * 0.4 + abs(vN) * 0.35);
+    }`
+});
+
+// ---------- GROUPS ----------
 const orb = new THREE.Group(); scene.add(orb);
-let core, parts, debris, dust, rings = [], pulses = [], arcs = [], sprites = [];
+const swarm = new THREE.Group(); scene.add(swarm);
+const codeGroup = new THREE.Group(); scene.add(codeGroup);
 
-const rPt = r => {
-  const p = Math.acos(2*Math.random()-1), t = Math.random()*Math.PI*2;
-  return new THREE.Vector3(r*Math.sin(p)*Math.cos(t), r*Math.cos(p), r*Math.sin(p)*Math.sin(t));
-};
-const setArc = (l, r) => {
-  const s = rPt(r), e = rPt(r);
-  const m = s.clone().add(e).multiplyScalar(.5).normalize().multiplyScalar(r*1.45);
-  const pts = new THREE.QuadraticBezierCurve3(s, m, e).getPoints(30);
-  const pos = l.geometry.attributes.position;
-  for (let i = 0; i < pts.length; i++) pos.setXYZ(i, pts[i].x, pts[i].y, pts[i].z);
-  pos.needsUpdate = 1; l.geometry.computeBoundingSphere();
+// ---------- STATE ARRAYS ----------
+let liquidMesh, coreGlow, particles, swarmPts, dust;
+let mechanical=[], gimbals=[], sats=[], codeSprites=[], arcBeams=[];
+
+const rPt = (r) => {
+  const phi = Math.acos(2*Math.random()-1), th = Math.random()*Math.PI*2;
+  return new THREE.Vector3(r*Math.sin(phi)*Math.cos(th), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(th));
 };
 
-function motionM(mat, w, s) {
+function mkPts(n, rf, colors, size, op, w, s) {
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array(n*3), seeds = new Float32Array(n), cols = new Float32Array(n*3);
+  const tmp = new THREE.Color();
+  for (let i=0;i<n;i++){
+    const v = rPt(rf());
+    pos[i*3]=v.x; pos[i*3+1]=v.y; pos[i*3+2]=v.z;
+    seeds[i] = Math.random()*Math.PI*2;
+    tmp.setHex(colors[Math.floor(Math.random()*colors.length)]);
+    cols[i*3]=tmp.r; cols[i*3+1]=tmp.g; cols[i*3+2]=tmp.b;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds,1));
+  geo.setAttribute('color', new THREE.BufferAttribute(cols,3));
+  const mat = new THREE.PointsMaterial({
+    map: glowTex, size, transparent: 1, opacity: op,
+    vertexColors: 1, blending: THREE.AdditiveBlending,
+    depthWrite: 0, sizeAttenuation: 1
+  });
   mat.onBeforeCompile = sh => {
-    sh.uniforms.uT = uT; sh.uniforms.uW = { value: w }; sh.uniforms.uS = { value: s };
-    sh.vertexShader = `uniform float uT;uniform float uW;uniform float uS;attribute float aSeed;` + sh.vertexShader;
+    sh.uniforms.uT = uT; sh.uniforms.uW = { value: w }; sh.uniforms.uS = { value: s }; sh.uniforms.uVel = uVel;
+    sh.vertexShader = `uniform float uT;uniform float uW;uniform float uS;uniform float uVel;attribute float aSeed;` + sh.vertexShader;
     sh.vertexShader = sh.vertexShader.replace('#include <begin_vertex>', `
       vec3 transformed=vec3(position);
       float t=uT+aSeed,r=length(transformed);
       vec3 dir=transformed/max(r,0.0001);
-      transformed+=dir*sin(t*1.2)*uW;
-      transformed.x+=sin(t*0.6+aSeed*1.7)*uW*0.8;
-      transformed.y+=cos(t*0.8+aSeed*2.3)*uW*0.8;
-      transformed.z+=sin(t*1.0+aSeed*3.1)*uW*0.8;
-      float a=t*uS*(0.4+fract(aSeed*0.159)*0.6);
-      float cs=cos(a),sn=sin(a);
+      float trail = uVel * 3.0;
+      transformed += dir * sin(t*1.2) * (uW + trail*0.05);
+      transformed.x += sin(t*0.6+aSeed*1.7)*(uW + trail*0.08)*0.9;
+      transformed.y += cos(t*0.8+aSeed*2.3)*(uW + trail*0.08)*0.9;
+      transformed.z += sin(t*1.0+aSeed*3.1)*(uW + trail*0.08)*0.9;
+      float ang = t*uS*(0.4+fract(aSeed*0.159)*0.6);
+      float cs=cos(ang),sn=sin(ang);
       transformed.xz=mat2(cs,-sn,sn,cs)*transformed.xz;
     `);
   };
-  mat.customProgramCacheKey = () => 'm'+w+s;
-}
-
-function mkPts(n, rf, colors, size, op, w, s) {
-  const geo = new THREE.BufferGeometry();
-  const pos = new Float32Array(n*3);
-  const seeds = new Float32Array(n);
-  const cols = new Float32Array(n*3);
-  const multi = Array.isArray(colors);
-  const tmp = new THREE.Color();
-  for (let i = 0; i < n; i++) {
-    const v = rPt(rf());
-    pos[i*3]=v.x; pos[i*3+1]=v.y; pos[i*3+2]=v.z;
-    seeds[i] = Math.random()*Math.PI*2;
-    tmp.setHex(multi ? colors[i % colors.length] : colors);
-    cols[i*3]=tmp.r; cols[i*3+1]=tmp.g; cols[i*3+2]=tmp.b;
-  }
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
-  geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
-  const mat = new THREE.PointsMaterial({
-    map: glow, size, transparent: 1, opacity: op,
-    vertexColors: 1, blending: THREE.AdditiveBlending,
-    depthWrite: 0, sizeAttenuation: 1
-  });
-  motionM(mat, w, s);
+  // FIX: cache key uses real varying params only
+  mat.customProgramCacheKey = () => 'p' + w + s;
   return new THREE.Points(geo, mat);
 }
 
+// ---------- BUILD ORB ----------
 function buildOrb(q) {
-  while (orb.children.length) {
-    const c = orb.children.pop();
-    c.geometry?.dispose();
-    if (c.material) (Array.isArray(c.material)?c.material:[c.material]).forEach(m => m.dispose());
-  }
-  rings=[]; pulses=[]; arcs=[]; sprites=[];
   const c = Q[q];
 
-  // Dual wireframe shells — cyan outer, orange inner
-  orb.add(new THREE.Mesh(
-    new THREE.SphereGeometry(2, c.seg, c.seg),
-    new THREE.MeshBasicMaterial({ color: PAL.cy, wireframe: 1, transparent: 1, opacity: .10 })
-  ));
-  orb.add(new THREE.Mesh(
-    new THREE.SphereGeometry(1.85, c.seg, c.seg),
-    new THREE.MeshBasicMaterial({ color: PAL.ol, wireframe: 1, transparent: 1, opacity: .08 })
-  ));
+  // FIX: Clear all dynamic children INCLUDING dust, EXCLUDING liquidMat
+  const dynamic = [...mechanical, ...gimbals, ...sats, ...codeSprites,
+                   liquidMesh, coreGlow, particles, swarmPts, dust, ...arcBeams];
+  dynamic.forEach(o => {
+    if (!o) return;
+    if (o.parent) o.parent.remove(o);
+    if (o.geometry) o.geometry.dispose();
+    // FIX: never dispose the shared liquidMat
+    if (o.material && o.material !== liquidMat) {
+      const ms = Array.isArray(o.material) ? o.material : [o.material];
+      ms.forEach(m => m.dispose());
+    }
+  });
+  mechanical=[]; gimbals=[]; sats=[]; codeSprites=[]; arcBeams=[];
 
-  // Core — dual torus knots
-  core = new THREE.Group();
-  const ck1 = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(.55, .1, 40, 6, 2, 3),
-    new THREE.MeshBasicMaterial({ color: PAL.od, wireframe: 1, transparent: 1, opacity: .55 })
+  // Liquid metal core
+  liquidMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1.5, c.seg), liquidMat);
+  orb.add(liquidMesh);
+
+  coreGlow = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.4, 2),
+    new THREE.MeshBasicMaterial({ color: C.cw, transparent: true, opacity: .7, blending: THREE.AdditiveBlending, depthWrite: false })
   );
-  const ck2 = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(.75, .04, 48, 8, 3, 5),
-    new THREE.MeshBasicMaterial({ color: PAL.cl, wireframe: 1, transparent: 1, opacity: .35 })
-  );
-  core.add(ck1, ck2);
-  orb.add(core);
+  orb.add(coreGlow);
 
-  // Particles with mixed colors
-  parts = mkPts(c.pc, () => 2.02, [PAL.ol, PAL.cy, PAL.ow, PAL.cl, PAL.wh], .11, 1, .05, .15); orb.add(parts);
-  debris = mkPts(c.dc, () => 2.15 + Math.random()*.9, [PAL.cy, PAL.cl, PAL.tl], .07, .85, .14, .30); orb.add(debris);
-  dust = mkPts(c.gc, () => .4 + Math.random()*1.5, [PAL.od, PAL.or, PAL.pu], .035, .55, .08, .22); orb.add(dust);
-
-  // 6 orbital rings — alternating cyan/orange
-  const rcfgs = [
-    { r:2.25, t:.008, rx:Math.PI/2,  ry:0,              spd: .15, col:PAL.cy },
-    { r:2.50, t:.006, rx:Math.PI/2,  ry:Math.PI/3,      spd:-.12, col:PAL.ol },
-    { r:2.75, t:.010, rx:Math.PI/2,  ry:2*Math.PI/3,    spd: .20, col:PAL.cy },
-    { r:2.40, t:.007, rx:Math.PI/3,  ry:Math.PI/4,      spd:-.18, col:PAL.ol },
-    { r:2.60, t:.005, rx:-Math.PI/3, ry:Math.PI/6,      spd: .10, col:PAL.cl },
-    { r:2.85, t:.009, rx:Math.PI/4,  ry:-Math.PI/4,     spd:-.14, col:PAL.or }
-  ];
-  rcfgs.forEach((rc,i) => {
-    const r = new THREE.Mesh(
-      new THREE.TorusGeometry(rc.r, rc.t, 6, c.rs),
-      new THREE.MeshBasicMaterial({ color: rc.col, transparent: 1, opacity: .4 - i*.02 })
+  // Latitude rings
+  [-1.2,-0.7,-0.2,0.3,0.9,1.3].forEach((y,i) => {
+    const rad = Math.sqrt(Math.max(0, 2.05*2.05 - y*y)) * 0.96;
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(rad, 0.012, 4, 40),
+      new THREE.MeshBasicMaterial({ color: i%2===0?C.cl:C.am, transparent: 1, opacity: .5 })
     );
-    r.rotation.x = rc.rx; r.rotation.y = rc.ry;
-    r.userData.spd = rc.spd;
-    orb.add(r); rings.push(r);
+    ring.rotation.x = Math.PI/2; ring.position.y = y;
+    orb.add(ring); mechanical.push(ring);
   });
 
-  // Pulses — alternating colors
-  for (let i = 0; i < c.pu; i++) {
-    const p = new THREE.Mesh(
-      new THREE.RingGeometry(1.85, 2.05, 48),
-      new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? PAL.cy : PAL.ol,
-        transparent: 1, opacity: 0, side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending, depthWrite: 0
-      })
+  // Meridian arcs
+  for (let i=0;i<4;i++){
+    const arc = new THREE.Mesh(
+      new THREE.TorusGeometry(2.0, 0.01, 4, 32, Math.PI),
+      new THREE.MeshBasicMaterial({ color: i%2===0?C.am:C.cy, transparent: 1, opacity: .45 })
     );
-    p.rotation.x = Math.random()*Math.PI; p.rotation.y = Math.random()*Math.PI;
-    p.userData = { life: Math.random(), spd: .35 + Math.random()*.4 };
-    orb.add(p); pulses.push(p);
+    arc.rotation.y = (i/4)*Math.PI*2; arc.rotation.z = Math.PI/2;
+    orb.add(arc); mechanical.push(arc);
   }
 
-  // Arcs — mixed colors
-  for (let i = 0; i < c.ac; i++) {
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(93), 3));
-    const l = new THREE.Line(g, new THREE.LineBasicMaterial({
-      color: i % 2 === 0 ? PAL.cl : PAL.ol,
-      transparent: 1, opacity: 0,
-      blending: THREE.AdditiveBlending, depthWrite: 0
-    }));
-    setArc(l, 2.02);
-    l.userData = { life: Math.random(), spd: .5 + Math.random()*.5 };
-    orb.add(l); arcs.push(l);
+  // Panel plates — FIX: removed unused bp field
+  for (let i=0;i<c.pan;i++){
+    const phi = Math.acos(2*Math.random()-1), th = Math.random()*Math.PI*2, r = 2.08;
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(0.14, 0.05, 0.03),
+      new THREE.MeshBasicMaterial({ color: i%3===0?C.am:(i%3===1?C.cy:C.cw), transparent: 1, opacity: .55 })
+    );
+    box.position.set(r*Math.sin(phi)*Math.cos(th), r*Math.cos(phi), r*Math.sin(phi)*Math.sin(th));
+    box.lookAt(0,0,0);
+    box.userData = { ph: Math.random()*Math.PI*2 };
+    orb.add(box); mechanical.push(box);
   }
 
-  // Text sprites — cyan-dominant
-  for (let i = 0; i < c.sc; i++) {
+  // Gimbals
+  const gcfgs = [
+    { r:2.3, tube:.022, col:C.cl, rx:0,         ry:0,         rz:0 },
+    { r:2.45,tube:.018, col:C.am, rx:Math.PI/2, ry:Math.PI/3, rz:0 },
+    { r:2.6, tube:.015, col:C.te, rx:Math.PI/3, ry:0,         rz:Math.PI/4 }
+  ];
+  gcfgs.forEach((cfg,i) => {
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(
+      new THREE.TorusGeometry(cfg.r, cfg.tube, 6, c.rs),
+      new THREE.MeshBasicMaterial({ color: cfg.col, transparent: 1, opacity: .55 })
+    ));
+    for (let j=0;j<8;j++){
+      const a = (j/8)*Math.PI*2;
+      const bolt = new THREE.Mesh(
+        new THREE.BoxGeometry(.06,.06,.06),
+        new THREE.MeshBasicMaterial({ color: cfg.col, transparent: 1, opacity: .85 })
+      );
+      bolt.position.set(Math.cos(a)*cfg.r, Math.sin(a)*cfg.r, 0);
+      g.add(bolt);
+    }
+    g.rotation.set(cfg.rx, cfg.ry, cfg.rz);
+    g.userData.spd = (i+1)*0.15*(i%2===0?1:-1);
+    g.userData.axis = ['x','y','z'][i];
+    orb.add(g); gimbals.push(g);
+  });
+
+  // Satellites
+  for (let i=0;i<c.sats;i++){
+    const s = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.05, 0),
+      new THREE.MeshBasicMaterial({ color: i%2===0?C.cy:C.am, transparent: 1, opacity: .9 })
+    );
+    s.userData = { a: Math.random()*Math.PI*2, inc: (Math.random()-.5)*Math.PI, rad: 2.7+Math.random()*0.6, spd: 0.3+Math.random()*0.5 };
+    orb.add(s); sats.push(s);
+  }
+
+  // Energy arcs
+  const ac = [
+    { r:2.75, tube:.014, col:C.cl, axis:'x', speed:.5 },
+    { r:2.85, tube:.012, col:C.am, axis:'y', speed:-.6 },
+    { r:2.65, tube:.010, col:C.te, axis:'z', speed:.7 },
+    { r:3.0,  tube:.008, col:C.cy, axis:'x', speed:-.4 },
+    { r:2.9,  tube:.010, col:C.ow || C.am, axis:'y', speed:.45 }
+  ].slice(0, c.ac);
+  ac.forEach(cfg => {
+    const arc = new THREE.Mesh(
+      new THREE.TorusGeometry(cfg.r, cfg.tube, 5, 48, Math.PI*1.4),
+      new THREE.MeshBasicMaterial({ color: cfg.col, transparent: 1, opacity: .55, blending: THREE.AdditiveBlending, depthWrite: 0 })
+    );
+    arc.userData = { axis: cfg.axis, speed: cfg.speed };
+    arc.rotation.x = Math.random()*Math.PI*2;
+    arc.rotation.y = Math.random()*Math.PI*2;
+    arc.rotation.z = Math.random()*Math.PI*2;
+    orb.add(arc); arcBeams.push(arc);
+  });
+
+  particles = mkPts(c.pc, () => 1.6 + Math.random()*0.7, [C.cy, C.cl, C.am, C.wh], .09, 1, .05, .15);
+  orb.add(particles);
+
+  swarmPts = mkPts(c.dc, () => 2.3 + Math.random()*1.4, [C.cy, C.cl, C.te, C.pu], .07, .9, .18, .35);
+  swarm.add(swarmPts);
+
+  for (let i=0;i<c.sc;i++){
     const s = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: wordTexs[i % wordTexs.length],
+      map: codeTexs[i % codeTexs.length],
       transparent: 1, opacity: .85,
       blending: THREE.AdditiveBlending, depthWrite: 0
     }));
-    const p = rPt(1.9 + Math.random()*1.5);
+    const p = rPt(2.2 + Math.random()*1.3);
     s.position.copy(p);
-    const sc = .55 + Math.random()*.35;
-    s.scale.set(sc, sc*.13, 1);
-    s.userData = { bp: p.clone(), ph: Math.random()*Math.PI*2, spd: .4 + Math.random()*.6, orb: .05 + Math.random()*.1 };
-    orb.add(s); sprites.push(s);
+    const sc = .7 + Math.random()*.5;
+    s.scale.set(sc, sc*.12, 1);
+    s.userData = { bp: p.clone(), ph: Math.random()*Math.PI*2, spd: .5 + Math.random()*.6 };
+    codeGroup.add(s); codeSprites.push(s);
   }
+
+  // FIX: dust is now in the clear list, will dispose properly
+  dust = mkPts(c.gc, () => 0.5 + Math.random()*2.5, [C.od, C.am, C.pu, C.cy], .025, .45, .1, .28);
+  swarm.add(dust);
 }
 
-// ---------- PORTAL (complex mechanical ring with hole at center) ----------
+// ---------- PORTAL ----------
 const portal = new THREE.Group();
-portal.scale.setScalar(.85);
+portal.scale.setScalar(.75);
 scene.add(portal);
 const P = {};
 {
-  // Outer wireframe torus (orange, structural frame)
-  P.outer = new THREE.Mesh(
-    new THREE.TorusGeometry(.95, .05, 8, 48),
-    new THREE.MeshBasicMaterial({ color: PAL.or, wireframe: 1, transparent: 1, opacity: .35 })
-  );
-  portal.add(P.outer);
+  P.cageF = new THREE.Mesh(new THREE.TorusGeometry(1.2, .04, 5, 40), new THREE.MeshBasicMaterial({ color: C.od, wireframe: 1, transparent: 1, opacity: .35 }));
+  P.cageF.position.z = .12; portal.add(P.cageF);
+  P.cageB = new THREE.Mesh(new THREE.TorusGeometry(1.2, .04, 5, 40), new THREE.MeshBasicMaterial({ color: C.od, wireframe: 1, transparent: 1, opacity: .25 }));
+  P.cageB.position.z = -.12; portal.add(P.cageB);
 
-  // Mid cyan smooth ring
-  P.mid = new THREE.Mesh(
-    new THREE.TorusGeometry(.78, .028, 8, 64),
-    new THREE.MeshBasicMaterial({ color: PAL.cy, transparent: 1, opacity: .85 })
-  );
-  portal.add(P.mid);
-
-  // Inner orange ring
-  P.inner = new THREE.Mesh(
-    new THREE.TorusGeometry(.58, .018, 8, 48),
-    new THREE.MeshBasicMaterial({ color: PAL.ol, transparent: 1, opacity: .9 })
-  );
-  portal.add(P.inner);
-
-  // Innermost glow ring (edge of the hole)
-  P.edge = new THREE.Mesh(
-    new THREE.RingGeometry(.28, .42, 48),
-    new THREE.MeshBasicMaterial({
-      color: PAL.cl, transparent: 1, opacity: .55,
-      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0
-    })
-  );
-  portal.add(P.edge);
-
-  // The hole (dark center)
-  P.hole = new THREE.Mesh(
-    new THREE.CircleGeometry(.28, 32),
-    new THREE.MeshBasicMaterial({ color: 0x000000, transparent: 1, opacity: .92, side: THREE.DoubleSide })
-  );
-  portal.add(P.hole);
-
-  // Cyan halo around hole
-  P.halo = new THREE.Mesh(
-    new THREE.CircleGeometry(.32, 32),
-    new THREE.MeshBasicMaterial({
-      color: PAL.cy, transparent: 1, opacity: .3,
-      side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0
-    })
-  );
-  portal.add(P.halo);
-
-  // 8 satellites orbiting the portal
-  P.sats = [];
-  for (let i = 0; i < 8; i++) {
-    const s = new THREE.Mesh(
-      new THREE.BoxGeometry(.06,.06,.06),
-      new THREE.MeshBasicMaterial({ color: i%2 === 0 ? PAL.cy : PAL.ol, transparent: 1, opacity: .9 })
-    );
-    s.userData = { angle: (i/8)*Math.PI*2, rad: 1.15, spd: .6 + Math.random()*.4 };
-    portal.add(s); P.sats.push(s);
+  P.beams = [];
+  for (let i=0;i<8;i++){
+    const a = (i/8)*Math.PI*2;
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(.014,.014,.24,5), new THREE.MeshBasicMaterial({ color: C.am, transparent: 1, opacity: .55 }));
+    beam.position.set(Math.cos(a)*1.2, Math.sin(a)*1.2, 0);
+    beam.rotation.x = Math.PI/2;
+    portal.add(beam); P.beams.push(beam);
   }
 
-  // 4 cross struts
+  P.outer = new THREE.Mesh(new THREE.TorusGeometry(1.05, .03, 8, 60), new THREE.MeshBasicMaterial({ color: C.am, transparent: 1, opacity: .85 }));
+  P.outer.position.z = .06; portal.add(P.outer);
+  P.mid = new THREE.Mesh(new THREE.TorusGeometry(.9, .025, 8, 60), new THREE.MeshBasicMaterial({ color: C.cy, transparent: 1, opacity: .9 }));
+  P.mid.position.z = -.02; portal.add(P.mid);
+  P.inner = new THREE.Mesh(new THREE.TorusGeometry(.72, .018, 8, 48), new THREE.MeshBasicMaterial({ color: C.cl, transparent: 1, opacity: .95 }));
+  P.inner.position.z = .04; portal.add(P.inner);
+  P.hole = new THREE.Mesh(new THREE.CircleGeometry(.35, 32), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: 1, opacity: .96, side: THREE.DoubleSide }));
+  portal.add(P.hole);
+  P.halo = new THREE.Mesh(new THREE.RingGeometry(.35, .55, 48), new THREE.MeshBasicMaterial({ color: C.cl, transparent: 1, opacity: .5, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0 }));
+  P.halo.position.z = .01; portal.add(P.halo);
+  P.tube = new THREE.Mesh(new THREE.CylinderGeometry(.32, .22, .55, 24, 1, true), new THREE.MeshBasicMaterial({ color: C.cy, transparent: 1, opacity: .28, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0 }));
+  P.tube.rotation.x = Math.PI/2; P.tube.position.z = -.28; portal.add(P.tube);
+
   P.struts = [];
-  for (let i = 0; i < 4; i++) {
-    const s = new THREE.Mesh(
-      new THREE.BoxGeometry(.018, 1.9, .018),
-      new THREE.MeshBasicMaterial({ color: PAL.cd, transparent: 1, opacity: .5 })
-    );
+  for (let i=0;i<4;i++){
+    const s = new THREE.Mesh(new THREE.BoxGeometry(.014, 2.4, .014), new THREE.MeshBasicMaterial({ color: C.gb, transparent: 1, opacity: .5 }));
     s.rotation.z = (i/4)*Math.PI;
     portal.add(s); P.struts.push(s);
   }
-
-  // Small marker ring at the top (target indicator)
-  P.marker = new THREE.Mesh(
-    new THREE.TorusGeometry(.08, .012, 6, 16),
-    new THREE.MeshBasicMaterial({ color: PAL.tl, transparent: 1, opacity: .9 })
-  );
-  P.marker.position.y = 1.15;
-  portal.add(P.marker);
+  P.sats = [];
+  for (let i=0;i<10;i++){
+    const tier = i<5 ? 1 : -1;
+    const s = new THREE.Mesh(new THREE.OctahedronGeometry(.05, 0), new THREE.MeshBasicMaterial({ color: i%2===0?C.cy:C.am, transparent: 1, opacity: .9 }));
+    s.userData = { a: (i%5)/5*Math.PI*2, rad: 1.35 + Math.random()*.2, z: tier*.15, spd: .5 + Math.random()*.5 };
+    portal.add(s); P.sats.push(s);
+  }
+  P.marker = new THREE.Mesh(new THREE.OctahedronGeometry(.1, 0), new THREE.MeshBasicMaterial({ color: C.te, transparent: 1, opacity: .95 }));
+  P.marker.position.y = 1.55; portal.add(P.marker);
+  P.corona = new THREE.Mesh(new THREE.RingGeometry(1.25, 1.7, 48), new THREE.MeshBasicMaterial({ color: C.cy, transparent: 1, opacity: .1, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: 0 }));
+  portal.add(P.corona);
 
   portal.userData = { flash: 0 };
 }
 
 // ---------- TASK CHIPS ----------
 const tasks = [], MAXT = 6;
-const CCOL = {
-  pending: ['#ff9900','rgba(255,153,0,.15)'],
-  working: ['#ff6600','rgba(255,102,0,.25)'],
-  done:    ['#88ffcc','rgba(136,255,204,.15)'],
-  failed:  ['#ff2200','rgba(255,34,0,.2)'],
-  auto:    ['#cc44ff','rgba(204,68,255,.15)']
-};
-function chipTex(text, state) {
-  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
-  const g = c.getContext('2d');
+const CCOL = { pending:['#ff9900','rgba(255,153,0,.18)'], working:['#00aaff','rgba(0,170,255,.22)'], done:['#00ffaa','rgba(0,255,170,.18)'], failed:['#ff2244','rgba(255,34,68,.22)'], auto:['#aa55ff','rgba(170,85,255,.18)'] };
+function chipTex(text, state){
+  const c=document.createElement('canvas'); c.width=512; c.height=128;
+  const g=c.getContext('2d');
   const [fg,bg] = CCOL[state] || CCOL.pending;
-  g.fillStyle = bg; g.fillRect(0,0,512,128);
-  g.strokeStyle = fg; g.lineWidth = 3; g.strokeRect(2,2,508,124);
-  g.font = 'bold 24px monospace'; g.fillStyle = fg; g.textBaseline = 'middle';
-  const words = String(text).split(' '); let line = ''; const lines = [];
-  for (const w of words) {
-    const t = line ? line + ' ' + w : w;
-    if (g.measureText(t).width > 470) { lines.push(line); line = w; } else line = t;
-  }
+  g.fillStyle=bg; g.fillRect(0,0,512,128);
+  g.strokeStyle=fg; g.lineWidth=3; g.strokeRect(2,2,508,124);
+  g.font='bold 24px monospace'; g.fillStyle=fg; g.textBaseline='middle';
+  const words=String(text).split(' '); let line=''; const lines=[];
+  for (const w of words){ const t=line?line+' '+w:w; if (g.measureText(t).width>470){ lines.push(line); line=w; } else line=t; }
   if (line) lines.push(line);
-  lines.slice(0,3).forEach((l,i) => g.fillText(l, 20, 44 + i*32));
-  g.font = 'bold 16px monospace';
-  g.fillText(String(state).toUpperCase(), 20, 110);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  lines.slice(0,3).forEach((l,i)=>g.fillText(l,20,44+i*32));
+  g.font='bold 14px monospace'; g.fillText(String(state).toUpperCase(), 20, 110);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace; return t;
 }
-function spawn(text, isAuto) {
-  if (tasks.length >= MAXT) {
-    let i = 0; while (i < tasks.length && tasks[i] === carried) i++;
-    if (i >= tasks.length) i = 0;
-    const o = tasks.splice(i,1)[0];
+function spawn(text, isAuto){
+  if (tasks.length>=MAXT){
+    let i=0; while(i<tasks.length && tasks[i]===carried) i++;
+    if (i>=tasks.length) i=0;
+    const o=tasks.splice(i,1)[0];
     scene.remove(o.sprite);
-    try { o.sprite.material.map?.dispose(); o.sprite.material.dispose(); } catch {}
+    try{ o.sprite.material.map?.dispose(); o.sprite.material.dispose(); }catch{}
   }
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: 1, opacity: .95, depthWrite: 0 }));
-  s.scale.set(1.5,.375,1);
-  const t = {
-    sprite: s, text, state: isAuto ? 'auto' : 'pending',
-    ba: Math.random()*Math.PI*2, br: 2.7 + Math.random()*.8,
-    bh: (Math.random()-.5)*1.8, ph: Math.random()*Math.PI*2,
-    isAuto, flight: null
-  };
-  s.material.map = chipTex(text, t.state); s.material.needsUpdate = 1;
+  s.scale.set(1.5, .375, 1);
+  const st = isAuto ? 'auto' : 'pending';
+  const t = { sprite: s, text, state: st,
+              ba: Math.random()*Math.PI*2, br: 3.2 + Math.random()*.9,
+              bh: (Math.random()-.5)*2.4, ph: Math.random()*Math.PI*2, isAuto, flight: null };
+  s.material.map = chipTex(text, st); s.material.needsUpdate = 1;
   scene.add(s); tasks.push(t); return t;
 }
-function setTS(t, state) {
+function setTS(t, state){
+  if (t.state === state) return; // FIX: skip redundant texture rebuild
   t.state = state;
   try { t.sprite.material.map?.dispose(); } catch {}
   t.sprite.material.map = chipTex(t.text, state);
@@ -476,132 +510,121 @@ function setTS(t, state) {
 }
 
 // ---------- CAMERA ----------
-async function startCam() {
+async function startCam(){
   if (camOk) return 1;
   if (!navigator.mediaDevices?.getUserMedia) return 0;
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: 640, height: 480, facingMode: 'user' }, audio: 0
-    });
+    const stream = await navigator.mediaDevices.getUserMedia({ video:{width:640,height:480,facingMode:'user'}, audio:0 });
     vid.srcObject = stream; await vid.play().catch(()=>{});
     const fs = await FilesetResolver.forVisionTasks(WASM);
-    const o = {
-      baseOptions: { modelAssetPath: MURL, delegate: 'GPU' },
-      runningMode: 'VIDEO', numHands: 1,
-      minHandDetectionConfidence: .5, minHandPresenceConfidence: .5, minTrackingConfidence: .5
-    };
+    const o = { baseOptions:{ modelAssetPath:MURL, delegate:'GPU' }, runningMode:'VIDEO', numHands:1,
+                minHandDetectionConfidence:.5, minHandPresenceConfidence:.5, minTrackingConfidence:.5 };
     try { hLM = await HandLandmarker.createFromOptions(fs, o); }
-    catch { o.baseOptions.delegate = 'CPU'; hLM = await HandLandmarker.createFromOptions(fs, o); }
+    catch { o.baseOptions.delegate='CPU'; hLM = await HandLandmarker.createFromOptions(fs, o); }
     camOk = 1; detLoop(); return 1;
-  } catch (e) { console.warn('Cam off:', e.message); return 0; }
+  } catch(e){ console.warn('Cam off:', e.message); return 0; }
 }
-function detLoop() {
+function detLoop(){
   if (!hLM) return;
   const n = performance.now();
-  if (vid.readyState >= 2 && n - lastHR > hFI && vid.currentTime !== lastVT) {
+  if (vid.readyState>=2 && n-lastHR>hFI && vid.currentTime!==lastVT){
     lastVT = vid.currentTime; lastHR = n;
     try { doHands(hLM.detectForVideo(vid, n)); } catch {}
   }
   requestAnimationFrame(detLoop);
 }
-function analyze(h) {
+function analyze(h){
   const w = h[0];
   const ext = [d2(h[4],w) > d2(h[2],w)*1.12];
   for (const [t,p] of [[8,6],[12,10],[16,14],[20,18]]) ext.push(d2(h[t],w) > d2(h[p],w)*1.15);
-  return {
-    open: ext.filter(Boolean).length,
-    size: d2(h[0],h[9]) + d2(h[5],h[17]),
-    palm: { x:(h[0].x+h[5].x+h[9].x+h[13].x+h[17].x)/5, y:(h[0].y+h[5].y+h[9].y+h[13].y+h[17].y)/5 }
-  };
+  return { open: ext.filter(Boolean).length, size: d2(h[0],h[9])+d2(h[5],h[17]),
+           palm: { x:(h[0].x+h[5].x+h[9].x+h[13].x+h[17].x)/5, y:(h[0].y+h[5].y+h[9].y+h[13].y+h[17].y)/5 } };
 }
 const pv = new THREE.Vector3();
-const scrPos = o => { pv.copy(o).project(cam); return { x: pv.x + .5, y: .5 - pv.y }; };
+const scrPos = o => { pv.copy(o).project(cam); return { x:pv.x+.5, y:.5-pv.y }; };
 
-function doHands(r) {
+function doHands(r){
   const hands = r.landmarks || [];
   const now = performance.now();
-  if (!hands.length) {
-    // ---------- HAND LOST → keep momentum ----------
+
+  if (!hands.length){
+    if (wasHand){
+      rYV *= 2.2; rXV *= 2.2; // single momentum boost
+      wasHand = 0;
+    }
     handOn = 0; pPalm = null; pSize = null;
     if (gMode === 'carrying' && carried) drop(carried, 0);
     gMode = 'idle'; carried = null; hovered = null; hStart = 0;
     hud.textContent = 'MODE: IDLE';
-    // Boost momentum for a "thrown" feel
-    rYV *= 12; rXV *= 12;
     return;
   }
-  handOn = 1;
+
+  wasHand = 1; handOn = 1;
   const info = analyze(hands[0]);
   const g = info.open >= 4 ? 'open' : info.open <= 1 ? 'fist' : 'part';
   const hs = { x: 1 - info.palm.x, y: info.palm.y };
 
-  // ---------- CARRYING ----------
-  if (gMode === 'carrying' && carried) {
+  if (gMode === 'carrying' && carried){
     const v = new THREE.Vector3((1-info.palm.x)*2-1, 1-info.palm.y*2, .5).unproject(cam);
     const d = v.sub(cam.position).normalize();
     carried.sprite.position.copy(cam.position.clone().add(d.multiplyScalar(3.2)));
-    carried.sprite.scale.set(1.7,.425,1);
+    carried.sprite.scale.set(1.7, .425, 1);
     hud.textContent = 'CARRYING · palm over portal';
-    // Wider catch radius
-    if (info.open >= 4) {
-      const portalCenter = portal.position.clone();
-      const ps = scrPos(portalCenter);
-      if (Math.hypot(hs.x - ps.x, hs.y - ps.y) < .28) {
+    if (info.open >= 4){
+      const ps = scrPos(portal.position);
+      if (Math.hypot(hs.x - ps.x, hs.y - ps.y) < .3){
         drop(carried, 1); carried = null; gMode = 'idle'; hovered = null; hStart = 0;
       }
     }
     return;
   }
 
-  // ---------- FIST → GRAB or SPIN ----------
-  if (g === 'fist' && tasks.length) {
-    let cl = null, cd = .22; // wider grab range
-    for (const t of tasks) {
+  if (g === 'fist' && tasks.length){
+    let cl2 = null, cd = .22;
+    for (const t of tasks){
       if (t === carried) continue;
       const sp = scrPos(t.sprite.position);
       const d = Math.hypot(hs.x - sp.x, hs.y - sp.y);
-      if (d < cd) { cl = t; cd = d; }
+      if (d < cd){ cl2 = t; cd = d; }
     }
-    if (cl) {
-      if (hovered !== cl) { hovered = cl; hStart = now; }
-      cl.sprite.scale.set(1.7,.425,1);
+    if (cl2){
+      if (hovered !== cl2){ hovered = cl2; hStart = now; }
+      cl2.sprite.scale.set(1.7, .425, 1);
       const pct = Math.min(100, Math.round((now - hStart) / DWELL * 100));
       hud.textContent = 'GRAB ' + pct + '%';
-      if (now - hStart >= DWELL) { carried = cl; gMode = 'carrying'; hud.textContent = 'CARRYING · palm over portal'; }
-      // Rotate while hovering
-      const p = { x: 1 - info.palm.x, y: info.palm.y };
-      if (pPalm) {
+      if (now - hStart >= DWELL){ carried = cl2; gMode = 'carrying'; hud.textContent = 'CARRYING · palm over portal'; }
+      const p = { x: 1-info.palm.x, y: info.palm.y };
+      if (pPalm){
         const dx = p.x - pPalm.x, dy = p.y - pPalm.y;
         rotY += dx * 3.5; rotX += dy * 2.5;
-        rYV = dx * 8; rXV = dy * 6;
+        rYV = dx * 12; rXV = dy * 10;
       }
       pPalm = p; pSize = null; return;
     }
     hovered = null; hStart = 0;
-    const p = { x: 1 - info.palm.x, y: info.palm.y };
-    if (pPalm) {
+    const p = { x: 1-info.palm.x, y: info.palm.y };
+    if (pPalm){
       const dx = p.x - pPalm.x, dy = p.y - pPalm.y;
-      rotY += dx * 6.5; rotX += dy * 5;
-      rYV = dx * 15; rXV = dy * 12;
+      rotY += dx * 6; rotX += dy * 5;
+      rYV = dx * 20; rXV = dy * 16;
     }
     pPalm = p; pSize = null;
     hud.textContent = 'FIST · spin';
     return;
   }
 
-  // ---------- OPEN PALM → ROTATE + ZOOM ----------
-  if (g === 'open') {
+  if (g === 'open'){
     hovered = null; hStart = 0;
-    const p = { x: 1 - info.palm.x, y: 1 - info.palm.y };
-    if (pPalm) {
+    const p = { x: 1-info.palm.x, y: 1-info.palm.y };
+    if (pPalm){
       const dx = p.x - pPalm.x, dy = p.y - pPalm.y;
-      rotY += dx * 4.5; rotX += dy * 3.5;
-      rYV = dx * 12; rXV = dy * 10;
+      rotY += dx * 5; rotX += dy * 4;
+      rYV = dx * 16; rXV = dy * 14;
     }
     pPalm = p;
-    if (pSize) {
+    if (pSize){
       const dd = info.size - pSize;
-      if (Math.abs(dd) > .008) zoom = clamp(zoom - dd*25, 2, 12);
+      if (Math.abs(dd) > .008) zoom = cl(zoom - dd*25, 2, 12);
     }
     pSize = info.size;
     hud.textContent = 'OPEN · rotate';
@@ -610,196 +633,151 @@ function doHands(r) {
 
   hovered = null; hStart = 0; pPalm = null; pSize = null;
 }
-
-function drop(t, into) {
+function drop(t, into){
   if (!t) return;
-  if (into) {
-    // Fly to portal center (the hole)
-    const bp = portal.position.clone();
-    t.flight = { from: t.sprite.position.clone(), to: bp, t: 0, dur: .55 };
+  if (into){
+    t.flight = { from: t.sprite.position.clone(), t: 0, dur: .55 };
     setTS(t, t.isAuto ? 'auto' : 'done');
     portal.userData.flash = 1;
-  } else {
-    t.flight = null;
-    setTS(t, t.isAuto ? 'auto' : 'pending');
-  }
+  } else { t.flight = null; setTS(t, t.isAuto ? 'auto' : 'pending'); }
 }
 
 // ---------- SPEECH ----------
-if ('speechSynthesis' in window) {
+if ('speechSynthesis' in window){
   try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); } catch {}
 }
-function say(text, silent) {
+function say(text, silent){
   if (silent || !('speechSynthesis' in window)) return;
   try { speechSynthesis.cancel(); } catch {}
   const u = new SpeechSynthesisUtterance(text);
-  u.rate = 1; u.pitch = .7;
-  try {
-    const v = speechSynthesis.getVoices().find(v => /Google UK English Male|Daniel|David|Guy/i.test(v.name));
-    if (v) u.voice = v;
-  } catch {}
+  u.rate = 1; u.pitch = .75;
+  try { const v = speechSynthesis.getVoices().find(v => /Google UK English Male|Daniel|David|Guy/i.test(v.name)); if (v) u.voice = v; } catch {}
   try { speechSynthesis.speak(u); } catch {}
 }
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-function startSR() {
+function startSR(){
   if (!SR || srB) return;
   try { sr = new SR(); } catch { return; }
   sr.continuous = 1; sr.interimResults = 1; sr.lang = 'en-US';
   sr.onresult = onSpeech;
-  sr.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { srB = 1; setS('BLOCKED','Mic denied'); } };
+  sr.onerror = e => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed'){ srB = 1; setS('BLOCKED','Mic denied'); } };
   sr.onend = () => {
     if (busy || srB) return;
-    srN++;
-    clearTimeout(srT);
+    srN++; clearTimeout(srT);
     srT = setTimeout(() => { try { sr.start(); srN = Math.max(0, srN-1); } catch {} }, Math.min(200, 50*srN));
   };
   try { sr.start(); srN = 0; } catch {}
 }
-function onSpeech(e) {
+function onSpeech(e){
   if (busy) return;
   let interm = '', fin = '';
-  for (let i = e.resultIndex; i < e.results.length; i++) {
+  for (let i = e.resultIndex; i < e.results.length; i++){
     const t = e.results[i][0].transcript;
     if (e.results[i].isFinal) fin += t + ' '; else interm += t;
   }
   const text = (fin || interm).toLowerCase().trim();
   if (!text) return;
-  if (!awake) {
-    for (const w of WAKE) {
+  if (!awake){
+    for (const w of WAKE){
       const i = text.indexOf(w);
-      if (i !== -1) {
+      if (i !== -1){
         awake = 1; buf = text.slice(i + w.length).trim();
         setS('AWAKE','Listening...'); boost = .5;
         if (buf.length > 2) runCmd(buf);
-        else {
-          say('Yes?');
-          clearTimeout(wakeT);
-          wakeT = setTimeout(() => { if (awake && !busy) { awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; } }, 8000);
-        }
+        else { say('Yes?'); clearTimeout(wakeT); wakeT = setTimeout(() => { if (awake && !busy){ awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; } }, 8000); }
         break;
       }
     }
-  } else if (fin) {
+  } else if (fin){
     buf += ' ' + fin.trim();
-    if (buf.trim().length > 2) { clearTimeout(wakeT); runCmd(buf.trim()); buf = ''; }
+    if (buf.trim().length > 2){ clearTimeout(wakeT); runCmd(buf.trim()); buf = ''; }
   }
 }
 
 // ---------- LLM ----------
 const hist = [{ role: 'system', content: SYS }];
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function think(a) {
-  resp.classList.add('active');
-  resp.innerHTML = `<span class="label${a?' auto':''}">// ULTRON${a?' · self':''}</span><span class="think">${a?'Thinking':'Processing'}</span>`;
-}
-function show(text, anim = 1, auto = 0) {
+function think(a){ resp.classList.add('active'); resp.innerHTML = `<span class="label${a?' auto':''}">// ULTRON${a?' · self':''}</span><span class="think">${a?'Thinking':'Processing'}</span>`; }
+function show(text, anim=1, auto=0){
   resp.classList.add('active');
   const lab = `<span class="label${auto?' auto':''}">// ULTRON${auto?' · self':''}</span>`;
-  if (!anim) { resp.innerHTML = lab + esc(text); return; }
+  if (!anim){ resp.innerHTML = lab + esc(text); return; }
   resp.innerHTML = lab + '<span id="typed"></span><span class="caret"></span>';
   const el = $('typed'); if (!el) return;
   let i = 0; clearInterval(typT);
-  typT = setInterval(() => { el.textContent = text.slice(0, ++i); if (i >= text.length) clearInterval(typT); }, 18);
+  typT = setInterval(() => { el.textContent = text.slice(0,++i); if (i >= text.length) clearInterval(typT); }, 18);
 }
-async function callLLM(msgs, max = 220) {
-  const tries = workingModel ? [workingModel] : MODEL_CANDIDATES;
+async function callLLM(msgs, max=220){
+  const tries = wMod ? [wMod] : MODS;
   let lastErr = null;
-  for (const m of tries) {
-    const ac = new AbortController();
-    const to = setTimeout(() => ac.abort(), 30000);
+  for (const m of tries){
+    const ac = new AbortController(); const to = setTimeout(() => ac.abort(), 30000);
     try {
-      const r = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY },
+      const r = await fetch(EP, { method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + KEY },
         body: JSON.stringify({ model: m, messages: msgs, temperature: .7, max_tokens: max }),
-        signal: ac.signal
-      });
+        signal: ac.signal });
       clearTimeout(to);
       if (r.status === 401 || r.status === 403) throw new Error('AUTH');
-      if (!r.ok) {
-        const b = await r.text();
-        console.error(`LLM7 rejected "${m}":`, r.status, b);
-        lastErr = new Error(`HTTP ${r.status} [${m}]: ${b.slice(0,120)}`);
-        workingModel = null;
-        continue;
-      }
+      if (!r.ok){ const b = await r.text(); console.error(`LLM7 "${m}":`, r.status, b); lastErr = new Error(`HTTP ${r.status} [${m}]`); wMod = null; continue; }
       const d = await r.json();
       const t = d.choices?.[0]?.message?.content?.trim();
-      if (!t) { lastErr = new Error('Empty from ' + m); workingModel = null; continue; }
-      if (workingModel !== m) { workingModel = m; console.log('LLM7 model:', m); }
+      if (!t){ lastErr = new Error('Empty'); wMod = null; continue; }
+      if (wMod !== m){ wMod = m; console.log('LLM7 model:', m); }
       return t;
-    } catch (e) {
-      clearTimeout(to);
-      if (e.message === 'AUTH') throw e;
-      lastErr = e; break;
-    }
+    } catch(e){ clearTimeout(to); if (e.message === 'AUTH') throw e; lastErr = e; break; }
   }
-  throw lastErr || new Error('All models failed');
+  throw lastErr || new Error('All failed');
 }
-async function runCmd(q) {
+async function runCmd(q){
   if (busy) return;
-  if (!KEY) { show('No API key.',0); say('No key.'); awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; return; }
+  if (!KEY){ show('No API key.',0); say('No key.'); awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; return; }
   busy = 1; boost = 1;
   setS('PROCESSING', q.slice(0,40)); think(0);
   const tk = spawn(q, 0); setTS(tk, 'working');
-  hist.push({ role: 'user', content: q });
+  hist.push({ role:'user', content: q });
   try {
     const ans = await callLLM(hist, 220);
-    hist.push({ role: 'assistant', content: ans });
+    hist.push({ role:'assistant', content: ans });
     if (hist.length > 12) hist.splice(1,2);
-    setTS(tk, 'done'); show(ans,1,0); say(ans);
+    setTS(tk, 'done'); show(ans, 1, 0); say(ans);
     setS('AWAKE','Listening...');
     clearTimeout(wakeT);
-    wakeT = setTimeout(() => { if (awake && !busy) { awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; resp.classList.remove('active'); } }, 12000);
-  } catch (e) {
-    console.error(e);
-    setTS(tk, 'failed');
-    if (e.name === 'AbortError') { show('Timed out.',0); say('Timed out.'); }
-    else if (e.message === 'AUTH') { show('Key rejected.',0); say('Access denied.'); showK('Key rejected.'); }
+    wakeT = setTimeout(() => { if (awake && !busy){ awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; resp.classList.remove('active'); } }, 12000);
+  } catch(e){
+    console.error(e); setTS(tk, 'failed');
+    if (e.name === 'AbortError'){ show('Timed out.',0); say('Timed out.'); }
+    else if (e.message === 'AUTH'){ show('Key rejected.',0); say('Access denied.'); showK('Key rejected.'); }
     else { show('Error: ' + e.message, 0); say('Error.'); }
     setS('ERROR','Failed');
     setTimeout(() => { awake = 0; setS('STANDBY','Say "Hello Ultron" to wake'); boost = 0; }, 3000);
   } finally { busy = 0; }
 }
-const SEEDS = [
-  'Observe something about the time.','Tactical assessment of now.','Ask the user a probing question.',
-  'Reflect on pending tasks.','Comment on your processing state.','Issue a subtle warning.',
-  'Speculate about what you cannot see.','Note a pattern in recent commands.',
-  'Warn about a system condition.','Philosophical remark about being AI.',
-  'Suggest a next action.','Report on your readiness.'
-];
-async function autoThink() {
+const SEEDS = ['Observe the time.','Tactical assessment.','Probing question.','Reflect on tasks.','Comment on state.','Subtle warning.','Speculate on unseen.','Note a pattern.','System condition warning.','Philosophical remark.','Suggest next action.','Report readiness.'];
+async function autoThink(){
   if (busy || !KEY) return;
   busy = 1; boost = .6; autoN++;
   think(1);
   const t = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
   const pend = tasks.filter(x => x.state === 'pending' || x.state === 'working').length;
-  const seed = SEEDS[Math.floor(Math.random() * SEEDS.length)];
-  const p = `Context — Time ${t}. ${awake?'User engaged':'User idle'}. ${handOn?'Hand detected':'No user'}. Chips: ${tasks.length} (${pend} pending). Thought #${autoN}.\nDirective: ${seed}\n1-2 sentence internal thought.`;
+  const p = `Context — ${t}. ${awake?'User engaged':'User idle'}. ${handOn?'Hand detected':'No user'}. Chips: ${tasks.length} (${pend} pending). Thought #${autoN}.\nDirective: ${SEEDS[Math.floor(Math.random()*SEEDS.length)]}\n1-2 sentence internal thought.`;
   try {
-    const ans = await callLLM([{ role: 'system', content: SYS_A }, { role: 'user', content: p }], 120);
-    const tk = spawn(ans, 1); setTS(tk, 'auto');
+    const ans = await callLLM([{ role:'system', content: SYS_A }, { role:'user', content: p }], 120);
+    // FIX: spawn already sets 'auto' state, no setTS needed
+    spawn(ans, 1);
     show(ans, 1, 1); say(ans);
     setTimeout(() => { if (!awake) resp.classList.remove('active'); }, 8000);
-  } catch (e) { console.warn('Auto-think failed:', e.message); resp.classList.remove('active'); }
+  } catch(e){ console.warn('Auto fail:', e.message); resp.classList.remove('active'); }
   finally { busy = 0; if (!awake) boost = 0; }
 }
-aBtn.onclick = () => {
-  autoOn = !autoOn;
-  aBtn.textContent = 'Auto: ' + (autoOn?'On':'Off');
-  if (autoOn && autoT > 30000) autoT = 8000;
-};
+aBtn.onclick = () => { autoOn = !autoOn; aBtn.textContent = 'Auto: ' + (autoOn?'On':'Off'); if (autoOn && autoT > 30000) autoT = 8000; };
 
 sBtn.onclick = async () => {
   sBtn.style.display = 'none';
   setS('STARTING','Initializing...');
   const ok = await startCam();
   startSR();
-  setTimeout(() => {
-    setS('STANDBY','Say "Hello Ultron" to wake' + (ok?'':' (no cam)'));
-    say('Systems online.');
-    autoT = 10000;
-  }, 500);
+  setTimeout(() => { setS('STANDBY','Say "Hello Ultron" to wake' + (ok?'':' (no cam)')); say('Systems online.'); autoT = 10000; }, 500);
 };
 const ORD = ['performance','balanced','ultra'];
 qBtn.onclick = () => {
@@ -810,7 +788,7 @@ qBtn.onclick = () => {
   bloom.enabled = !!c.bl; if (c.bl) bloom.setSize(innerWidth*.5, innerHeight*.5);
   comp.setSize(innerWidth, innerHeight);
   hFI = 1000/c.hf;
-  try { buildOrb(n); } catch (e) { console.error(e); err('Rebuild: ' + e.message); }
+  try { buildOrb(n); } catch(e){ console.error(e); errBox('Rebuild: ' + e.message); }
   qBtn.textContent = 'Quality: ' + n[0].toUpperCase() + n.slice(1);
 };
 
@@ -818,65 +796,79 @@ qBtn.onclick = () => {
 const clk = new THREE.Clock();
 let fr = 0, fpsT = 0, tAcc = 0;
 const camR = new THREE.Vector3(), camU = new THREE.Vector3(), camF = new THREE.Vector3();
-function loop() {
+function loop(){
   requestAnimationFrame(loop);
   try {
     const dt = clk.getDelta(), b = 1 + boost * 3;
-    tAcc += dt * b; uT.value = tAcc;
+    tAcc += dt * b; uT.value = tAcc; uB.value = boost;
 
-    if (autoOn && !busy && KEY) {
+    // FIX: correct velocity tracking with both axes
+    const dRot = Math.abs(rotY - lastRotY) + Math.abs(rotX - lastRotX);
+    rotVel = rotVel * 0.88 + dRot * 0.12;
+    uVel.value = Math.min(rotVel * 20, 1.2);
+    lastRotY = rotY;
+    lastRotX = rotX;
+
+    if (autoOn && !busy && KEY){
       autoT -= dt * 1000;
-      if (autoT <= 0) { autoT = 22000 + Math.random()*28000; autoThink(); }
+      if (autoT <= 0){ autoT = 22000 + Math.random()*28000; autoThink(); }
     }
 
-    // Momentum / auto-rotate
-    if (!handOn) {
-      if (Math.abs(rYV) > .0005 || Math.abs(rXV) > .0005) {
+    if (!handOn){
+      if (Math.abs(rYV) > .0005 || Math.abs(rXV) > .0005){
         rotY += rYV; rotX += rXV;
         rYV *= .97; rXV *= .97;
       } else {
-        rotY += .003 * b; rotX += .0005 * b;
+        rotY += .002 * b; rotX += .0003 * b;
       }
     }
     if (rotX > Math.PI) rotX -= Math.PI*2;
     if (rotX < -Math.PI) rotX += Math.PI*2;
 
-    orb.rotation.x += (rotX - orb.rotation.x) * .1;
-    orb.rotation.y += (rotY - orb.rotation.y) * .1;
+    orb.rotation.x += (rotX - orb.rotation.x) * .18;
+    orb.rotation.y += (rotY - orb.rotation.y) * .18;
     cam.position.z += (zoom - cam.position.z) * .09;
     cam.lookAt(0,0,0);
 
-    if (core) {
-      core.rotation.x += dt * .6 * b;
-      core.rotation.y += dt * .9 * b;
-      core.children[1].rotation.x -= dt * .4 * b;
-      core.children[1].rotation.z += dt * .7 * b;
-    }
-    rings.forEach(r => r.rotation.z += dt * (r.userData.spd || .15) * b);
+    // Swarm + code lag for liquid trailing
+    swarm.rotation.x += (orb.rotation.x - swarm.rotation.x) * .04;
+    swarm.rotation.y += (orb.rotation.y - swarm.rotation.y) * .04;
+    codeGroup.rotation.x += (orb.rotation.x - codeGroup.rotation.x) * .07;
+    codeGroup.rotation.y += (orb.rotation.y - codeGroup.rotation.y) * .07;
 
-    pulses.forEach(p => {
-      p.userData.life += dt * p.userData.spd * b;
-      if (p.userData.life > 1) { p.userData.life = 0; p.rotation.x = Math.random()*Math.PI; p.rotation.y = Math.random()*Math.PI; }
-      const l = p.userData.life;
-      p.scale.setScalar(.7 + l*1.6);
-      p.material.opacity = l < .2 ? (l/.2)*.55 : Math.max(0, 1 - (l-.2)/.8)*.55;
+    coreGlow.scale.setScalar(1 + Math.sin(tAcc * 2.5) * .1 + boost * .3);
+
+    gimbals.forEach(g => { g.rotation[g.userData.axis] += dt * g.userData.spd * b; });
+
+    mechanical.forEach(m => {
+      if (m.userData.ph !== undefined){
+        m.scale.setScalar(1 + Math.sin(tAcc * 1.5 + m.userData.ph) * 0.15);
+      }
     });
-    arcs.forEach(l => {
-      l.userData.life += dt * l.userData.spd * b;
-      if (l.userData.life > 1) { l.userData.life = 0; l.userData.spd = .4 + Math.random()*.6; setArc(l, 2.02); }
-      l.material.opacity = Math.sin(l.userData.life * Math.PI) * .7;
+
+    sats.forEach(s => {
+      const u = s.userData;
+      u.a += dt * u.spd * b;
+      s.position.set(
+        Math.cos(u.a) * u.rad,
+        Math.sin(u.a * 1.3) * u.rad * Math.sin(u.inc),
+        Math.sin(u.a) * u.rad
+      );
+      s.rotation.x += dt * 2 * b;
+      s.rotation.y += dt * 1.5 * b;
     });
-    sprites.forEach(s => {
+
+    arcBeams.forEach(a => { a.rotation[a.userData.axis] += dt * a.userData.speed * b; });
+
+    codeSprites.forEach(s => {
       const u = s.userData;
       u.ph += dt * u.spd * b;
-      const a = tAcc * u.orb, c = Math.cos(a), si = Math.sin(a);
-      s.position.x = u.bp.x * c - u.bp.z * si;
-      s.position.z = u.bp.x * si + u.bp.z * c;
-      s.position.y = u.bp.y + Math.sin(u.ph)*.12;
-      s.material.opacity = .35 + .55*(.5 + .5*Math.sin(u.ph*1.7));
+      s.position.copy(u.bp);
+      s.position.y += Math.sin(u.ph) * .15;
+      s.material.opacity = .5 + .45 * Math.sin(u.ph * 1.6);
     });
 
-    // ---------- PORTAL POSITION (camera-anchored, faces camera) ----------
+    // ---------- PORTAL ----------
     cam.updateMatrixWorld();
     camR.setFromMatrixColumn(cam.matrixWorld, 0);
     camU.setFromMatrixColumn(cam.matrixWorld, 1);
@@ -888,47 +880,46 @@ function loop() {
     portal.position.copy(pp);
     portal.lookAt(cam.position);
 
-    // ---------- PORTAL ANIMATION ----------
     const pf = portal.userData.flash;
     portal.userData.flash = Math.max(0, pf - dt*2);
 
-    P.outer.rotation.z += dt * .25 * b;
-    P.mid.rotation.z   -= dt * .6 * b;
-    P.inner.rotation.z += dt * 1.0 * b;
-    P.edge.rotation.z  -= dt * 1.6 * b;
-    P.halo.rotation.z  += dt * 2.0 * b;
-
+    P.outer.rotation.z += dt * .3 * b;
+    P.mid.rotation.z   -= dt * .7 * b;
+    P.inner.rotation.z += dt * 1.1 * b;
+    P.halo.rotation.z  += dt * 1.8 * b;
+    P.cageF.rotation.z += dt * .15 * b;
+    P.cageB.rotation.z -= dt * .15 * b;
     P.sats.forEach(s => {
-      const a = s.userData.angle + tAcc * s.userData.spd;
-      s.position.set(Math.cos(a)*s.userData.rad, Math.sin(a)*s.userData.rad, 0);
-      s.rotation.x += dt * 2 * b;
-      s.rotation.y += dt * 1.5 * b;
+      const u = s.userData;
+      const a = u.a + tAcc * u.spd;
+      s.position.set(Math.cos(a)*u.rad, Math.sin(a)*u.rad, u.z);
+      s.rotation.x += dt * 2.5 * b;
+      s.rotation.z += dt * 2 * b;
     });
-    P.struts.forEach((s,i) => { s.rotation.z = (i/4)*Math.PI + tAcc * .2 * b; });
-    P.marker.position.x = Math.cos(tAcc * .8) * .1;
-    P.marker.position.y = 1.15 + Math.sin(tAcc * 1.2) * .05;
-    P.marker.rotation.z = tAcc * 1.5;
-
-    // Hole pulse + flash
-    const holeGlow = .15 + .1 * Math.sin(tAcc * 3) + pf * .7;
-    P.halo.material.opacity = Math.min(1, holeGlow);
-    P.edge.material.opacity = Math.min(1, .4 + pf * .6);
-    P.mid.material.opacity = Math.min(1, .7 + pf * .3);
-    P.hole.scale.setScalar(1 + pf * .3);
+    P.struts.forEach((s,i) => { s.rotation.z = (i/4)*Math.PI + tAcc * .18 * b; });
+    P.marker.position.y = 1.55 + Math.sin(tAcc * 1.4) * .08;
+    P.marker.rotation.z = tAcc * 1.2;
+    P.marker.rotation.x = tAcc * .8;
+    P.halo.material.opacity = Math.min(1, .35 + .12 * Math.sin(tAcc * 3) + pf * .7);
+    P.tube.material.opacity = Math.min(1, .2 + pf * .7);
+    P.mid.material.opacity = Math.min(1, .75 + pf * .3);
+    P.hole.scale.setScalar(1 + pf * .35);
+    P.corona.material.opacity = .08 + pf * .25;
 
     // ---------- TASK CHIPS ----------
-    for (let i = tasks.length-1; i >= 0; i--) {
+    for (let i = tasks.length-1; i >= 0; i--){
       const t = tasks[i];
       if (t === carried) continue;
-      if (t.flight) {
+      if (t.flight){
         t.flight.t += dt / t.flight.dur;
-        if (t.flight.t >= 1) {
+        if (t.flight.t >= 1){
           scene.remove(t.sprite);
           try { t.sprite.material.map?.dispose(); t.sprite.material.dispose(); } catch {}
           tasks.splice(i,1); continue;
         }
+        // FIX: read live portal position each frame
         const e = 1 - Math.pow(1 - t.flight.t, 2);
-        t.sprite.position.lerpVectors(t.flight.from, t.flight.to, e);
+        t.sprite.position.lerpVectors(t.flight.from, portal.position, e);
         t.sprite.material.opacity = 1 - t.flight.t;
         t.sprite.scale.setScalar(1.5 * (1 - t.flight.t * .9));
         continue;
@@ -940,12 +931,12 @@ function loop() {
 
     comp.render();
     fr++; fpsT += dt;
-    if (fpsT >= 1) { fpsEl.textContent = 'FPS: ' + fr; fr = 0; fpsT = 0; }
-  } catch (e) { console.error('Frame:', e); }
+    if (fpsT >= 1){ fpsEl.textContent = 'FPS: ' + fr; fr = 0; fpsT = 0; }
+  } catch(e){ console.error('Frame:', e); }
 }
 
 try { buildOrb('performance'); ldr.classList.add('hidden'); }
-catch (e) { console.error('Init:', e); ldr.textContent = 'INIT FAILED: ' + e.message; err('Init failed:\n' + e.message + '\n\n' + (e.stack||'')); }
+catch (e){ console.error('Init:', e); ldr.textContent = 'INIT FAILED: ' + e.message; errBox('Init failed:\n' + e.message + '\n\n' + (e.stack||'')); }
 loop();
 
 addEventListener('resize', () => {

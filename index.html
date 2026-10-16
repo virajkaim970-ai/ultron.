@@ -1,248 +1,51 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ultron Diag</title>
-<style>
-body{margin:0;padding:16px;background:#000;color:#0df;font:13px 'Courier New',monospace;line-height:1.5}
-h1{font-size:15px;letter-spacing:2px;margin:0 0 12px}
-.t{background:rgba(0,8,16,.8);border:1px solid rgba(0,221,255,.3);border-radius:6px;padding:8px 12px;margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
-.n{color:#9ef}
-.s{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:bold;white-space:nowrap}
-.p{background:#222;color:#888}.ok{background:#0a3;color:#fff}.fl{background:#a03;color:#fff}.wn{background:#a70;color:#fff}
-.d{font-size:11px;color:#8df;margin-top:2px}
-#log{background:#001;border:1px solid #0df;border-radius:6px;padding:10px;margin-top:12px;max-height:220px;overflow-y:auto;font-size:11px;white-space:pre-wrap}
-.err{color:#f36}.okl{color:#0f9}.inf{color:#8df}.hd{color:#fd0}
-button{background:rgba(0,221,255,.15);color:#0df;border:1px solid #0df;border-radius:6px;padding:10px 20px;font:13px 'Courier New',monospace;cursor:pointer;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
-button:hover{background:rgba(0,221,255,.35)}
-button:disabled{opacity:.5}
-#m{height:14px;background:#111;border-radius:3px;overflow:hidden;margin-top:4px;border:1px solid rgba(0,221,255,.3)}
-#mf{height:100%;width:0;background:linear-gradient(90deg,#0df,#0f9);transition:width .1s}
-#v{background:rgba(0,8,16,.9);border:2px solid #0df;border-radius:6px;padding:12px;margin-top:12px;display:none;white-space:pre-wrap;font-size:12px}
-#v.on{display:block}
-#v b{color:#fd0}
-#ki{background:#001;border:1px solid #0df;color:#0df;padding:6px 10px;border-radius:3px;font:11px 'Courier New',monospace;outline:none;width:100%;margin-top:4px}
-</style>
-</head>
-<body>
-<h1>◈ ULTRON DIAGNOSTIC</h1>
-<p style="font-size:12px">Click RUN, allow mic, say <b>"Hello Ultron"</b> 3 times. Wait 20s, copy verdict.</p>
-<button id="start">▶ RUN</button>
-
-<div class="t"><div><span class="n">1. Browser</span><div class="d" id="d1">checking...</div></div><span class="s p" id="s1">PENDING</span></div>
-<div class="t"><div><span class="n">2. Mic Permission</span><div class="d" id="d2">waiting...</div></div><span class="s p" id="s2">PENDING</span></div>
-<div class="t"><div style="flex:1"><span class="n">3. Mic Audio</span><div class="d" id="d3">speak now</div><div id="m"><div id="mf"></div></div></div><span class="s p" id="s3">PENDING</span></div>
-<div class="t"><div><span class="n">4. Speech Recog</span><div class="d" id="d4">waiting...</div></div><span class="s p" id="s4">PENDING</span></div>
-<div class="t"><div><span class="n">5. Wake Word</span><div class="d" id="d5">say "Hello Ultron"</div></div><span class="s p" id="s5">PENDING</span></div>
-<div class="t"><div style="flex:1"><span class="n">6. API Key</span><div class="d" id="d6">checking...</div><input id="ki" type="password" placeholder="paste key if missing"></div><span class="s p" id="s6">PENDING</span></div>
-<div class="t"><div><span class="n">7. Key Valid + Models</span><div class="d" id="d7">not tested</div></div><span class="s p" id="s7">PENDING</span></div>
-<div class="t"><div><span class="n">8. End-to-End</span><div class="d" id="d8">not tested</div></div><span class="s p" id="s8">PENDING</span></div>
-
-<div id="log"></div>
-<div id="v"></div>
-
+<head><title>Mic Test</title></head>
+<body style="background:#000;color:#0df;font:14px monospace;padding:20px">
+<h2>Speech Recognition Test</h2>
+<button id="go" style="padding:10px 20px;font-size:16px">▶ START</button>
+<pre id="out" style="background:#111;padding:12px;margin-top:12px;min-height:200px;white-space:pre-wrap">Click START, then say "Hello Ultron" 3 times.</pre>
 <script>
-const $ = id => document.getElementById(id);
-const L = $('log'), V = $('v');
-const R = {browser:'p',mic:'p',audio:'p',sr:'p',wake:'p',key:'p',valid:'p',e2e:'p'};
-const heard = [], okModels = [], failModels = [];
-let maxVol = 0, srGo = false, key = null;
+const out = document.getElementById('out');
+function log(s) { out.textContent += '\n' + s; out.scrollTop = out.scrollHeight; }
 
-const log = (m,c='inf') => { L.innerHTML += `<span class="${c}">[${new Date().toLocaleTimeString()}] ${m}</span>\n`; L.scrollTop = L.scrollHeight; };
-const set = (id,s,d) => { R[id]=s; const e=$('s'+['browser','mic','audio','sr','wake','key','valid','e2e'].indexOf(id)+1); e.className='s '+s; e.textContent=s==='p'?'PENDING':s==='ok'?'OK':s==='fl'?'FAIL':'WARN'; if(d)$('d'+['browser','mic','audio','sr','wake','key','valid','e2e'].indexOf(id)+1).textContent=d; };
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+log('Browser: ' + navigator.userAgent.slice(0, 80));
+log('SpeechRecognition available: ' + !!SR);
 
-// 1
-(() => {
-  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
-  const ua = navigator.userAgent;
-  const br = /Edg\//.test(ua)?'Edge':/SamsungBrowser/.test(ua)?'Samsung Internet':/Chrome\/\d+/.test(ua)?'Chrome':/Firefox/.test(ua)?'Firefox':/Safari/.test(ua)?'Safari':'Unknown';
-  log(`Browser: ${br}`);
-  log(`SpeechRecognition: ${!!SR}`, SR?'okl':'err');
-  if (!SR) { set('browser','fl',`${br} doesn't support speech. Use Chrome/Edge.`); return; }
-  set('browser','ok',`${br} — OK`);
-  window._SR = SR;
-})();
+if (!SR) {
+  log('');
+  log('❌ PROBLEM: This browser has no SpeechRecognition API.');
+  log('   Only Chrome and Edge support it. Firefox and Safari do not.');
+} else {
+  document.getElementById('go').onclick = () => {
+    log('');
+    log('--- starting ---');
+    const sr = new SR();
+    sr.continuous = true;
+    sr.interimResults = true;
+    sr.lang = 'en-US';
 
-// 2+3
-async function t23() {
-  try {
-    const s = await navigator.mediaDevices.getUserMedia({audio:true});
-    set('mic','ok','granted');
-    log('Mic granted','okl');
-    const ac = new (window.AudioContext||window.webkitAudioContext)();
-    const src = ac.createMediaStreamSource(s);
-    const an = ac.createAnalyser(); an.fftSize = 512;
-    src.connect(an);
-    const data = new Uint8Array(an.frequencyBinCount);
-    function tick() {
-      an.getByteFrequencyData(data);
-      let sum = 0; for (let i=0;i<data.length;i++) sum += data[i];
-      const pct = Math.min(100, (sum/data.length)*1.5);
-      $('mf').style.width = pct+'%';
-      if (pct > maxVol) maxVol = pct;
-      if (pct > 15) set('audio','ok',`peak ${Math.round(maxVol)}%`);
-      else if (maxVol > 5 && R.audio !== 'ok') set('audio','ok',`peak ${Math.round(maxVol)}% (low)`);
-      requestAnimationFrame(tick);
-    }
-    tick();
-  } catch(e) {
-    set('mic','fl','denied: '+e.message);
-    set('audio','fl','no mic');
-    log('Mic denied: '+e.message,'err');
-  }
-}
-
-// 4+5
-function t45() {
-  const sr = new window._SR();
-  sr.continuous = true; sr.interimResults = true; sr.lang = 'en-US'; sr.maxAlternatives = 3;
-  const WAKE = ['hello ultron','hey ultron','hi ultron','hello ultra','hey ultra','hello altar','hey altar','hello olton','yellow ultron'];
-  sr.onstart = () => { set('sr','wn','listening...'); srGo = true; };
-  sr.onresult = e => {
-    for (let i=e.resultIndex;i<e.results.length;i++) {
-      const r = e.results[i];
-      const alts = []; for (let j=0;j<r.length;j++) alts.push(r[j].transcript);
-      if (r.isFinal) {
-        log(`HEARD: "${alts[0].trim()}"`,'hd');
-        if (alts[1]) log(`  alt: "${alts[1].trim()}"`);
-        heard.push(alts[0].trim().toLowerCase());
-        set('sr','ok',`${heard.length} phrases`);
-        let m = false;
-        for (const w of WAKE) if (alts[0].toLowerCase().includes(w)) { set('wake','ok',`"${alts[0].trim()}"`); log(`✓ MATCH: "${w}"`,'okl'); m = true; break; }
-        if (!m) set('wake','wn',`"${alts[0].trim().slice(0,30)}"`);
+    sr.onstart = () => log('LISTENING STARTED');
+    sr.onresult = (e) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        const alts = [];
+        for (let j = 0; j < e.results[i].length; j++) alts.push(e.results[i][j].transcript);
+        log((e.results[i].isFinal ? '✓ FINAL: ' : '... interim: ') + t);
+        if (alts.length > 1) log('    alt: ' + alts[1]);
       }
-    }
-  };
-  sr.onerror = e => {
-    log(`SR err: ${e.error}`,'err');
-    if (e.error==='not-allowed'||e.error==='service-not-allowed') set('sr','fl','blocked');
-    else if (e.error==='network') set('sr','fl','network error');
-    else if (e.error==='audio-capture') set('sr','fl','audio capture failed');
-  };
-  sr.onend = () => { if (srGo && R.wake !== 'ok') setTimeout(()=>{try{sr.start()}catch(e){}},300); };
-  try { sr.start(); } catch(e) { set('sr','fl',e.message); }
-}
-
-// 6
-function t6() {
-  try { key = localStorage.getItem('ultron_key'); } catch(e) { set('key','fl','storage blocked'); return null; }
-  if (!key) { set('key','fl','no key saved'); log('No API key','err'); return null; }
-  set('key','ok',`${key.slice(0,6)}...${key.slice(-4)} (${key.length} chars)`);
-  log(`Key length ${key.length}`,'okl');
-  $('ki').value = key;
-  return key;
-}
-$('ki').addEventListener('change', () => {
-  const v = $('ki').value.trim();
-  if (!v) return;
-  try { localStorage.setItem('ultron_key', v); key = v; set('key','ok','saved manually'); t78(key); } catch(e) {}
-});
-
-// 7+8
-async function t78(k) {
-  const MODS = ['default','gpt-4o-mini','gpt-4o','gpt-3.5-turbo','deepseek-chat','mistral-small'];
-  set('valid','wn','testing...');
-  for (const m of MODS) {
-    const ac = new AbortController(); const to = setTimeout(()=>ac.abort(),15000);
+    };
+    sr.onerror = (e) => log('❌ ERROR: ' + e.error);
+    sr.onend = () => { log('(recognizer stopped — restarting)'); try { sr.start(); } catch(e){} };
     try {
-      const t0 = performance.now();
-      const r = await fetch('https://api.llm7.io/v1/chat/completions', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},
-        body: JSON.stringify({model:m, messages:[{role:'user',content:'Say OK'}], max_tokens:5}),
-        signal: ac.signal
-      });
-      clearTimeout(to);
-      const ms = Math.round(performance.now()-t0);
-      if (r.status===401||r.status===403) { set('valid','fl',`key rejected (HTTP ${r.status})`); log(`✗ KEY REJECTED`,'err'); set('e2e','fl','cannot test'); return; }
-      if (!r.ok) { const b = await r.text(); log(`✗ ${m}: HTTP ${r.status}`, 'err'); failModels.push(m+'→'+r.status+':'+b.slice(0,40)); continue; }
-      const d = await r.json();
-      const txt = d.choices?.[0]?.message?.content?.trim();
-      if (!txt) { log(`✗ ${m}: empty`, 'err'); failModels.push(m+'→empty'); continue; }
-      log(`✓ ${m} works (${ms}ms)`,'okl');
-      okModels.push(m+'('+ms+'ms)');
-      if (okModels.length===1) set('valid','ok',`key valid — ${m} works`);
+      sr.start();
+      log('Called sr.start()');
     } catch(e) {
-      clearTimeout(to);
-      log(`✗ ${m}: ${e.name==='AbortError'?'timeout':e.message}`,'err');
-      failModels.push(m+'→'+(e.name==='AbortError'?'timeout':'network'));
+      log('❌ sr.start() threw: ' + e.message);
     }
-  }
-  if (okModels.length) {
-    set('valid','ok','key valid');
-    set('e2e','wn','running...');
-    // E2E
-    try {
-      const t0 = performance.now();
-      const r = await fetch('https://api.llm7.io/v1/chat/completions', {
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},
-        body: JSON.stringify({model: okModels[0].split('(')[0], messages:[{role:'system',content:'You are ULTRON. 1 short sentence.'},{role:'user',content:'Purpose?'}], max_tokens:50})
-      });
-      const ms = Math.round(performance.now()-t0);
-      const d = await r.json();
-      const txt = d.choices?.[0]?.message?.content?.trim();
-      if (txt) { set('e2e','ok',`${ms}ms`); log(`✓ E2E: "${txt}"`,'okl'); }
-      else { set('e2e','fl','empty'); }
-    } catch(e) { set('e2e','fl',e.message); }
-  } else {
-    set('valid','fl','all models failed');
-    set('e2e','fl','no model');
-  }
+  };
 }
-
-// Verdict
-function verdict() {
-  V.classList.add('on');
-  const pad = (s,n) => (s+' '.repeat(n)).slice(0,n);
-  let out = '';
-  const line = (k,v) => out += pad(k,18)+': '+v+'\n';
-  line('BROWSER', R.browser==='ok'?'✓ OK':'✗ '+$('d1').textContent);
-  line('MIC PERM', R.mic==='ok'?'✓ OK':'✗ '+$('d2').textContent);
-  line('MIC AUDIO', R.audio==='ok'?'✓ peak '+Math.round(maxVol)+'%':'✗ '+$('d3').textContent);
-  line('SPEECH REC', R.sr==='ok'?'✓ '+heard.length+' phrases':'✗ '+$('d4').textContent);
-  line('WAKE WORD', R.wake==='ok'?'✓ '+$('d5').textContent:'✗ '+$('d5').textContent);
-  line('API KEY', R.key==='ok'?'✓ present':'✗ '+$('d6').textContent);
-  line('KEY VALID', R.valid==='ok'?'✓ valid':'✗ '+$('d7').textContent);
-  line('END-TO-END', R.e2e==='ok'?'✓ OK':'✗ '+$('d8').textContent);
-  out += '\nLAST HEARD (up to 5):\n';
-  if (heard.length) heard.slice(-5).forEach((h,i) => { out += `  ${i+1}. "${h}"\n`; });
-  else out += '  (nothing)\n';
-  out += '\nWORKING MODELS:\n  ' + (okModels.join(', ')||'(none)') + '\n';
-  out += '\nFAILED MODELS:\n  ' + (failModels.join('\n  ')||'(none)') + '\n';
-  out += '\n═══ BOTTOM LINE ═══\n';
-  let bl = '';
-  if (R.browser==='fl') bl = 'Browser cannot do voice. Switch to Chrome/Edge.';
-  else if (R.mic==='fl') bl = 'Fix mic permission (lock icon → Allow → reload).';
-  else if (R.audio==='fl') bl = 'Mic not picking up sound. Check hardware/mute/other apps.';
-  else if (R.sr==='fl') bl = 'Speech recognition failing. Check internet/WiFi.';
-  else if (R.sr==='p'||R.sr==='wn') bl = 'Speech not transcribing. Move closer, speak louder, check WiFi.';
-  else if (R.wake!=='ok') bl = 'Speech works but wake word not matching. Send me the LAST HEARD list above.';
-  else if (R.key==='fl') bl = 'Voice works, no API key. Paste it in the field.';
-  else if (R.valid==='fl') bl = 'Key present but rejected. Check LLM7 credits/quota.';
-  else if (R.e2e!=='ok') bl = 'Everything works except final query. Retry.';
-  else bl = '✓ ALL SYSTEMS GREEN. If app still fails, send browser console log.';
-  out += bl;
-  V.textContent = out;
-  // Also copy button
-  const btn = document.createElement('button');
-  btn.textContent = 'COPY VERDICT';
-  btn.style.marginTop = '10px';
-  btn.onclick = () => { navigator.clipboard.writeText(out); btn.textContent = 'COPIED'; setTimeout(()=>btn.textContent='COPY VERDICT',1500); };
-  V.appendChild(btn);
-}
-
-$('start').onclick = async () => {
-  $('start').disabled = true;
-  log('=== START ===','okl');
-  if (R.browser === 'fl') { verdict(); return; }
-  await t23();
-  t45();
-  const k = t6();
-  if (k) t78(k);
-  setTimeout(verdict, 20000);
-};
 </script>
 </body>
 </html>
